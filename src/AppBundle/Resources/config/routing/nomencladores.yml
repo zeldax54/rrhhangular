@@ -1,0 +1,15 @@
+estudiotipoget:
+    path:     /estudiotipo/getall
+    defaults: { _controller: AppBundle:Nomencladores:estudiotipoget }
+
+estudioestadosget:
+    path:     /estudioestado/getall
+    defaults: { _controller: AppBundle:Nomencladores:estudioestadoget }
+
+estudiotitulos:
+    path:     /estudiotitulos/getall
+    defaults: { _controller: AppBundle:Nomencladores:estudiotituloget }
+
+annos:
+    path:     /annos/getall
+    defaults: { _controller: AppBundle:Nomencladores:annosget }

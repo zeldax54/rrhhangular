@@ -1,0 +1,185 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use JMS\Serializer\Annotation as JMS;
+
+
+
+
+/**
+ * Tipodoc
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\ProvinciaRepository")
+ * @ORM\Table(name="provincia")
+ */
+class Provincia
+{
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="text",nullable=false )
+     */
+    private $nombre;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Pais",inversedBy="provincias", cascade={"persist"})
+     */
+    private $pais;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Localidad" , mappedBy="provincia", cascade={"persist", "detach"})
+     */
+    private $localidades;
+
+    /**
+     * @JMS\Exclude();
+     * @ORM\OneToMany(targetEntity="Curriculum" , mappedBy="provincia", cascade={"persist", "detach"})
+     */
+    private $curriculumns;
+
+
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre
+     *
+     * @return string
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->localidades = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set pais
+     *
+     * @param \AppBundle\Entity\Pais $pais
+     *
+     * @return Provincia
+     */
+    public function setPais(\AppBundle\Entity\Pais $pais = null)
+    {
+        $this->pais = $pais;
+
+        return $this;
+    }
+
+    /**
+     * Get pais
+     *
+     * @return \AppBundle\Entity\Pais
+     */
+    public function getPais()
+    {
+        return $this->pais;
+    }
+
+    /**
+     * Add localidade
+     *
+     * @param \AppBundle\Entity\Localidad $localidade
+     *
+     * @return Provincia
+     */
+    public function addLocalidade(\AppBundle\Entity\Localidad $localidade)
+    {
+        $this->localidades[] = $localidade;
+
+        return $this;
+    }
+
+    /**
+     * Remove localidade
+     *
+     * @param \AppBundle\Entity\Localidad $localidade
+     */
+    public function removeLocalidade(\AppBundle\Entity\Localidad $localidade)
+    {
+        $this->localidades->removeElement($localidade);
+    }
+
+    /**
+     * Get localidades
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLocalidades()
+    {
+        return $this->localidades;
+    }
+
+    /**
+     * Add curriculumn
+     *
+     * @param \AppBundle\Entity\Curriculum $curriculumn
+     *
+     * @return Provincia
+     */
+    public function addCurriculumn(\AppBundle\Entity\Curriculum $curriculumn)
+    {
+        $this->curriculumns[] = $curriculumn;
+
+        return $this;
+    }
+
+    /**
+     * Remove curriculumn
+     *
+     * @param \AppBundle\Entity\Curriculum $curriculumn
+     */
+    public function removeCurriculumn(\AppBundle\Entity\Curriculum $curriculumn)
+    {
+        $this->curriculumns->removeElement($curriculumn);
+    }
+
+    /**
+     * Get curriculumns
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCurriculumns()
+    {
+        return $this->curriculumns;
+    }
+}

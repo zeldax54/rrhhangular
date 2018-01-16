@@ -1,3 +1,21 @@
 welcome:
     path:     /
     defaults: { _controller: AppBundle:Default:index }
+
+tipodoc:
+    resource: "@AppBundle/Resources/config/routing/tipodoc.yml"
+
+clientsidevalidate:
+    resource: "@AppBundle/Resources/config/routing/clientsidevalidate.yml"
+
+estadocivil:
+    resource: "@AppBundle/Resources/config/routing/estadocivil.yml"
+
+pais:
+    resource: "@AppBundle/Resources/config/routing/pais.yml"
+
+tipotelefono:
+    resource: "@AppBundle/Resources/config/routing/tipotelefono.yml"
+
+nomencladores:
+    resource: "@AppBundle/Resources/config/routing/nomencladores.yml"

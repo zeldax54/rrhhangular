@@ -1,0 +1,4 @@
+clientsideemail:
+    path:     /clientvalidate/validatemail
+    defaults: { _controller: AppBundle:ClientValidator:validateEmail }
+    requirements: { _method: post }

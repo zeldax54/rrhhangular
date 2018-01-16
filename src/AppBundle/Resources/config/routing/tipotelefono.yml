@@ -1,0 +1,3 @@
+paisget:
+    path:     /tipostelefono/getall
+    defaults: { _controller: AppBundle:Nomencladores:gettipostelef }

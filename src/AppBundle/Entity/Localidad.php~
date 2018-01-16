@@ -1,0 +1,152 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
+
+
+
+/**
+ * Tipodoc
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\LocalidadRepository")
+ * @ORM\Table(name="localidad")
+ */
+class Localidad
+{
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="text",nullable=false )
+     */
+    private $nombre;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Provincia",inversedBy="localidades", cascade={"persist"})
+     */
+    private $provincia;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Curriculum" , mappedBy="localidad", cascade={"persist", "detach"})
+     */
+    private $curriculumns;
+
+
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+
+    /**
+     * Set nombre
+     *
+     * @param string $nombre
+     *
+     * @return Provincia
+     */
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre
+     *
+     * @return string
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
+
+    /**
+     * Set provincia
+     *
+     * @param \AppBundle\Entity\Localidad $provincia
+     *
+     * @return Localidad
+     */
+    public function setProvincia(\AppBundle\Entity\Localidad $provincia = null)
+    {
+        $this->provincia = $provincia;
+
+        return $this;
+    }
+
+    /**
+     * Get provincia
+     *
+     * @return \AppBundle\Entity\Localidad
+     */
+    public function getProvincia()
+    {
+        return $this->provincia;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->curriculumns = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add curriculumn
+     *
+     * @param \AppBundle\Entity\Curriculum $curriculumn
+     *
+     * @return Localidad
+     */
+    public function addCurriculumn(\AppBundle\Entity\Curriculum $curriculumn)
+    {
+        $this->curriculumns[] = $curriculumn;
+
+        return $this;
+    }
+
+    /**
+     * Remove curriculumn
+     *
+     * @param \AppBundle\Entity\Curriculum $curriculumn
+     */
+    public function removeCurriculumn(\AppBundle\Entity\Curriculum $curriculumn)
+    {
+        $this->curriculumns->removeElement($curriculumn);
+    }
+
+    /**
+     * Get curriculumns
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCurriculumns()
+    {
+        return $this->curriculumns;
+    }
+}

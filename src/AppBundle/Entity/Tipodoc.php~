@@ -1,0 +1,120 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
+
+
+
+/**
+ * Tipodoc
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\TipodocRepository")
+ * @UniqueEntity(fields="tipo", message="Este tipo de documento ya existe")
+ * @ORM\Table(name="tipodoc")
+ */
+class Tipodoc
+{
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo", type="text",nullable=false )
+     */
+    private $tipo;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Curriculum" , mappedBy="tipodoc", cascade={"persist", "detach"})
+     */
+    private $curriculums;
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param string $tipo
+     *
+     * @return Tipodoc
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return string
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->curriculums = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add curriculum
+     *
+     * @param \AppBundle\Entity\Curriculum $curriculum
+     *
+     * @return Tipodoc
+     */
+    public function addCurriculum(\AppBundle\Entity\Curriculum $curriculum)
+    {
+        $this->curriculums[] = $curriculum;
+
+        return $this;
+    }
+
+    /**
+     * Remove curriculum
+     *
+     * @param \AppBundle\Entity\Curriculum $curriculum
+     */
+    public function removeCurriculum(\AppBundle\Entity\Curriculum $curriculum)
+    {
+        $this->curriculums->removeElement($curriculum);
+    }
+
+    /**
+     * Get curriculums
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCurriculums()
+    {
+        return $this->curriculums;
+    }
+}

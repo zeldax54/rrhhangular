@@ -1,0 +1,3 @@
+gettiposdoc:
+    path:     /tiposdoc/getall
+    defaults: { _controller: AppBundle:Tipodoc:getall }

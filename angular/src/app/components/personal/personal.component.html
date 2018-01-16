@@ -1,0 +1,322 @@
+
+<form #personalForm="ngForm" class="editForm"  novalidate>
+    <div class="tab-pane fade in active">
+        <h4 class="head text-center">{{title}}</h4>
+        <br/>
+        <div class='row'>
+            <div class='col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8'>
+                <div class="row">
+                    <div class='col-xs-12 col-sm-6'>
+                        <div class="form-group">
+                            <label class="control-label" for="nombre">Nombre</label>
+                            <input class="form-control input-md" #nombre="ngModel" required id="nombre" name="nombre" type="text" placeholder="Nombre(s)" [(ngModel)]="personal.nombre">
+                            <div class="alert alert-danger" [hidden]="nombre.valid">requerido</div>
+                        </div>
+                    </div>
+                    <div class='col-xs-12 col-sm-6'>
+                        <div class="form-group">
+                            <label class="control-label" for="apellidos">Apellidos</label>
+                            <input class="form-control input-md" #apellidos="ngModel" required id="apellidos" name="apellidos" type="text" placeholder="Last Name" [(ngModel)]="personal.apellidos">
+                            <div class="alert alert-danger" [hidden]="apellidos.valid">requerido</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class='col-xs-12 col-sm-6'>
+                        <div class="form-group">
+                            <label class="control-label" for="tipodoc">Tipo de Documento</label>
+
+                            <select #tipodoc="ngModel" [(ngModel)]="personal.tipodoc" name="tipodoc" id="tipodoc" class="form-control input-md" required>
+                                <option *ngFor="let t of td" value= {{t.id}}>
+                                    {{t.tipo}}
+                                </option>
+                            </select>
+
+                        </div>
+                    </div>
+
+                    <div class='col-xs-12 col-sm-6'>
+                        <div class="form-group">
+                            <label class="control-label" for="nrodocumento">Nro de Documento</label>
+                            <input class="form-control input-md" #nrodocumento="ngModel" required id="nrodocumento" name="nrodocumento" type="text" placeholder="Nro de documento" [(ngModel)]="personal.nrodoc">
+                            <div class="alert alert-danger" [hidden]="nrodocumento.valid">requerido</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="email">Email</label>
+                    <input class="form-control input-md"  #email="ngModel" required pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$" id="email" name="email" type="text" placeholder="Email" [(ngModel)]="personal.email" (keyup)="validateMail(personalForm);">
+                    <em [hidden]="emailrepetido">Este email ya está en uso o no es válido</em>
+                    <div class="alert alert-danger" [hidden]="email.valid">Email requerido y válido</div>
+
+
+                </div>
+
+                <div class="row">
+                    <div class='col-xs-12 col-sm-6'>
+                        <div class="form-group">
+                            <label class="control-label" for="fechanacimiento">Fecha de Nacimiento</label>
+                            <input type="date" class="form-control input-md" #fechanacimiento="ngModel" required id="fechanacimiento" name="fechanacimiento" [(ngModel)] ="personal.fechanacimiento">
+                            <div class="alert alert-danger" [hidden]="fechanacimiento.valid">requerido</div>
+                        </div>
+                    </div>
+
+                    <div class='col-xs-12 col-sm-6'>
+                        <div class="form-group">
+                            <label class="control-label" for="lugarnacimiento">Lugar de Nacimiento</label>
+                            <input class="form-control input-md" #lugarnacimiento="ngModel" required id="lugarnacimiento" name="lugarnacimiento" type="text" placeholder="Lugar de nacimiento" [(ngModel)]="personal.lugarnacimiento">
+                            <div class="alert alert-danger" [hidden]="lugarnacimiento.valid">requerido</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class='col-xs-12 col-sm-6'>
+                        <div class="form-group">
+                            <label class="control-label" for="sexo">Sexo</label>
+                            <select class="form-control input-md" #sexo="ngModel" required id="sexo" name="sexo" [(ngModel)] ="personal.sexo">
+                                 <option value="Masculino">Masculino</option>
+                                 <option value="Femenino">Femenino</option>
+
+                            </select>
+                            <div class="alert alert-danger" [hidden]="sexo.valid">requerido</div>
+                        </div>
+                    </div>
+
+                    <div class='col-xs-12 col-sm-6'>
+                        <div class="form-group">
+                            <label class="control-label" for="estadocivil">Estado Civil</label>
+
+                            <select #estadocivil="ngModel" [(ngModel)]="personal.estadocivil" name="estadocivil" id="estadocivil" class="form-control input-md" required>
+                                <option *ngFor="let t of ec" value= {{t.id}}>
+                                    {{t.nombre}}
+                                </option>
+                            </select>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="control-label">Si tiene hijo(s) complete los datos siguientes:</label>
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Hijo</th>
+                                <th>Fecha de Nacimiento</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let h of Hijos; let i = index">
+
+                                <td>
+                                    <span>{{i+1}}</span>
+                                </td>
+
+                                <td>
+                                    <input [(ngModel)]="h.fechanacimiento"  class="form-control" type="date" name="{{h.fechanacimiento}}"/>
+                                </td>
+
+                                <td>
+                                    <button class="btn btn-default"  type="button" (click)="deleteFieldValue(i)">Eliminar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                              <td>  <span>Nuevo</span></td>
+                                <td>
+                                    <input class="form-control" type="date" id="newAttributeCode" [(ngModel)]="Hijo.fechanacimiento" name="newAttributeCode" />
+                                </td>
+
+                                <td>
+                                    <button class="btn btn-default" type="button" (click)="addHijo()">Agregar</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <p>
+                          <em class="headerinform">Datos de Acceso y Contacto</em>
+
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                <div class='col-xs-6 col-sm-4'>
+
+                        <div class="form-group">
+                            <label class="control-label" for="calle">Calle</label>
+                            <input class="form-control input-md" #calle="ngModel" required id="calle" name="calle" type="text"  [(ngModel)]="personal.calle">
+                            <div class="alert alert-danger" [hidden]="calle.valid">requerido</div>
+                        </div>
+                 </div>
+                    <div class='col-xs-6 col-sm-4'>
+
+                        <div class="form-group">
+                            <label class="control-label" for="nrocalle">Nro calle</label>
+                            <input class="form-control input-md" #nrocalle="ngModel" required id="nrocalle" name="nrocalle" type="text"  [(ngModel)]="personal.nrocalle">
+                            <div class="alert alert-danger" [hidden]="nrocalle.valid">requerido</div>
+                        </div>
+                    </div>
+                    <div class='col-xs-6 col-sm-4'>
+
+                        <div class="form-group">
+                            <label class="control-label" for="piso">Piso</label>
+                            <input class="form-control input-md" #piso="ngModel"  id="piso" name="piso" type="text"  [(ngModel)]="personal.piso">
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class='col-xs-6 col-sm-4'>
+
+                        <div class="form-group">
+                            <label class="control-label" for="depto">Depto</label>
+                            <input class="form-control input-md" #depto="ngModel"  id="depto" name="depto" type="text"  [(ngModel)]="personal.depto">
+
+                        </div>
+                    </div>
+                    <div class='col-xs-6 col-sm-4'>
+
+                        <div class="form-group">
+                            <label class="control-label" for="codigopostal">Codigo postal</label>
+                            <input class="form-control input-md" #codigopostal="ngModel"  id="codigopostal" name="codigopostal" type="text"  [(ngModel)]="personal.codigopostal">
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class='col-xs-6 col-sm-4'>
+
+                        <div class="form-group">
+                            <label class="control-label" for="pais">Pais</label>
+
+                            <select #pais="ngModel" [(ngModel)]="personal.pais" name="pais" id="pais" class="form-control input-md" required (change)="changepais()">
+                                <option *ngFor="let t of paises" value= {{t.id}}>
+                                    {{t.nombre}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class='col-xs-6 col-sm-4'>
+
+                        <div class="form-group">
+                            <label class="control-label" for="provincia">Provincia</label>
+
+                            <select #provincia="ngModel" [(ngModel)]="personal.provincia" name="provincia" id="provincia" class="form-control input-md" (change)="changeprovincia(personal.provincia);">
+                                <option *ngFor="let p of (paises | filter:{'id':personal.pais})[0].provincias" value= {{p.id}}>
+                                    {{p.nombre}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class='col-xs-6 col-sm-4'>
+
+                        <div class="form-group">
+                            <label class="control-label" for="provincia">Localidades</label>
+
+                            <select #localidad="ngModel" [(ngModel)]="personal.localidad" name="localidad" id="localidad" class="form-control input-md" >
+                                <option *ngFor="let l of localidades" value= {{l.id}}>
+                                    {{l.nombre}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="control-label">Numeros Telefonicos:</label>
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+
+                                <th>Número</th>
+                                <th>Tipo</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let n of Telefonos; let i = index">
+
+
+
+                                <td>
+
+                                    <input [(ngModel)]="n.numero"  class="form-control" type="text" name="{{n.numero}}"/>
+                                </td>
+
+                                <td>
+
+                                    <select  [(ngModel)]="n.tipo" name="{{n.tipo}}"  class="form-control input-md" >
+                                        <option *ngFor="let tt of tipostelefono" value= {{tt.id}}>
+                                            {{tt.nombre}}
+                                        </option>
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <button class="btn btn-default"  type="button" (click)="deleteTelefono(i)">Eliminar</button>
+                                </td>
+                            </tr>
+                            <tr>
+
+
+                                <td>
+                                    <input class="form-control" type="text" id="newNumero" [(ngModel)]="Telefono.numero" name="newNumero" />
+                                </td>
+
+                                <td>
+                                    <select  [(ngModel)]="Telefono.tipo" name="newTipo"  class="form-control input-md" >
+                                        <option *ngFor="let tt of tipostelefono" value= {{tt.id}}>
+                                            {{tt.nombre}}
+                                        </option>
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <button class="btn btn-default" type="button" (click)="addTelefono()">Agregar</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group text-center">
+                    <button class="btn btn-success btn-outline-rounded btn-info botonporto" [disabled]="!personalForm.valid" (click)="goToNext(personalForm)"> Siguiente <span style="margin-left:10px;" class="glyphicon glyphicon-arrow-right"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
