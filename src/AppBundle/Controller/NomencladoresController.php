@@ -64,6 +64,35 @@ class NomencladoresController extends Controller
 
 
     }
+    public function idiomasgetAction(){
+
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('AppBundle:Idioma')->findAll();
+        $helper=$this->get(Helpers::class);
+        return $helper->JMSSerializar($entities,$this->container->get('jms_serializer'));
+
+    }
+
+    public function nivelesgetAction(){
+
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('AppBundle:Nivel')->findAll();
+        $helper=$this->get(Helpers::class);
+        return $helper->JMSSerializar($entities,$this->container->get('jms_serializer'));
+
+    }
+
+    public function habilidadesgetAction(){
+
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('AppBundle:Nivel')->findAll();
+        $helper=$this->get(Helpers::class);
+        return $helper->JMSSerializar($entities,$this->container->get('jms_serializer'));
+
+    }
+
+
+
 
 
 

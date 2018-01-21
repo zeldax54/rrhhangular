@@ -1,42 +1,61 @@
 import { Injectable } from '@angular/core';
+import {EnvironmentSpecificService} from "./enviromentSpecific";
+import {EnvSpecific} from "../models/envSpecific";
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import "rxjs/add/operator/map";
 import {Observable} from 'rxjs/Observable';
-import {GLOBAL} from "./global";
+
+
+
 
 @Injectable()
 export class NomencladoresService{
 
-    public url:string;
+
 
     constructor(
         public http: HttpClient
     )
     {
-        this.url=GLOBAL.url;
+
     }
 
 
-    getTiposTelefonos():Observable<any>{
-        return this.http.get(this.url+'/tipostelefono/getall');
+
+    getTiposTelefonos(url:any):Observable<any>{
+        return this.http.get(url+'/tipostelefono/getall');
     }
 
-    getEstudiosTipo():Observable<any>{
-        return this.http.get(this.url+'/estudiotipo/getall');
+    getEstudiosTipo(url:any):Observable<any>{
+        return this.http.get(url+'/estudiotipo/getall');
     }
 
-    getEstudiosEstado():Observable<any>{
-        return this.http.get(this.url+'/estudioestado/getall');
+    getEstudiosEstado(url:any):Observable<any>{
+        return this.http.get(url+'/estudioestado/getall');
     }
 
-    getEstudiosTitulo():Observable<any>{
-        return this.http.get(this.url+'/estudiotitulos/getall');
+    getEstudiosTitulo(url:any):Observable<any>{
+        return this.http.get(url+'/estudiotitulos/getall');
     }
 
 
-    getAnnos():Observable<any>{
-        return this.http.get(this.url+'/annos/getall');
+    getAnnos(url:any):Observable<any>{
+        return this.http.get(url+'/annos/getall');
     }
+
+    getIdiomas(url:any):Observable<any>{
+        return this.http.get(url+'/idiomas/getall');
+    }
+
+    getNiveles(url:any):Observable<any>{
+        return this.http.get(url+'/niveles/getall');
+    }
+    getHabilidades(url:any):Observable<any>{
+        return this.http.get(url+'/habilidades/getall');
+    }
+
+
+
 
 
 

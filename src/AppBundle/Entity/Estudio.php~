@@ -9,6 +9,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
 
+
 /**
  * Estudiotipo
  *
@@ -72,7 +73,7 @@ class Estudio
     /**
      * @var string
      *
-     * @ORM\Column(name="materiasaprobadas", type="integer",nullable=true )
+     * @ORM\Column(name="materiasaprobadas", type="string",length=250 )
      */
     private $materiasaprobadas;
 
@@ -95,6 +96,35 @@ class Estudio
      * @ORM\ManyToOne(targetEntity="Curriculum",inversedBy="estudios", cascade={"persist"})
      */
     private $curriculum;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="EstudioIdioma" , mappedBy="estudio", cascade={"persist", "detach"})
+     */
+    private $estudioidiomas;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cursos",type="text")
+     */
+     private $cursos;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="seminarios",type="text")
+     */
+    private $seminarios;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="congresos",type="text")
+     */
+    private $congresos;
 
 
 
@@ -211,5 +241,190 @@ class Estudio
     public function getTitulo()
     {
         return $this->titulo;
+    }
+
+    /**
+     * Set annoingreso
+     *
+     * @param integer $annoingreso
+     *
+     * @return Estudio
+     */
+    public function setAnnoingreso($annoingreso)
+    {
+        $this->annoingreso = $annoingreso;
+
+        return $this;
+    }
+
+    /**
+     * Get annoingreso
+     *
+     * @return integer
+     */
+    public function getAnnoingreso()
+    {
+        return $this->annoingreso;
+    }
+
+    /**
+     * Set annoegreso
+     *
+     * @param integer $annoegreso
+     *
+     * @return Estudio
+     */
+    public function setAnnoegreso($annoegreso)
+    {
+        $this->annoegreso = $annoegreso;
+
+        return $this;
+    }
+
+    /**
+     * Get annoegreso
+     *
+     * @return integer
+     */
+    public function getAnnoegreso()
+    {
+        return $this->annoegreso;
+    }
+
+    /**
+     * Set materiasaprobadas
+     *
+     * @param integer $materiasaprobadas
+     *
+     * @return Estudio
+     */
+    public function setMateriasaprobadas($materiasaprobadas)
+    {
+        $this->materiasaprobadas = $materiasaprobadas;
+
+        return $this;
+    }
+
+    /**
+     * Get materiasaprobadas
+     *
+     * @return integer
+     */
+    public function getMateriasaprobadas()
+    {
+        return $this->materiasaprobadas;
+    }
+
+    /**
+     * Set cantidadmaterias
+     *
+     * @param integer $cantidadmaterias
+     *
+     * @return Estudio
+     */
+    public function setCantidadmaterias($cantidadmaterias)
+    {
+        $this->cantidadmaterias = $cantidadmaterias;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadmaterias
+     *
+     * @return integer
+     */
+    public function getCantidadmaterias()
+    {
+        return $this->cantidadmaterias;
+    }
+
+    /**
+     * Set annosaprobadoscursados
+     *
+     * @param integer $annosaprobadoscursados
+     *
+     * @return Estudio
+     */
+    public function setAnnosaprobadoscursados($annosaprobadoscursados)
+    {
+        $this->annosaprobadoscursados = $annosaprobadoscursados;
+
+        return $this;
+    }
+
+    /**
+     * Get annosaprobadoscursados
+     *
+     * @return integer
+     */
+    public function getAnnosaprobadoscursados()
+    {
+        return $this->annosaprobadoscursados;
+    }
+
+    /**
+     * Set curriculum
+     *
+     * @param \AppBundle\Entity\Curriculum $curriculum
+     *
+     * @return Estudio
+     */
+    public function setCurriculum(\AppBundle\Entity\Curriculum $curriculum = null)
+    {
+        $this->curriculum = $curriculum;
+
+        return $this;
+    }
+
+    /**
+     * Get curriculum
+     *
+     * @return \AppBundle\Entity\Curriculum
+     */
+    public function getCurriculum()
+    {
+        return $this->curriculum;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->estudioidiomas = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add estudioidioma
+     *
+     * @param \AppBundle\Entity\EstudioIdioma $estudioidioma
+     *
+     * @return Estudio
+     */
+    public function addEstudioidioma(\AppBundle\Entity\EstudioIdioma $estudioidioma)
+    {
+        $this->estudioidiomas[] = $estudioidioma;
+
+        return $this;
+    }
+
+    /**
+     * Remove estudioidioma
+     *
+     * @param \AppBundle\Entity\EstudioIdioma $estudioidioma
+     */
+    public function removeEstudioidioma(\AppBundle\Entity\EstudioIdioma $estudioidioma)
+    {
+        $this->estudioidiomas->removeElement($estudioidioma);
+    }
+
+    /**
+     * Get estudioidiomas
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEstudioidiomas()
+    {
+        return $this->estudioidiomas;
     }
 }

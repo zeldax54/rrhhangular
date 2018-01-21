@@ -7,100 +7,136 @@
             <div class='col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8'>
                 <div class="row">
                     <div class='col-xs-12 col-sm-6'>
-                        <div class="form-group">
-                            <label class="control-label" for="nombre">Nombre</label>
-                            <input class="form-control input-md" #nombre="ngModel" required id="nombre" name="nombre" type="text" placeholder="Nombre(s)" [(ngModel)]="personal.nombre">
-                            <div class="alert alert-danger" [hidden]="nombre.valid">requerido</div>
-                        </div>
+                          <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Nombre(s)" [formControl]="nombreFormControl" [errorStateMatcher]="matcher" id="nombre" name="nombre" type="text" placeholder="*Nombre" [(ngModel)]="personal.nombre">
+                        <mat-hint><span class="requerido" *ngIf="nombreFormControl.value==null">campo obligatorio</span></mat-hint>
+
+                        <mat-error *ngIf="nombreFormControl.hasError('required')">
+                            Campo <strong>requerido</strong>
+                        </mat-error>
+
+                    </mat-form-field>
+
+
                     </div>
                     <div class='col-xs-12 col-sm-6'>
-                        <div class="form-group">
-                            <label class="control-label" for="apellidos">Apellidos</label>
-                            <input class="form-control input-md" #apellidos="ngModel" required id="apellidos" name="apellidos" type="text" placeholder="Last Name" [(ngModel)]="personal.apellidos">
-                            <div class="alert alert-danger" [hidden]="apellidos.valid">requerido</div>
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="*Apellidos" [formControl]="apellidosFormControl" [errorStateMatcher]="matcher" id="apellidos" name="apellidos" type="text" placeholder="*Apellidos" [(ngModel)]="personal.apellidos">
+                        <mat-hint class="requerido"><span class="requerido" *ngIf="apellidosFormControl.value==''">campo obligatorio</span></mat-hint>
+                        <mat-error *ngIf="apellidosFormControl.hasError('required')">
+                            Campo <strong>requerido</strong>
+                        </mat-error>
+                    </mat-form-field>
                         </div>
-                    </div>
-                </div>
+
+                </div><br>
 
                 <div class="row">
                     <div class='col-xs-12 col-sm-6'>
-                        <div class="form-group">
-                            <label class="control-label" for="tipodoc">Tipo de Documento</label>
 
-                            <select #tipodoc="ngModel" [(ngModel)]="personal.tipodoc" name="tipodoc" id="tipodoc" class="form-control input-md" required>
-                                <option *ngFor="let t of td" value= {{t.id}}>
-                                    {{t.tipo}}
-                                </option>
-                            </select>
+                        <mat-form-field class="example-full-width">
+                            <mat-select [placeholder]="placeholdertipodoc" [formControl]="tipodedocumentoFormControl" [errorStateMatcher]="matcher"  [(ngModel)]="personal.tipodoc" name="tipodoc" id="tipodoc" >
+                                <mat-option *ngFor="let t of td" [value]="t.id">
+                                    {{ t.tipo }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-hint><span class="requerido" *ngIf="tipodedocumentoFormControl.value==''">campo obligatorio</span></mat-hint>
+                            <mat-error *ngIf="tipodedocumentoFormControl.hasError('required')">
+                                Campo <strong>requerido</strong>
+                            </mat-error>
+                        </mat-form-field>
 
-                        </div>
+
                     </div>
-
                     <div class='col-xs-12 col-sm-6'>
-                        <div class="form-group">
-                            <label class="control-label" for="nrodocumento">Nro de Documento</label>
-                            <input class="form-control input-md" #nrodocumento="ngModel" required id="nrodocumento" name="nrodocumento" type="text" placeholder="Nro de documento" [(ngModel)]="personal.nrodoc">
-                            <div class="alert alert-danger" [hidden]="nrodocumento.valid">requerido</div>
-                        </div>
+
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Nro de Documento" [formControl]="nrodocumentoFormControl" [errorStateMatcher]="matcher" id="nrodocumento" name="nrodocumento" type="text" placeholder="*Nro de Documento" [(ngModel)]="personal.nrodoc">
+                            <mat-hint>Nro de Documento <span class="requerido" *ngIf="nrodocumentoFormControl.value==''">campo obligatorio</span></mat-hint>
+                            <mat-error *ngIf="nrodocumentoFormControl.hasError('required')">
+                                Campo <strong>requerido</strong>
+                            </mat-error>
+                        </mat-form-field>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label" for="email">Email</label>
-                    <input class="form-control input-md"  #email="ngModel" required pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$" id="email" name="email" type="text" placeholder="Email" [(ngModel)]="personal.email" (keyup)="validateMail(personalForm);">
-                    <em [hidden]="emailrepetido">Este email ya está en uso o no es válido</em>
-                    <div class="alert alert-danger" [hidden]="email.valid">Email requerido y válido</div>
 
 
-                </div>
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Email@email.com" [formControl]="emailFormControl" [errorStateMatcher]="matcher" id="email" name="email" type="email"  [(ngModel)]="personal.email" (keyup)="validateMail(personalForm);">
+                        <mat-hint><span class="requerido" *ngIf="nrodocumentoFormControl.value==''">campo obligatorio</span></mat-hint>
+                        <mat-error *ngIf="emailFormControl.hasError('required')">
+                            Campo <strong>requerido</strong> y <strong>válido</strong>
+                        </mat-error>
+                        <mat-error *ngIf="emailFormControl.hasError('notUnique')">
+                            Email <strong>en uso</strong>
+                        </mat-error>
+                    </mat-form-field>
 
-                <div class="row">
-                    <div class='col-xs-12 col-sm-6'>
-                        <div class="form-group">
-                            <label class="control-label" for="fechanacimiento">Fecha de Nacimiento</label>
-                            <input type="date" class="form-control input-md" #fechanacimiento="ngModel" required id="fechanacimiento" name="fechanacimiento" [(ngModel)] ="personal.fechanacimiento">
-                            <div class="alert alert-danger" [hidden]="fechanacimiento.valid">requerido</div>
-                        </div>
-                    </div>
 
-                    <div class='col-xs-12 col-sm-6'>
-                        <div class="form-group">
-                            <label class="control-label" for="lugarnacimiento">Lugar de Nacimiento</label>
-                            <input class="form-control input-md" #lugarnacimiento="ngModel" required id="lugarnacimiento" name="lugarnacimiento" type="text" placeholder="Lugar de nacimiento" [(ngModel)]="personal.lugarnacimiento">
-                            <div class="alert alert-danger" [hidden]="lugarnacimiento.valid">requerido</div>
-                        </div>
-                    </div>
-
-                </div>
+                </div><br>
 
                 <div class="row">
-
                     <div class='col-xs-12 col-sm-6'>
-                        <div class="form-group">
-                            <label class="control-label" for="sexo">Sexo</label>
-                            <select class="form-control input-md" #sexo="ngModel" required id="sexo" name="sexo" [(ngModel)] ="personal.sexo">
-                                 <option value="Masculino">Masculino</option>
-                                 <option value="Femenino">Femenino</option>
 
-                            </select>
-                            <div class="alert alert-danger" [hidden]="sexo.valid">requerido</div>
-                        </div>
+                        <mat-form-field class="example-full-width">
+                            <input matInput [matDatepicker]="picker" placeholder="Fecha de Nacimiento" [formControl]="fechadenacimientoFormControl" id="fechanacimiento" name="fechanacimiento" [(ngModel)] ="personal.fechanacimiento">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi="true" #picker></mat-datepicker>
+                            <mat-hint><span class="requerido" *ngIf="fechadenacimientoFormControl.value==null">campo obligatorio</span></mat-hint>
+                        </mat-form-field>
+
                     </div>
 
                     <div class='col-xs-12 col-sm-6'>
-                        <div class="form-group">
-                            <label class="control-label" for="estadocivil">Estado Civil</label>
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Lugar de nacimiento" [formControl]="lucagarNacimientoFormControl" [errorStateMatcher]="matcher" id="lugarnacimiento" name="lugarnacimiento" type="text" placeholder="Lugar de nacimiento" [(ngModel)]="personal.lugarnacimiento">
+                            <mat-hint><span class="requerido" *ngIf="lucagarNacimientoFormControl.value==''">campo obligatorio</span></mat-hint>
+                            <mat-error *ngIf="nrodocumentoFormControl.hasError('required')">
+                                Campo <strong>requerido</strong>
+                            </mat-error>
+                        </mat-form-field>
 
-                            <select #estadocivil="ngModel" [(ngModel)]="personal.estadocivil" name="estadocivil" id="estadocivil" class="form-control input-md" required>
-                                <option *ngFor="let t of ec" value= {{t.id}}>
-                                    {{t.nombre}}
-                                </option>
-                            </select>
-
-                        </div>
                     </div>
 
-                </div>
+                </div><br>
+
+                <div class="row">
+
+                    <div class='col-xs-12 col-sm-6'>
+                         <mat-form-field class="example-full-width">
+                            <mat-select  [formControl]="sexoFormControl" placeholder="Sexo" [errorStateMatcher]="matcher"  [(ngModel)]="personal.sexo" name="sexo" id="sexo" >
+                                <mat-option  value="M">
+                                 Masculino
+                                </mat-option>
+                                <mat-option  value="F">
+                                    Femenino
+                                </mat-option>
+                            </mat-select>
+                            <mat-hint><span class="requerido" *ngIf="sexoFormControl.value==''">campo obligatorio</span></mat-hint>
+                            <mat-error *ngIf="sexoFormControl.hasError('required')">
+                                Campo <strong>requerido</strong>
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
+
+                    <div class='col-xs-12 col-sm-6'>
+                        <mat-form-field class="example-full-width">
+                            <mat-select [placeholder]="placeholderestadoCivil" [formControl]="estadoCivilFormControl" [errorStateMatcher]="matcher"  [(ngModel)]="personal.estadocivil" name="estadocivil" id="estadocivil" >
+                                <mat-option *ngFor="let t of ec" [value]="t.id">
+                                    {{ t.nombre }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-hint><span class="requerido" *ngIf="estadoCivilFormControl.value==''">campo obligatorio</span></mat-hint>
+                            <mat-error *ngIf="estadoCivilFormControl.hasError('required')">
+                                Campo <strong>requerido</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                </div><br>
 
                 <div class="row">
                     <div class="form-group">
@@ -121,21 +157,33 @@
                                 </td>
 
                                 <td>
-                                    <input [(ngModel)]="h.fechanacimiento"  class="form-control" type="date" name="{{h.fechanacimiento}}"/>
+                                    <!--<input [(ngModel)]="h.fechanacimiento"  class="form-control" type="date" name="{{h.fechanacimiento}}"/>-->
+                                    <mat-form-field class="">
+                                        <input matInput [matDatepicker]="picker2"   name="{{h.fechanacimiento}}" [(ngModel)] ="h.fechanacimiento">
+                                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                        <mat-datepicker touchUi="true" #picker2></mat-datepicker>
+                                    </mat-form-field>
                                 </td>
 
                                 <td>
-                                    <button class="btn btn-default"  type="button" (click)="deleteFieldValue(i)">Eliminar</button>
+                                    <button mat-raised-button (click)="deleteFieldValue(i)">Eliminar</button>
+
                                 </td>
                             </tr>
                             <tr>
                               <td>  <span>Nuevo</span></td>
                                 <td>
-                                    <input class="form-control" type="date" id="newAttributeCode" [(ngModel)]="Hijo.fechanacimiento" name="newAttributeCode" />
+                                    <!--<input class="form-control" type="date" id="newAttributeCode" [(ngModel)]="Hijo.fechanacimiento" name="newAttributeCode" />-->
+                                    <mat-form-field class="">
+                                        <input matInput [matDatepicker]="picker3"   id="newAttributeCode" [(ngModel)]="Hijo.fechanacimiento" name="newAttributeCode">
+                                        <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                                        <mat-datepicker touchUi="true" #picker3></mat-datepicker>
+                                    </mat-form-field>
                                 </td>
 
                                 <td>
-                                    <button class="btn btn-default" type="button" (click)="addHijo()">Agregar</button>
+
+                                    <button mat-raised-button  (click)="addHijo();">Agregar</button>
                                 </td>
                             </tr>
                             </tbody>
@@ -150,103 +198,128 @@
                 <div class="row">
                     <div class="col-md-8">
                         <p>
-                          <em class="headerinform">Datos de Acceso y Contacto</em>
+                        <strong>  <em class="headerinform">Datos de Acceso y Contacto</em></strong>
 
                         </p>
                     </div>
                 </div>
                 <div class="row">
                 <div class='col-xs-6 col-sm-4'>
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Calle" [formControl]="calleFormControl" [errorStateMatcher]="matcher" id="calle" name="calle" type="text" placeholder="Calle" [(ngModel)]="personal.calle">
+                        <mat-hint><span class="requerido" *ngIf="calleFormControl.value==''">campo obligatorio</span></mat-hint>
 
-                        <div class="form-group">
-                            <label class="control-label" for="calle">Calle</label>
-                            <input class="form-control input-md" #calle="ngModel" required id="calle" name="calle" type="text"  [(ngModel)]="personal.calle">
-                            <div class="alert alert-danger" [hidden]="calle.valid">requerido</div>
-                        </div>
+                        <mat-error *ngIf="calleFormControl.hasError('required')">
+                            Campo <strong>requerido</strong>
+                        </mat-error>
+
+                    </mat-form-field>
                  </div>
                     <div class='col-xs-6 col-sm-4'>
 
-                        <div class="form-group">
-                            <label class="control-label" for="nrocalle">Nro calle</label>
-                            <input class="form-control input-md" #nrocalle="ngModel" required id="nrocalle" name="nrocalle" type="text"  [(ngModel)]="personal.nrocalle">
-                            <div class="alert alert-danger" [hidden]="nrocalle.valid">requerido</div>
-                        </div>
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Calle" [formControl]="nroCalleFormControl" [errorStateMatcher]="matcher" id="nrocalle" name="nrocalle" type="text" placeholder="Nro Calle" [(ngModel)]="personal.nrocalle">
+                            <mat-hint><span class="requerido" *ngIf="nroCalleFormControl.value==''">campo obligatorio</span></mat-hint>
+
+                            <mat-error *ngIf="nroCalleFormControl.hasError('required')">
+                                Campo <strong>requerido</strong>
+                            </mat-error>
+
+                        </mat-form-field>
                     </div>
                     <div class='col-xs-6 col-sm-4'>
-
-                        <div class="form-group">
-                            <label class="control-label" for="piso">Piso</label>
-                            <input class="form-control input-md" #piso="ngModel"  id="piso" name="piso" type="text"  [(ngModel)]="personal.piso">
-
-                        </div>
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Piso"  [errorStateMatcher]="matcher" id="piso" name="piso" type="text"  [(ngModel)]="personal.piso">
+                         </mat-form-field>
                     </div>
 
-                </div>
+                </div><br>
 
                 <div class="row">
 
                     <div class='col-xs-6 col-sm-4'>
 
-                        <div class="form-group">
-                            <label class="control-label" for="depto">Depto</label>
-                            <input class="form-control input-md" #depto="ngModel"  id="depto" name="depto" type="text"  [(ngModel)]="personal.depto">
-
-                        </div>
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Depto"   id="depto" name="depto" type="text"  [(ngModel)]="personal.depto">
+                        </mat-form-field>
                     </div>
                     <div class='col-xs-6 col-sm-4'>
 
-                        <div class="form-group">
-                            <label class="control-label" for="codigopostal">Codigo postal</label>
-                            <input class="form-control input-md" #codigopostal="ngModel"  id="codigopostal" name="codigopostal" type="text"  [(ngModel)]="personal.codigopostal">
-
-                        </div>
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Código Postal"   id="codigopostal" name="codigopostal" type="text"  [(ngModel)]="personal.codigopostal">
+                        </mat-form-field>
                     </div>
 
                 </div>
 
-                <div class="row">
+                <div class="row"><br>
 
                     <div class='col-xs-6 col-sm-4'>
+                        <mat-form-field class="example-full-width">
+                            <mat-select [placeholder]="placeholderpais" [formControl]="paisFormControl" [errorStateMatcher]="matcher"  [(ngModel)]="personal.pais" name="pais" id="pais" (change)="changepais();">
+                                <mat-option *ngFor="let t of paises" [value]="t.id">
+                                    {{ t.nombre }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-hint><span class="requerido" *ngIf="paisFormControl.value==''">campo obligatorio</span></mat-hint>
+                            <mat-error *ngIf="paisFormControl.hasError('required')">
+                                Campo <strong>requerido</strong>
+                            </mat-error>
+                        </mat-form-field>
 
-                        <div class="form-group">
-                            <label class="control-label" for="pais">Pais</label>
 
-                            <select #pais="ngModel" [(ngModel)]="personal.pais" name="pais" id="pais" class="form-control input-md" required (change)="changepais()">
-                                <option *ngFor="let t of paises" value= {{t.id}}>
-                                    {{t.nombre}}
-                                </option>
-                            </select>
-                        </div>
+
+                    <!--<mat-form-field class="example-full-width" >-->
+                        <!--<input matInput placeholder="País" aria-label="País" [matAutocomplete]="auto" [formControl]="paisFormControl" [(ngModel)]="personal.pais" name="pais" id="pais">-->
+                        <!--<mat-autocomplete #auto="matAutocomplete" >-->
+                            <!--<mat-option *ngFor="let state of filteredpaises | async" [value]="state.id">-->
+                                <!--<span>{{ state.nombre }}</span>-->
+                            <!--</mat-option>-->
+                        <!--</mat-autocomplete>-->
+                    <!--</mat-form-field>-->
+                    <!--<br/>-->
+                    <!--<mat-slide-toggle-->
+                            <!--[checked]="paisFormControl.disabled"-->
+                            <!--(change)="paisFormControl.disabled ? paisFormControl.enable() : paisFormControl.disable()">-->
+                        <!--Bloquear-->
+                    <!--</mat-slide-toggle>-->
                     </div>
 
                     <div class='col-xs-6 col-sm-4'>
 
-                        <div class="form-group">
-                            <label class="control-label" for="provincia">Provincia</label>
+                        <!--<div class="form-group">-->
+                            <!--<label class="control-label" for="provincia">Provincia</label>-->
 
-                            <select #provincia="ngModel" [(ngModel)]="personal.provincia" name="provincia" id="provincia" class="form-control input-md" (change)="changeprovincia(personal.provincia);">
-                                <option *ngFor="let p of (paises | filter:{'id':personal.pais})[0].provincias" value= {{p.id}}>
-                                    {{p.nombre}}
-                                </option>
-                            </select>
-                        </div>
+                            <!--<select #provincia="ngModel" [(ngModel)]="personal.provincia" name="provincia" id="provincia" class="form-control input-md" (change)="changeprovincia(personal.provincia);">-->
+                                <!--<option *ngFor="let p of (paises | filter:{'id':personal.pais})[0].provincias" value= {{p.id}}>-->
+                                    <!--{{p.nombre}}-->
+                                <!--</option>-->
+                            <!--</select>-->
+                        <!--</div>-->
+
+
+                    <mat-form-field class="example-full-width">
+                        <mat-select placeholder="Provincia"   [(ngModel)]="personal.provincia" name="provincia" id="provincia" (change)="changeprovincia(personal.provincia);">
+                            <mat-option *ngFor="let p of (paises | filter:{'id':personal.pais})[0].provincias" [value]="p.id">
+                                {{ p.nombre }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
                     </div>
 
                     <div class='col-xs-6 col-sm-4'>
 
-                        <div class="form-group">
-                            <label class="control-label" for="provincia">Localidades</label>
-
-                            <select #localidad="ngModel" [(ngModel)]="personal.localidad" name="localidad" id="localidad" class="form-control input-md" >
-                                <option *ngFor="let l of localidades" value= {{l.id}}>
-                                    {{l.nombre}}
-                                </option>
-                            </select>
-                        </div>
+                        <mat-form-field class="example-full-width">
+                            <mat-select placeholder="Localidad"   [(ngModel)]="personal.localidad" name="localidad" id="localidad">
+                                <mat-option *ngFor="let l of localidades" [value]="l.id">
+                                    {{ l.nombre }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
 
 
-                </div>
+                </div><br>
 
 
 
@@ -265,43 +338,51 @@
                             <tbody>
                             <tr *ngFor="let n of Telefonos; let i = index">
 
-
+                                <td>
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput [(ngModel)]="n.numero"  class="form-control" type="tel" name="{{n.numero}}">
+                                    </mat-form-field>
+                                </td>
 
                                 <td>
-
-                                    <input [(ngModel)]="n.numero"  class="form-control" type="text" name="{{n.numero}}"/>
+                                    <mat-form-field class="">
+                                        <mat-select placeholder="Tipo"  [(ngModel)]="n.tipo" name="{{n.tipo}}" >
+                                            <mat-option *ngFor="let t of tipostelefono" value={{t.id}}>
+                                                {{ t.nombre }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
                                 </td>
 
                                 <td>
 
-                                    <select  [(ngModel)]="n.tipo" name="{{n.tipo}}"  class="form-control input-md" >
-                                        <option *ngFor="let tt of tipostelefono" value= {{tt.id}}>
-                                            {{tt.nombre}}
-                                        </option>
-                                    </select>
-                                </td>
-
-                                <td>
-                                    <button class="btn btn-default"  type="button" (click)="deleteTelefono(i)">Eliminar</button>
+                                    <button mat-raised-button  (click)="deleteTelefono(i)">Eliminar</button>
                                 </td>
                             </tr>
                             <tr>
 
 
                                 <td>
-                                    <input class="form-control" type="text" id="newNumero" [(ngModel)]="Telefono.numero" name="newNumero" />
+
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput type="tel" id="newNumero" [(ngModel)]="Telefono.numero" name="newNumero">
+                                    </mat-form-field>
                                 </td>
 
                                 <td>
-                                    <select  [(ngModel)]="Telefono.tipo" name="newTipo"  class="form-control input-md" >
-                                        <option *ngFor="let tt of tipostelefono" value= {{tt.id}}>
-                                            {{tt.nombre}}
-                                        </option>
-                                    </select>
+
+                                    <mat-form-field class="">
+                                        <mat-select placeholder="Tipo"  [(ngModel)]="Telefono.tipo" name="newTipo" >
+                                            <mat-option *ngFor="let tt of tipostelefono" value={{tt.id}}>
+                                                {{ tt.nombre }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
                                 </td>
 
                                 <td>
-                                    <button class="btn btn-default" type="button" (click)="addTelefono()">Agregar</button>
+                                    <button mat-raised-button class="primary" (click)="addTelefono()">Agregar</button>
+
                                 </td>
                             </tr>
                             </tbody>
@@ -312,11 +393,52 @@
 
                 </div>
 
+                <div class="row">
+                    <div class='col-xs-6 col-sm-4'>
+                    <mat-form-field class="">
+                        <mat-select placeholder="Disponibilidad de traslado"  [(ngModel)]="personal.dispotraslado" name="dispotraslado" id="dispotraslado" >
+                            <mat-option *ngFor="let t of dispotrasladolist" value={{t.id}}>
+                                {{ t.nombre }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                        </div>
+
+                    <div class='col-xs-6 col-sm-4'>
+                        <mat-form-field class="">
+                            <mat-select placeholder="Disponibilidad de horas"  [(ngModel)]="personal.dispohoras" name="dispohoras" id="dispohoras" >
+                                <mat-option *ngFor="let t of dispohoraslist" value={{t.id}}>
+                                    {{ t.valor }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+
+                    <div class='col-xs-6 col-sm-4'>
+                        <mat-form-field class="">
+                            <mat-select placeholder="Movilidad Propia" [formControl]="movpropiaFormControl" [errorStateMatcher]="matcher"  [(ngModel)]="personal.movilidadpropia" name="movilidadpropia" id="movilidadpropia" >
+                                <mat-option *ngFor="let t of movilidadpropialist" value={{t.id}}>
+                                    {{ t.nombre }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-hint><span class="requerido" *ngIf="movpropiaFormControl.value==''">campo obligatorio</span></mat-hint>
+                            <mat-error *ngIf="movpropiaFormControl.hasError('required')">
+                                Campo <strong>requerido</strong>
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
+
+
+                </div>
+
 
                 <div class="form-group text-center">
-                    <button class="btn btn-success btn-outline-rounded btn-info botonporto" [disabled]="!personalForm.valid" (click)="goToNext(personalForm)"> Siguiente <span style="margin-left:10px;" class="glyphicon glyphicon-arrow-right"></span></button>
+                    <button class="btn btn-borders btn-info mr-xs mb-sm" [disabled]="!personalForm.valid" (click)="goToNext(personalForm)" style="float: right;margin: 40px"> Siguiente <span style="margin-left:10px;" class="glyphicon glyphicon-arrow-right"></span></button>
                 </div>
             </div>
         </div>
     </div>
 </form>
+

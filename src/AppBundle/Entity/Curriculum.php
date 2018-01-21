@@ -148,11 +148,38 @@ class Curriculum {
      */
     private $telefonos;
 
-   //Paso
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dispotraslado",type="string", length=2)
+     */
+    private $dispotraslado;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dispohoras",type="integer")
+     */
+    private $dispohoras;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="movilidadpropia",type="string", length=2)
+     */
+    private $movilidadpropia;
+
+
+    //Paso
     /**
      * @ORM\OneToMany(targetEntity="Estudio" , mappedBy="curriculum", cascade={"persist", "detach"})
      */
     private $estudios;
+
+
+
+
 
 
 
@@ -682,5 +709,77 @@ class Curriculum {
     public function getEstudios()
     {
         return $this->estudios;
+    }
+
+    /**
+     * Set dispotraslado
+     *
+     * @param string $dispotraslado
+     *
+     * @return Curriculum
+     */
+    public function setDispotraslado($dispotraslado)
+    {
+        $this->dispotraslado = $dispotraslado;
+
+        return $this;
+    }
+
+    /**
+     * Get dispotraslado
+     *
+     * @return string
+     */
+    public function getDispotraslado()
+    {
+        return $this->dispotraslado;
+    }
+
+    /**
+     * Set dispohoras
+     *
+     * @param integer $dispohoras
+     *
+     * @return Curriculum
+     */
+    public function setDispohoras($dispohoras)
+    {
+        $this->dispohoras = $dispohoras;
+
+        return $this;
+    }
+
+    /**
+     * Get dispohoras
+     *
+     * @return integer
+     */
+    public function getDispohoras()
+    {
+        return $this->dispohoras;
+    }
+
+    /**
+     * Set movilidadpropia
+     *
+     * @param string $movilidadpropia
+     *
+     * @return Curriculum
+     */
+    public function setMovilidadpropia($movilidadpropia)
+    {
+        $this->movilidadpropia = $movilidadpropia;
+
+        return $this;
+    }
+
+    /**
+     * Get movilidadpropia
+     *
+     * @return string
+     */
+    public function getMovilidadpropia()
+    {
+        return $this->movilidadpropia;
     }
 }

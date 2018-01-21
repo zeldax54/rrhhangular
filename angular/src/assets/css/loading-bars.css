@@ -33,3 +33,14 @@
 .example-full-width {
     width: 100%;
 }
+
+.requerido{
+    color: green;
+    font-weight: 700;
+}
+
+.tabledeletebtn{
+
+    color:#F06B21 !important;
+}
+

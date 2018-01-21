@@ -148,11 +148,36 @@ class Curriculum {
      */
     private $telefonos;
 
-   //Paso
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dispotraslado",type="string", length=2)
+     */
+    private $dispotraslado;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dispohoras",type="integer")
+     */
+    private $dispohoras;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="movilidadpropia",type="string", length=2)
+     */
+    private $movilidadpropia;
+
+
+    //Paso
     /**
      * @ORM\OneToMany(targetEntity="Estudio" , mappedBy="curriculum", cascade={"persist", "detach"})
      */
     private $estudios;
+
+
 
 
 
@@ -648,5 +673,39 @@ class Curriculum {
     public function getTelefonos()
     {
         return $this->telefonos;
+    }
+
+    /**
+     * Add estudio
+     *
+     * @param \AppBundle\Entity\Estudio $estudio
+     *
+     * @return Curriculum
+     */
+    public function addEstudio(\AppBundle\Entity\Estudio $estudio)
+    {
+        $this->estudios[] = $estudio;
+
+        return $this;
+    }
+
+    /**
+     * Remove estudio
+     *
+     * @param \AppBundle\Entity\Estudio $estudio
+     */
+    public function removeEstudio(\AppBundle\Entity\Estudio $estudio)
+    {
+        $this->estudios->removeElement($estudio);
+    }
+
+    /**
+     * Get estudios
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEstudios()
+    {
+        return $this->estudios;
     }
 }

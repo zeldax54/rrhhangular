@@ -3,4 +3,13 @@
 @import "assets/css/style.css";
 /*@import "assets/css/form.css";*/
 @import "assets/css/loading-bars.css";
-@import "~@angular/material/prebuilt-themes/indigo-pink.css"
+
+
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+/*@import '../node_modules/@swimlane/ngx-datatable/release/index.css';*/
+/*@import '../node_modules/@swimlane/ngx-datatable/release/themes/dark.css';*/
+/*@import '../node_modules/@swimlane/ngx-datatable/release/assets/icons.css';*/
+
+/*@import "assets/css/overridetable.css";*/

@@ -1,14 +1,19 @@
+
 <form #workForm="ngForm" class="editForm" novalidate>
 
         <div class="tab-pane fade in active">
             <h4 class="head text-center">{{title}}</h4>
             <h4 class="head text-center">Saber qué has estudiado nos permite elegirte </h4>
             <br/>
+            <div class="row">
 
-            <div class='row'>
-                <div class='col-xs-6 col-sm-6'>
+            <div class='col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8'>
+
+                <div class='row'>
+
+                    <div class='col-xs-6 col-sm-6'>
                         <mat-form-field class="example-full-width">
-                            <mat-select placeholder="*Estudios" [formControl]="estudiotipoFormControl" [errorStateMatcher]="matcher"  [(ngModel)]="estudio.estudiotipo" name="estudiotipo" id="estudiotipo" >
+                            <mat-select [placeholder]="estudiostipoPlaceholder" [formControl]="estudiotipoFormControl" [errorStateMatcher]="matcher"  [(ngModel)]="estudio.estudiotipo" name="estudiotipo" id="estudiotipo" >
                                 <mat-option *ngFor="let t of estudiostipo" [value]="t.id">
                                     {{ t.nombre }}
                                 </mat-option>
@@ -19,7 +24,7 @@
                             </mat-error>
                         </mat-form-field>
                     </div>
-                <div class='col-xs-6 col-sm-6'>
+                    <div class='col-xs-6 col-sm-6'>
                         <mat-form-field class="example-full-width">
                             <input matInput placeholder="Institución" [formControl]="institucionFormControl" [errorStateMatcher]="matcher" id="institucion" name="institucion" type="text" placeholder="Institución" [(ngModel)]="estudio.institucion">
                             <mat-hint>Entre la institucion en la que cursó los estudios</mat-hint>
@@ -28,110 +33,274 @@
                             </mat-error>
                         </mat-form-field>
 
+                    </div>
+                </div><br>
+
+
+                <div class="row">
+                    <div class='col-xs-6 col-sm-2'>
+                        <mat-form-field class="example-full-width">
+                            <mat-select [placeholder]="estudioestadosPlaceholder" [formControl]="estudioestadoFormControl" [errorStateMatcher]="matcher" [(ngModel)]="estudio.estudioestado" name="estudioestado" id="estudioestado" (change)="handleState(estudioestadoFormControl.value)" >
+                                <mat-option *ngFor="let t of estudioestados" [value]="t.id">
+                                    {{ t.nombre }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-hint>Estado actual</mat-hint>
+                            <mat-error *ngIf="estudioestadoFormControl.hasError('required')">
+                                Campo <strong>requerido</strong>
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
+
+                    <div class='col-xs-6 col-sm-6' *ngIf="completado">
+
+                        <mat-form-field class="example-full-width" >
+                            <input matInput [placeholder]="estudiotitulosPlaceholder" aria-label="Título" [matAutocomplete]="auto" [formControl]="estudiotitulosCtrl" [(ngModel)]="estudio.estudiotitulo" name="estudiotitulo" id="estudiotitulo">
+                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                                <mat-option *ngFor="let state of filteredStates | async" [value]="state">
+                                    <span>{{ state.nombre }}</span>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                        <br/>
+                        <mat-slide-toggle
+                                [checked]="estudiotitulosCtrl.disabled"
+                                (change)="estudiotitulosCtrl.disabled ? estudiotitulosCtrl.enable() : estudiotitulosCtrl.disable()">
+                            Bloquear
+                        </mat-slide-toggle>
+
+
+                    </div>
+
+                    <div class='col-xs-6 col-sm-2' *ngIf="completado">
+
+                        <mat-form-field class="example-full-width" >
+                            <input matInput placeholder="Ingreso" aria-label="Año de ingreso" [matAutocomplete]="auto" [formControl]="annoingresoCtrl" [(ngModel)]="estudio.annoingreso" name="annoingreso" id="annoingreso">
+                            <mat-autocomplete #auto="matAutocomplete" >
+                                <mat-option *ngFor="let state of filterannos | async" [value]="state.anno">
+                                    <span>{{ state.anno }}</span>
+                                </mat-option>
+                            </mat-autocomplete>
+                            <mat-hint>Año</mat-hint>
+                        </mat-form-field>
+                        <br/>
+                        <mat-slide-toggle
+                                [checked]="annoingresoCtrl.disabled"
+                                (change)="annoingresoCtrl.disabled ? annoingresoCtrl.enable() : annoingresoCtrl.disable()">
+                            Bloquear
+                        </mat-slide-toggle>
+
+
+                    </div>
+
+                    <div class='col-xs-6 col-sm-2' *ngIf="completado">
+
+                        <mat-form-field class="example-full-width" >
+                            <input matInput placeholder="Egreso" aria-label="Año de egreso" [matAutocomplete]="auto" [formControl]="annoegresoCtrl" [(ngModel)]="estudio.annoegreso" name="annoegreso" id="annoegreso">
+                            <mat-autocomplete #auto="matAutocomplete" >
+                                <mat-option *ngFor="let state of filterannoseg | async" [value]="state.anno">
+                                    <span>{{ state.anno }}</span>
+                                </mat-option>
+                            </mat-autocomplete>
+                            <mat-hint>Año</mat-hint>
+                        </mat-form-field>
+                        <br/>
+                        <mat-slide-toggle
+                                [checked]="annoegresoCtrl.disabled"
+                                (change)="annoegresoCtrl.disabled ? annoegresoCtrl.enable() : annoegresoCtrl.disable()">
+                            Bloquear
+                        </mat-slide-toggle>
+
+
+                    </div>
+
+                    <div class='col-xs-6 col-sm-4' *ngIf="encurso">
+                        <mat-form-field class="example-full-width">
+                <textarea  matInput  matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="5"  name="materiasaprobadas" type="text" placeholder="Materias aprobadas" [(ngModel)]="estudio.materiasaprobadas">
+                </textarea>
+                            <mat-hint>Materias aprobadas en el transcurso de sus estudios</mat-hint>
+                        </mat-form-field>
+                    </div>
+
+                    <div class='col-xs-6 col-sm-4' *ngIf="encurso">
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Cantidad de Materias"   name="cantidadmaterias" type="text" placeholder="Cantidad de materias" [(ngModel)]="estudio.cantidadmaterias">
+                            <mat-hint>Cantidad de materias aprobadas en el transcurso de sus estudios</mat-hint>
+                        </mat-form-field>
+                    </div>
+
+                    <div class='col-xs-6 col-sm-6' *ngIf="incompleto">
+                        <mat-form-field class="example-full-width">
+                <textarea  matInput  matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="5"  name="annosaprobadoscursados" type="text" placeholder="Años aprobados/cursados" [(ngModel)]="estudio.annosaprobadoscursados">
+                </textarea>
+                            <mat-hint>Años aprobados/cursados durante sus estudios</mat-hint>
+                        </mat-form-field>
+                    </div>
+
+
+                </div><br>
+
+
+                <div class="row">
+
+                    <h4 class="head text-left text-uppercase font-weight-bold">
+                        Idiomas
+                    </h4>
+
+                    <div class='col-xs-6 col-sm-3'>
+                        <mat-form-field class="example-full-width">
+                            <mat-select [placeholder]="idiomasPlaceHolder"   name="idioma" id="idioma"  [(ngModel)]="estudioIdioma.idioma">
+                                <mat-option *ngFor="let t of idiomas" [value]="t.id">
+                                    {{ t.idioma }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                    </div>
+
+                    <div class='col-xs-6 col-sm-3'>
+                        <button class="btn btn-borders btn-quaternary mr-xs mb-sm" (click)="AgregarIdioma();">Agregar Idioma</button>
+
+                    </div>
+
+
                 </div>
-            </div>
+                <div class="row">
+
+                    <div class='col-xs-6 col-sm-12'>
+                        <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+
+                            <ng-container matColumnDef="idioma">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Idioma</mat-header-cell>
+                                <mat-cell *matCellDef="let row" >
+
+                                    {{row.idiomaname}}
 
 
-        <div class="row">
-                <div class='col-xs-6 col-sm-2'>
-                    <mat-form-field class="example-full-width">
-                        <mat-select placeholder="*Estado" [formControl]="estudioestadoFormControl" [errorStateMatcher]="matcher" [(ngModel)]="estudio.estudioestado" name="estudioestado" id="estudioestado" (change)="handleState(estudioestadoFormControl.value)" >
-                            <mat-option *ngFor="let t of estudioestados" [value]="t.id">
-                                {{ t.nombre }}
-                            </mat-option>
-                        </mat-select>
-                        <mat-hint>Estado actual</mat-hint>
-                        <mat-error *ngIf="estudioestadoFormControl.hasError('required')">
-                            Campo <strong>requerido</strong>
-                        </mat-error>
-                    </mat-form-field>
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="nivellectura">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Lectura</mat-header-cell>
+                                <mat-cell *matCellDef="let row" >
+
+                                    <mat-select [placeholder]="nivelesPlaceHolder"  [(ngModel)]="row.nivellectura" name="{{row.nivellectura+'lectura'+row.idioma}}" (change)="updateEstudioIdiomas();" >
+                                        <mat-option *ngFor="let t of niveles" [value]="t.id">
+                                            {{ t.nivel }}
+                                        </mat-option>
+                                    </mat-select>
+
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="nivelescritura">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Escritura</mat-header-cell>
+                                <mat-cell *matCellDef="let row" >
+                                    <mat-select [placeholder]="nivelesPlaceHolder"  [(ngModel)]="row.nivelescritura" name="{{row.nivelescritura+'escritura'+row.idioma}}" (change)="updateEstudioIdiomas();">
+                                        <mat-option *ngFor="let t of niveles" [value]="t.id">
+                                            {{ t.nivel }}
+                                        </mat-option>
+                                    </mat-select>
+
+
+
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="nivelconversacion">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Conversacion</mat-header-cell>
+                                <mat-cell *matCellDef="let row" >
+
+                                    <mat-select [placeholder]="nivelesPlaceHolder"  [(ngModel)]="row.nivelconversacion" name="{{row.nivelconversacion+'conversacion'+row.idioma}}" (change)="updateEstudioIdiomas();">
+                                        <mat-option *ngFor="let t of niveles" [value]="t.id">
+                                            {{ t.nivel }}
+                                        </mat-option>
+                                    </mat-select>
+
+
+                                </mat-cell>
+                            </ng-container>
+
+
+                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                            <ng-container matColumnDef="actions">
+                                <mat-header-cell *matHeaderCellDef>
+                                    <button mat-icon-button color="primary">
+                                        <mat-icon aria-label="Example icon-button with a heart icon">Acciones</mat-icon>
+                                    </button>
+                                </mat-header-cell>
+
+                                <mat-cell *matCellDef="let row; let i=index;">
+
+                                    <button class="tabledeletebtn" mat-icon-button color="accent" (click)="deleteItem(row.idioma)">
+                                        <mat-icon aria-label="Delete">delete</mat-icon>
+                                    </button>
+                                </mat-cell>
+                            </ng-container>
+
+                        </mat-table>
+
+                    </div>
 
                 </div>
 
-             <div class='col-xs-6 col-sm-6' *ngIf="completado">
 
-                 <mat-form-field class="example-full-width" >
-                     <input matInput placeholder="Título" aria-label="Título" [matAutocomplete]="auto" [formControl]="estudiotitulosCtrl" [(ngModel)]="estudio.estudiotitulo" name="estudiotitulo" id="estudiotitulo">
-                     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-                         <mat-option *ngFor="let state of filteredStates | async" [value]="state">
-                             <span>{{ state.nombre }}</span>
-                         </mat-option>
-                     </mat-autocomplete>
-                 </mat-form-field>
-                 <br/>
-                 <mat-slide-toggle
-                         [checked]="estudiotitulosCtrl.disabled"
-                         (change)="estudiotitulosCtrl.disabled ? estudiotitulosCtrl.enable() : estudiotitulosCtrl.disable()">
-                     Bloquear
-                 </mat-slide-toggle>
+                <br>
+                <div class="row">
 
+                    <h4 class="head text-left text-uppercase font-weight-bold">
+                        Cursos/Seminarios/Congresos
+                    </h4>
+                    <div class='col-xs-6 col-sm-4'>
 
-            </div>
+                        <mat-form-field class="example-full-width">
+                        <textarea  matInput  matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="5"  name="cursos" type="text" placeholder="Cursos" [(ngModel)]="estudio.cursos">
+                        </textarea>
+                        <mat-hint>Cursos recibidos</mat-hint>
+                        </mat-form-field>
 
-            <div class='col-xs-6 col-sm-2' *ngIf="completado">
+                    </div>
 
-                <mat-form-field class="example-full-width" >
-                    <input matInput placeholder="Año de ingreso" aria-label="Año de ingreso" [matAutocomplete]="auto" [formControl]="annoingresoCtrl" [(ngModel)]="estudio.annoingreso" name="annoingreso" id="annoingreso">
-                    <mat-autocomplete #auto="matAutocomplete" >
-                        <mat-option *ngFor="let state of filterannos | async" [value]="state.anno">
-                            <span>{{ state.anno }}</span>
-                        </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-                <br/>
-                <mat-slide-toggle
-                        [checked]="annoingresoCtrl.disabled"
-                        (change)="annoingresoCtrl.disabled ? annoingresoCtrl.enable() : annoingresoCtrl.disable()">
-                    Bloquear
-                </mat-slide-toggle>
+                    <div class='col-xs-6 col-sm-4'>
+
+                        <mat-form-field class="example-full-width">
+                        <textarea  matInput  matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="5"  name="seminarios" type="text" placeholder="Seminarios" [(ngModel)]="estudio.seminarios">
+                        </textarea>
+                            <mat-hint>Seminarios recibidos</mat-hint>
+                        </mat-form-field>
+
+                    </div>
 
 
-            </div>
+                    <div class='col-xs-6 col-sm-4'>
 
-            <div class='col-xs-6 col-sm-2' *ngIf="completado">
+                        <mat-form-field class="example-full-width">
+                        <textarea  matInput  matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="5"  name="congresos" type="text" placeholder="Congresos" [(ngModel)]="estudio.congresos">
+                        </textarea>
+                            <mat-hint>Congresos a los que ha asistido</mat-hint>
+                        </mat-form-field>
 
-                <mat-form-field class="example-full-width" >
-                    <input matInput placeholder="Año de egreso" aria-label="Año de egreso" [matAutocomplete]="auto" [formControl]="annoegresoCtrl" [(ngModel)]="estudio.annoegreso" name="annoegreso" id="annoegreso">
-                    <mat-autocomplete #auto="matAutocomplete" >
-                        <mat-option *ngFor="let state of filterannoseg | async" [value]="state.anno">
-                            <span>{{ state.anno }}</span>
-                        </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-                <br/>
-                <mat-slide-toggle
-                        [checked]="annoegresoCtrl.disabled"
-                        (change)="annoegresoCtrl.disabled ? annoegresoCtrl.enable() : annoegresoCtrl.disable()">
-                    Bloquear
-                </mat-slide-toggle>
+                    </div>
 
+
+
+                </div>
+
+
+
+
+
+                <div class="form-group text-center space-20">
+                    <button class="btn btn-borders btn-info mr-xs mb-sm" (click)="goToPrevious(workForm)"> <span style="margin-right:10px;" class="glyphicon glyphicon-arrow-left"></span> Anterior</button>
+                    <button class="btn btn-borders btn-success mr-xs mb-sm" [disabled]="!workForm.valid" (click)="goToNext(workForm)"> Siguiente <span style="margin-left:10px;" class="glyphicon glyphicon-arrow-right"></span></button>
+                </div>
+                </div>
 
             </div>
 
-
-
-
-
-        </div>
-
-            <div class="row">
-
-
-                    <!--<mat-form-field>-->
-                        <!--<input matInput [matDatepicker]="picker" placeholder="Choose a date">-->
-                        <!--<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>-->
-                        <!--<mat-datepicker #picker></mat-datepicker>-->
-                    <!--</mat-form-field>-->
-
-
-
-            </div>
-
-
-            <div class="form-group text-center space-20">
-                <button class="btn btn-outline-rounded btn-default" (click)="goToPrevious(workForm)"> <span style="margin-right:10px;" class="glyphicon glyphicon-arrow-left"></span> Anterior</button>
-                <button class="btn btn-outline-rounded btn-info botonporto" [disabled]="!workForm.valid" (click)="goToNext(workForm)"> Siguiente <span style="margin-left:10px;" class="glyphicon glyphicon-arrow-right"></span></button>
-            </div>
         </div>
 
 </form>

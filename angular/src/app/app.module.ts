@@ -4,6 +4,7 @@ import 'hammerjs';
 
 import { FormsModule,ReactiveFormsModule }        from '@angular/forms';
 
+
 import {routing,appRoutingProviders} from './app.routing';
 import { AppComponent } from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -23,6 +24,7 @@ import { WorkComponent } from './components/work/work.component';
 import { ResultComponent } from './components/result/result.component';
 
 /* Shared Service */
+import { EnvironmentSpecificService }    from './services/enviromentSpecific';
 import { FormDataService }    from './data/formData.service';
 import { WorkflowService }    from './workflow/workflow.service';
 import {WorkflowGuard} from "./workflow/workflow-guard.service";
@@ -32,7 +34,9 @@ import {ValidatorService} from './services/validator.service';
 import {EstadoCivilService} from './services/estadocivil';
 import {PaisesService} from './services/paises.services';
 import {FilterPipe} from './pipes/filter.pipe';
-import {NomencladoresService} from './services/nomencladores.service';
+import {NomencladoresService} from "./services/nomencladores.service";
+import {EnvironmentSpecificResolver} from "./services/configuration.service";
+//import	{	NgxDatatableModule	}	from	'@swimlane/ngx-datatable';
 
 
 
@@ -62,18 +66,23 @@ import {NomencladoresService} from './services/nomencladores.service';
       HttpClientModule,
       BrowserAnimationsModule,
       MyOwnCustomMaterialModule,
-      ReactiveFormsModule
+      ReactiveFormsModule,
+
 
   ],
     exports: [
 
     ],
   providers: [
+
+      EnvironmentSpecificService,
+      EnvironmentSpecificResolver,
+      NomencladoresService,
       TiposDocService,
       ValidatorService,
       EstadoCivilService,
       PaisesService,
-      NomencladoresService,
+
       WorkflowGuard,
       appRoutingProviders,
       { provide: FormDataService, useClass: FormDataService },

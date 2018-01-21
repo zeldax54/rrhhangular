@@ -9,16 +9,18 @@ import {PersonalComponent} from "./components/personal/personal.component";
 import {WorkComponent} from "./components/work/work.component";
 import {AddressComponent} from "./components/address/address.component";
 import {WorkflowGuard} from "./workflow/workflow-guard.service";
+import {EnvironmentSpecificResolver} from "./services/configuration.service";
+
 
 const appRoutes:Routes=[
 
     {path:'',component:MainComponent},
 
-    {path:'registrar',component:RegisterFormHostComponent,children:[
+    {path:'registrar',component:RegisterFormHostComponent,resolve: { envSpecific: EnvironmentSpecificResolver },children:[
 
         { path: 'personal',  component: PersonalComponent },
 
-        { path: 'work',  component: WorkComponent, canActivate: [WorkflowGuard] },
+        { path: 'work',  component: WorkComponent,canActivate: [WorkflowGuard] },
         // 3rd Route
         { path: 'address',  component: AddressComponent, canActivate: [WorkflowGuard] },
         // 4th Route
@@ -26,7 +28,8 @@ const appRoutes:Routes=[
     ]},
 
 
-    {path:'**',component:MainComponent}
+    {path:'**',component:MainComponent},
+
     ];
 
 

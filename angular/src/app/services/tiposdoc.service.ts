@@ -7,18 +7,17 @@ import {GLOBAL} from "./global";
 @Injectable()
 export class TiposDocService{
 
-    public url:string;
 
     constructor(
         public http: HttpClient
     )
     {
-        this.url=GLOBAL.url;
+
     }
 
 
-    getTiposDoc():Observable<any>{
-        return this.http.get(this.url+'/tiposdoc/getall');
+    getTiposDoc(url:string):Observable<any>{
+        return this.http.get(url+'/tiposdoc/getall');
     }
 
 

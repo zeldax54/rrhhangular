@@ -7,18 +7,18 @@ import {GLOBAL} from "./global";
 @Injectable()
 export class PaisesService{
 
-    public url:string;
+
 
     constructor(
         public http: HttpClient
     )
     {
-        this.url=GLOBAL.url;
+
     }
 
 
-    getPaises():Observable<any>{
-        return this.http.get(this.url+'/pais/getall');
+    getPaises(url:string):Observable<any>{
+        return this.http.get(url+'/pais/getall');
     }
 
 

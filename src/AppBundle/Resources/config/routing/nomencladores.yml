@@ -13,3 +13,15 @@ estudiotitulos:
 annos:
     path:     /annos/getall
     defaults: { _controller: AppBundle:Nomencladores:annosget }
+
+idiomas:
+    path:     /idiomas/getall
+    defaults: { _controller: AppBundle:Nomencladores:idiomasget }
+
+niveles:
+    path:     /niveles/getall
+    defaults: { _controller: AppBundle:Nomencladores:nivelesget }
+
+habilidad:
+    path:     /habilidades/getall
+    defaults: { _controller: AppBundle:Nomencladores:habilidadesget }

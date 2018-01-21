@@ -19,7 +19,7 @@ export class WorkflowGuard implements CanActivate {
 
     verifyWorkFlow(path) : boolean {
 
-
+        //
         //// If any of the previous steps is invalid, go back to the first invalid step
         //let firstPath = this.workflowService.getFirstInvalidStep(path);
         //if (firstPath.length > 0) {

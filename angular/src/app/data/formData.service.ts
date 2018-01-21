@@ -40,7 +40,11 @@ export class FormDataService {
             pais:this.formData.pais,
             provincia:this.formData.provincia,
             localidad:this.formData.localidad,
-            telefonos:this.formData.telefonos
+            telefonos:this.formData.telefonos,
+            dispotraslado:this.formData.dispotraslado,
+            dispohoras:this.formData.dispohoras,
+            movilidadpropia:this.formData.movilidadpropia,
+            cachePersonal:this.formData.cachePersonal
         };
         return personal;
     }
@@ -68,6 +72,10 @@ export class FormDataService {
         this.formData.provincia=data.provincia;
         this.formData.localidad=data.localidad;
         this.formData.telefonos=data.telefonos;
+        this.formData.dispotraslado=data.dispotraslado;
+        this.formData.dispohoras=data.dispohoras;
+        this.formData.movilidadpropia=data.movilidadpropia;
+        this.formData.cachePersonal=data.cachePersonal;
 
         // Validate Personal Step in Workflow
         this.workflowService.validateStep(STEPS.personal);
@@ -82,6 +90,15 @@ export class FormDataService {
             estudiotitulo:this.formData.estudiotitulo,
             annoingreso:this.formData.annoingreso,
             annoegreso:this.formData.annoegreso,
+            materiasaprobadas:this.formData.materiasaprobadas,
+            cantidadmaterias:this.formData.cantidadmaterias,
+            annosaprobadoscursados:this.formData.annosaprobadoscursados,
+            estudioIdiomas:this.formData.estudioIdiomas,
+            cacheEstudio:this.formData.cacheEstudio,
+            cursos:this.formData.cursos,
+            seminarios:this.formData.seminarios,
+            congresos:this.formData.congresos,
+
 
 
 
@@ -97,7 +114,17 @@ export class FormDataService {
         this.formData.institucion = data.institucion;
         this.formData.estudiotitulo = data.estudiotitulo;
         this.formData.annoingreso = data.annoingreso;
-        this.formData.annoegreso = data.annoingreso;
+        this.formData.annoegreso = data.annoegreso;
+        this.formData.materiasaprobadas = data.materiasaprobadas;
+        this.formData.cantidadmaterias = data.cantidadmaterias;
+        this.formData.annosaprobadoscursados = data.annosaprobadoscursados;
+        this.formData.estudioIdiomas = data.estudioIdiomas;
+        this.formData.cacheEstudio = data.cacheEstudio;
+        this.formData.cursos = data.cursos;
+        this.formData.seminarios = data.seminarios;
+        this.formData.congresos = data.congresos;
+
+
 
         // Validate Work Step in Workflow
         this.workflowService.validateStep(STEPS.work);

@@ -15,9 +15,14 @@ import {
     MatCheckboxModule,
     MatAutocompleteModule,
     MatFormFieldModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSnackBarModule
+
 
 } from '@angular/material';
+
 
 
 
@@ -38,7 +43,11 @@ import {
         MatCheckboxModule ,
         MatAutocompleteModule,
         MatFormFieldModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSnackBarModule
+
         ],
     exports: [
         MatButtonModule,
@@ -56,7 +65,11 @@ import {
         MatCheckboxModule,
         MatAutocompleteModule,
         MatFormFieldModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSnackBarModule
+
         ],
 })
 export class MyOwnCustomMaterialModule { }

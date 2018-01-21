@@ -1,0 +1,127 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use JMS\Serializer\Annotation as JMS;
+
+
+
+
+/**
+ * Tipodoc
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\HabilidadRepository")
+ * @ORM\Table(name="habilidad")
+ */
+class Habilidad
+{
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="habilidad", type="string",length=250 )
+     */
+    private $habilidad;
+
+
+    /**
+     * @JMS\Exclude();
+     * @ORM\OneToMany(targetEntity="EstudioIdioma" , mappedBy="habilidad", cascade={"persist", "detach"})
+     */
+    private $estudioshabilidad;
+
+
+
+
+
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->estudiohabilidad = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set habilidad
+     *
+     * @param string $habilidad
+     *
+     * @return Habilidad
+     */
+    public function setHabilidad($habilidad)
+    {
+        $this->habilidad = $habilidad;
+
+        return $this;
+    }
+
+    /**
+     * Get habilidad
+     *
+     * @return string
+     */
+    public function getHabilidad()
+    {
+        return $this->habilidad;
+    }
+
+    /**
+     * Add estudiohabilidad
+     *
+     * @param \AppBundle\Entity\EstudioIdioma $estudiohabilidad
+     *
+     * @return Habilidad
+     */
+    public function addEstudiohabilidad(\AppBundle\Entity\EstudioIdioma $estudiohabilidad)
+    {
+        $this->estudiohabilidad[] = $estudiohabilidad;
+
+        return $this;
+    }
+
+    /**
+     * Remove estudiohabilidad
+     *
+     * @param \AppBundle\Entity\EstudioIdioma $estudiohabilidad
+     */
+    public function removeEstudiohabilidad(\AppBundle\Entity\EstudioIdioma $estudiohabilidad)
+    {
+        $this->estudiohabilidad->removeElement($estudiohabilidad);
+    }
+
+    /**
+     * Get estudiohabilidad
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEstudiohabilidad()
+    {
+        return $this->estudiohabilidad;
+    }
+}

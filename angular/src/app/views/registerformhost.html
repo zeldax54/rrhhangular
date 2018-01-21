@@ -3,7 +3,7 @@
 <br>
 <br>
 <div role="main" class="main" style="margin-top: 37px">
-
+    <!--<button class="btn btn-success" (click)="ShowHide();">Mostrar</button>-->
     <div class="board">
         <!-- Navigation Area (Circular Tabs) -->
         <msw-navbar></msw-navbar>
@@ -20,4 +20,8 @@
         <!-- For Debugging: show our valid formData -->
 
     </div>
-<pre>{{ formData | json }}</pre>
+
+
+<div>
+    <pre *ngIf="show">{{ formData | json }}</pre>
+</div>
