@@ -39,6 +39,11 @@ export class FormData {
     cursos:string='';
     seminarios:string='';
     congresos:string='';
+    //Experiencia
+    hasexperiencia:number=0;
+    experiencias:Array<Experiencia>=[];
+
+
 
 
 
@@ -72,7 +77,7 @@ export class FormData {
         this.dispotraslado='';
         this.dispohoras=2;
         this.movilidadpropia='';
-
+        //Estudios
         this.cacheEstudio=new CacheEstudio();
         this.estudiotipo=null;
         this.estudioestado=null;
@@ -87,6 +92,9 @@ export class FormData {
         this.cursos='';
         this.seminarios='';
         this.congresos='';
+        //Experiencia
+        this.hasexperiencia=0;
+        this.experiencias=[];
 
 
 
@@ -193,10 +201,30 @@ export class EstuduiIdiomaVisual{
 }
 
 
-export class Address {
-    street: string = '';
-    city: string = '';
-    state: string = '';
-    zip: string = '';
+export class ExperienciaLaboral {
+
+
+    hasexperiencia:number=0;
+    experiencias:Array<Experiencia>=[];
+
+}
+
+export  class Experiencia{
+
+    empresa:string='';
+    fechaingreso:Date=null;
+    fechaegreso:Date=null;
+    motivoegreso:string='';
+    puestodesempenado:string='';
+    principalesresponsabilidades:string='';
+    principalestareas:string='';
+    direccion:string='';
+    actividad:string='';
+    actividadempresa:string='';
+    localidad:string='';
+    pais:number=0;
+    provincia:number=0;
+    telefono:string='';
+    referencias:string='';
 }
 

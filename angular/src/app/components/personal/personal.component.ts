@@ -178,7 +178,7 @@ export class PersonalComponent implements OnInit {
 
         this.Hijos=this.personal.hijos;
         this.Telefonos=this.personal.telefonos;
-
+        window.scrollTo(0, 0);
     }
 
     validateMail(formulario:any){

@@ -177,7 +177,10 @@ class Curriculum {
      */
     private $estudios;
 
-
+    /**
+     * @ORM\OneToMany(targetEntity="ExperienciaLaboral" , mappedBy="curriculum", cascade={"persist", "detach"})
+     */
+    private $experienciaslaborales;
 
 
 
@@ -781,5 +784,39 @@ class Curriculum {
     public function getMovilidadpropia()
     {
         return $this->movilidadpropia;
+    }
+
+    /**
+     * Add experienciaslaborale
+     *
+     * @param \AppBundle\Entity\ExperienciaLaboral $experienciaslaborale
+     *
+     * @return Curriculum
+     */
+    public function addExperienciaslaborale(\AppBundle\Entity\ExperienciaLaboral $experienciaslaborale)
+    {
+        $this->experienciaslaborales[] = $experienciaslaborale;
+
+        return $this;
+    }
+
+    /**
+     * Remove experienciaslaborale
+     *
+     * @param \AppBundle\Entity\ExperienciaLaboral $experienciaslaborale
+     */
+    public function removeExperienciaslaborale(\AppBundle\Entity\ExperienciaLaboral $experienciaslaborale)
+    {
+        $this->experienciaslaborales->removeElement($experienciaslaborale);
+    }
+
+    /**
+     * Get experienciaslaborales
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExperienciaslaborales()
+    {
+        return $this->experienciaslaborales;
     }
 }

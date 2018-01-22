@@ -22,6 +22,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { PersonalComponent } from './components/personal/personal.component';
 import { WorkComponent } from './components/work/work.component';
 import { ResultComponent } from './components/result/result.component';
+import { AddDialogComponent } from './components/dialogos/add_experiencia.dialogg';
 
 /* Shared Service */
 import { EnvironmentSpecificService }    from './services/enviromentSpecific';
@@ -47,7 +48,7 @@ import {EnvironmentSpecificResolver} from "./services/configuration.service";
 
 @NgModule({
   declarations: [
-    AppComponent,
+      AppComponent,
       HeadComponent,
       FooterComponent,
       MainComponent,
@@ -57,8 +58,12 @@ import {EnvironmentSpecificResolver} from "./services/configuration.service";
       PersonalComponent,
       WorkComponent,
       ResultComponent,
-      FilterPipe
+      FilterPipe,
+      AddDialogComponent
   ],
+    entryComponents: [
+        AddDialogComponent
+    ],
   imports: [
     BrowserModule,
       FormsModule,

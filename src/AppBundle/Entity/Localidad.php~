@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use JMS\Serializer\Annotation as JMS;
 
 
 
@@ -43,9 +44,17 @@ class Localidad
 
 
     /**
+     * @JMS\Exclude();
      * @ORM\OneToMany(targetEntity="Curriculum" , mappedBy="localidad", cascade={"persist", "detach"})
      */
     private $curriculumns;
+
+
+    /**
+     * @JMS\Exclude();
+     * @ORM\OneToMany(targetEntity="ExperienciaLaboral" , mappedBy="pais", cascade={"persist", "detach"})
+     */
+    private $experiencias;
 
 
 

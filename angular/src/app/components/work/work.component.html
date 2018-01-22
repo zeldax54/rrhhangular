@@ -160,7 +160,7 @@
                     </div>
 
                     <div class='col-xs-6 col-sm-3'>
-                        <button class="btn btn-borders btn-quaternary mr-xs mb-sm" (click)="AgregarIdioma();">Agregar Idioma</button>
+                        <button class="btn btn-borders btn-quaternary mr-xs mb-sm agregaridioma" (click)="AgregarIdioma();">Agregar Idioma</button>
 
                     </div>
 
@@ -168,7 +168,7 @@
                 </div>
                 <div class="row">
 
-                    <div class='col-xs-6 col-sm-12'>
+                    <div class='tablecontainer'>
                         <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
 
                             <ng-container matColumnDef="idioma">
@@ -293,10 +293,12 @@
 
 
 
-                <div class="form-group text-center space-20">
-                    <button class="btn btn-borders btn-info mr-xs mb-sm" (click)="goToPrevious(workForm)"> <span style="margin-right:10px;" class="glyphicon glyphicon-arrow-left"></span> Anterior</button>
-                    <button class="btn btn-borders btn-success mr-xs mb-sm" [disabled]="!workForm.valid" (click)="goToNext(workForm)"> Siguiente <span style="margin-left:10px;" class="glyphicon glyphicon-arrow-right"></span></button>
+                <div class="form-group text-center space-20" style="margin-bottom: 40px">
+                    <button class="btn btn-borders btn-warning mr-xs mb-sm" (click)="goToPrevious(workForm)"> <span style="margin-right:10px;" class="glyphicon glyphicon-arrow-left"></span> Anterior</button>
+                    <button class="btn btn-borders btn-quaternary mr-xs mb-sm" [disabled]="!workForm.valid" (click)="goToNext(workForm)"> Siguiente <span style="margin-left:10px;" class="glyphicon glyphicon-arrow-right"></span></button>
+
                 </div>
+
                 </div>
 
             </div>

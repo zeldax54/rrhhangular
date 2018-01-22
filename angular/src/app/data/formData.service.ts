@@ -1,8 +1,9 @@
 import { Injectable,Component }                        from '@angular/core';
 
-import { FormData, Personal, Address,Estudio }       from './formData.model';
+import { FormData, Personal,Estudio,ExperienciaLaboral }       from './formData.model';
 import { WorkflowService }                   from '../workflow/workflow.service';
 import { STEPS }                             from '../workflow/workflow.model';
+
 
 
 
@@ -130,24 +131,20 @@ export class FormDataService {
         this.workflowService.validateStep(STEPS.work);
     }
 
-    getAddress() : Address {
+    getExperienciaLaboral() : ExperienciaLaboral {
         // Return the Address data
-        var address: Address = {
-            street: this.formData.street,
-            city: this.formData.city,
-            state: this.formData.state,
-            zip: this.formData.zip
+        var eL: ExperienciaLaboral = {
+            hasexperiencia:this.formData.hasexperiencia,
+            experiencias:this.formData.experiencias
+
         };
-        return address;
+        return eL;
     }
 
-    setAddress(data: Address) {
+    setExperienciaLaboral(data: ExperienciaLaboral) {
         // Update the Address data only when the Address Form had been validated successfully
-        this.isAddressFormValid = true;
-        this.formData.street = data.street;
-        this.formData.city = data.city;
-        this.formData.state = data.state;
-        this.formData.zip = data.zip;
+        this.formData.hasexperiencia = data.hasexperiencia;
+        this.formData.experiencias = data.experiencias;
         // Validate Address Step in Workflow
         this.workflowService.validateStep(STEPS.address);
     }

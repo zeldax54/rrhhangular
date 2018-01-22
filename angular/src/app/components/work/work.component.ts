@@ -260,6 +260,7 @@ export class WorkComponent implements OnInit {
 
         this.updateVisualfromEstudioIdiomas();
         this.handleState(this.estudio.estudioestado);
+        window.scrollTo(0, 0);
     }
 
     save(form: any): boolean {

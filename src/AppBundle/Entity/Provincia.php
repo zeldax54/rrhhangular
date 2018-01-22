@@ -53,6 +53,12 @@ class Provincia
      */
     private $curriculumns;
 
+    /**
+     * @JMS\Exclude();
+     * @ORM\OneToMany(targetEntity="ExperienciaLaboral" , mappedBy="pais", cascade={"persist", "detach"})
+     */
+    private $experiencias;
+
 
 
 
@@ -181,5 +187,39 @@ class Provincia
     public function getCurriculumns()
     {
         return $this->curriculumns;
+    }
+
+    /**
+     * Add experiencia
+     *
+     * @param \AppBundle\Entity\ExperienciaLaboral $experiencia
+     *
+     * @return Provincia
+     */
+    public function addExperiencia(\AppBundle\Entity\ExperienciaLaboral $experiencia)
+    {
+        $this->experiencias[] = $experiencia;
+
+        return $this;
+    }
+
+    /**
+     * Remove experiencia
+     *
+     * @param \AppBundle\Entity\ExperienciaLaboral $experiencia
+     */
+    public function removeExperiencia(\AppBundle\Entity\ExperienciaLaboral $experiencia)
+    {
+        $this->experiencias->removeElement($experiencia);
+    }
+
+    /**
+     * Get experiencias
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExperiencias()
+    {
+        return $this->experiencias;
     }
 }

@@ -20,6 +20,7 @@ export class ResultComponent implements OnInit {
         this.formData = this.formDataService.getFormData();
         this.isFormValid = this.formDataService.isFormValid();
         console.log('Result feature loaded!');
+        window.scrollTo(0, 0);
     }
 
     submit() {

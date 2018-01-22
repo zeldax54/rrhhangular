@@ -57,6 +57,13 @@ class Pais
     private $curriculumns;
 
 
+    /**
+     * @JMS\Exclude();
+     * @ORM\OneToMany(targetEntity="ExperienciaLaboral" , mappedBy="pais", cascade={"persist", "detach"})
+     */
+    private $experiencias;
+
+
 
     /**
      * Get id
@@ -183,5 +190,48 @@ class Pais
     public function getCodigo()
     {
         return $this->codigo;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->provincias = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->curriculumns = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->experiencias = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add experiencia
+     *
+     * @param \AppBundle\Entity\ExperienciaLaboral $experiencia
+     *
+     * @return Pais
+     */
+    public function addExperiencia(\AppBundle\Entity\ExperienciaLaboral $experiencia)
+    {
+        $this->experiencias[] = $experiencia;
+
+        return $this;
+    }
+
+    /**
+     * Remove experiencia
+     *
+     * @param \AppBundle\Entity\ExperienciaLaboral $experiencia
+     */
+    public function removeExperiencia(\AppBundle\Entity\ExperienciaLaboral $experiencia)
+    {
+        $this->experiencias->removeElement($experiencia);
+    }
+
+    /**
+     * Get experiencias
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExperiencias()
+    {
+        return $this->experiencias;
     }
 }

@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use JMS\Serializer\Annotation as JMS;
 
 
 
@@ -47,9 +48,16 @@ class Provincia
     private $localidades;
 
     /**
+     * @JMS\Exclude();
      * @ORM\OneToMany(targetEntity="Curriculum" , mappedBy="provincia", cascade={"persist", "detach"})
      */
     private $curriculumns;
+
+    /**
+     * @JMS\Exclude();
+     * @ORM\OneToMany(targetEntity="ExperienciaLaboral" , mappedBy="pais", cascade={"persist", "detach"})
+     */
+    private $experiencias;
 
 
 
@@ -145,5 +153,39 @@ class Provincia
     public function getLocalidades()
     {
         return $this->localidades;
+    }
+
+    /**
+     * Add curriculumn
+     *
+     * @param \AppBundle\Entity\Curriculum $curriculumn
+     *
+     * @return Provincia
+     */
+    public function addCurriculumn(\AppBundle\Entity\Curriculum $curriculumn)
+    {
+        $this->curriculumns[] = $curriculumn;
+
+        return $this;
+    }
+
+    /**
+     * Remove curriculumn
+     *
+     * @param \AppBundle\Entity\Curriculum $curriculumn
+     */
+    public function removeCurriculumn(\AppBundle\Entity\Curriculum $curriculumn)
+    {
+        $this->curriculumns->removeElement($curriculumn);
+    }
+
+    /**
+     * Get curriculumns
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCurriculumns()
+    {
+        return $this->curriculumns;
     }
 }

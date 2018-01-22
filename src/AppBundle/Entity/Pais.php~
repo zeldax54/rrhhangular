@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use JMS\Serializer\Annotation as JMS;
 
 
 
@@ -50,9 +51,17 @@ class Pais
     private $provincias;
 
     /**
+     * @JMS\Exclude();
      * @ORM\OneToMany(targetEntity="Curriculum" , mappedBy="pais", cascade={"persist", "detach"})
      */
     private $curriculumns;
+
+
+    /**
+     * @JMS\Exclude();
+     * @ORM\OneToMany(targetEntity="ExperienciaLaboral" , mappedBy="pais", cascade={"persist", "detach"})
+     */
+    private $experiencias;
 
 
 
@@ -66,36 +75,6 @@ class Pais
         return $this->id;
     }
 
-    /**
-     * Set pais
-     *
-     * @param string $pais
-     *
-     * @return Pais
-     */
-    public function setPais($pais)
-    {
-        $this->pais = $pais;
-
-        return $this;
-    }
-
-    /**
-     * Get pais
-     *
-     * @return string
-     */
-    public function getPais()
-    {
-        return $this->pais;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->provincias = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Set nombre
@@ -187,5 +166,29 @@ class Pais
     public function getCurriculumns()
     {
         return $this->curriculumns;
+    }
+
+    /**
+     * Set codigo
+     *
+     * @param string $codigo
+     *
+     * @return Pais
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return string
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
     }
 }
