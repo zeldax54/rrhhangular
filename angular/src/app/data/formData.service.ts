@@ -3,6 +3,7 @@ import { Injectable,Component }                        from '@angular/core';
 import { FormData, Personal,Estudio,ExperienciaLaboral }       from './formData.model';
 import { WorkflowService }                   from '../workflow/workflow.service';
 import { STEPS }                             from '../workflow/workflow.model';
+import {Result} from "./formData.model";
 
 
 
@@ -147,6 +148,23 @@ export class FormDataService {
         this.formData.experiencias = data.experiencias;
         // Validate Address Step in Workflow
         this.workflowService.validateStep(STEPS.address);
+    }
+
+
+    setResult(data: Result){
+
+        this.formData.postulaciones = data.postulaciones;
+        this.formData.otraspostulaciones = data.otraspostulaciones;
+
+    }
+
+    getResult():Result{
+
+        var result: Result= {
+            postulaciones:this.formData.postulaciones,
+            otraspostulaciones:this.formData.otraspostulaciones,
+        };
+        return result;
     }
 
     getFormData(): FormData {

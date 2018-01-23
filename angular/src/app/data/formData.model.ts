@@ -42,7 +42,9 @@ export class FormData {
     //Experiencia
     hasexperiencia:number=0;
     experiencias:Array<Experiencia>=[];
-
+   //Final
+    postulaciones:Array<any>=[];
+    otraspostulaciones:string='';
 
 
 
@@ -95,6 +97,9 @@ export class FormData {
         //Experiencia
         this.hasexperiencia=0;
         this.experiencias=[];
+        //final
+        this.postulaciones=[];
+        this.otraspostulaciones='';
 
 
 
@@ -226,5 +231,13 @@ export  class Experiencia{
     provincia:number=0;
     telefono:string='';
     referencias:string='';
+}
+
+export class Result{
+
+    postulaciones:Array<any>=[];
+    otraspostulaciones:string='';
+
+
 }
 

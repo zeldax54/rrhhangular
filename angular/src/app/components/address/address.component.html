@@ -6,7 +6,7 @@
         <div class='row'>
             <div class='col-xs-offset-1 col-xs-10 col-sm-offset-1 col-sm-10'>
 
-<div class="row">
+              <div class="row">
                 <div class='col-xs-6 col-sm-4'>
                     <mat-form-field class="">
                         <mat-select placeholder="Experiencia Laboral" #hasexperiencia  [(ngModel)]="experienciaLaboral.hasexperiencia" name="hasexperiencia" id="hasexperiencia" (change)="changeExp();">
@@ -18,24 +18,109 @@
 
                 </div>
 
-</div>
+              </div>
 
-                <div *ngIf="hasexperienciabool==true" >
+
+
+
+
+                    <div *ngIf="hasexperienciabool==true" class="row" style="text-align: center;margin: 0 auto">
                     <div class='col-xs-6 col-sm-4'>
-
-                        <button mat-icon-button color="primary" (click)="addNew()">
-                            <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
-                        </button>
+                            <button class="btn btn-borders btn-quaternary mr-xs mb-sm agregaridioma" (click)="addNew()">Agregar Experiencia</button>
 
                     </div>
-                </div>
+                    </div>
+
+                    <div *ngIf="hasexperienciabool==true" class="row" style="text-align: center;margin: 0 auto">
+
+
+
+
+                        <div class="row">
+
+                            <div class='tablecontainer2'>
+                                <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+
+                                    <ng-container matColumnDef="empresa">
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header>Empresa</mat-header-cell>
+                                        <mat-cell *matCellDef="let row" >
+
+                                            {{row.empresa}}
+
+
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="fechaingreso">
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Ingreso</mat-header-cell>
+                                        <mat-cell *matCellDef="let row" >
+
+                                            {{row.fechaingreso | date:'dd MMM yyyy'}}
+
+
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="fechaegreso">
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Egreso</mat-header-cell>
+                                        <mat-cell *matCellDef="let row">
+                                            {{row.fechaegreso | date:'dd MMM yyyy'}}
+                                        </mat-cell>
+                                    </ng-container>
+
+
+
+
+                                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                                    <ng-container matColumnDef="actions">
+                                        <mat-header-cell *matHeaderCellDef>
+                                            <button mat-icon-button color="primary">
+                                                <mat-icon aria-label="Example icon-button with a heart icon">Acciones</mat-icon>
+                                            </button>
+                                        </mat-header-cell>
+
+                                        <mat-cell *matCellDef="let row; let i=index;">
+
+                                            <button class="tabledeletebtn" mat-icon-button color="accent" (click)="deleteItem(row.empresa)">
+                                                <mat-icon aria-label="Delete">Eliminar</mat-icon>
+                                            </button>
+
+
+                                            <button style="margin-left: 20px !important;" class="tabledeletebtn" mat-icon-button color="accent" (click)="editItem(row.empresa)">
+                                                <mat-icon aria-label="Edit">Editar</mat-icon>
+                                            </button>
+                                        </mat-cell>
+                                    </ng-container>
+
+                                </mat-table>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+
+                     <br *ngIf="hasexperienciabool==true">
+                     <br *ngIf="hasexperienciabool==true">
+
+
+
+                <div class="row" style="text-align: center">
+                    <button class="btn btn-borders btn-warning mr-xs mb-sm" (click)="goToPrevious(addressForm)"> <span style="margin-right:10px;" class="glyphicon glyphicon-arrow-left"></span> Anterior</button>
+                    <button class="btn btn-borders btn-quaternary mr-xs mb-sm" [disabled]="!addressForm.valid" (click)="goToNext(addressForm)"> Siguiente <span style="margin-left:10px;" class="glyphicon glyphicon-arrow-right"></span></button>
+
+
+                </div><br><br>
+
+
 
             </div>
 
-            <div class="form-group text-center">
-                <button class="btn btn-outline-rounded btn-default" (click)="goToPrevious(addressForm)"> <span style="margin-right:10px;" class="glyphicon glyphicon-arrow-left"></span> Previous</button>
-                <button class="btn btn-outline-rounded btn-info" [disabled]="!addressForm.valid" (click)="goToNext(addressForm)"> Next <span style="margin-left:10px;" class="glyphicon glyphicon-arrow-right"></span></button>
-            </div>
+
         </div>
     
     </div>

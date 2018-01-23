@@ -29,10 +29,6 @@ class ExperienciaLaboral
      */
     private $id;
 
-    /**
-     * @ORM\Column(name="hasexp", type="boolean", nullable=true)
-     */
-    private $hasexp;
 
 
     /**

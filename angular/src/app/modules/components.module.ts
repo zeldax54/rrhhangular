@@ -18,7 +18,9 @@ import {
     MatSlideToggleModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule
+
 
 
 } from '@angular/material';
@@ -46,7 +48,8 @@ import {
         MatSlideToggleModule,
         MatTableModule,
         MatPaginatorModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        MatDialogModule
 
         ],
     exports: [
@@ -68,7 +71,8 @@ import {
         MatSlideToggleModule,
         MatTableModule,
         MatPaginatorModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        MatDialogModule
 
         ],
 })

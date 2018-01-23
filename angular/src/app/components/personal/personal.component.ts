@@ -185,10 +185,8 @@ export class PersonalComponent implements OnInit {
         clearTimeout(this.timeout);
         var that=this;
         this.timeout = setTimeout(function (e) {
-            console.log('validando'+that.personal.email);
             that.validatorservice.validateEmail(that.url,that.personal.email).retry(this.retries).subscribe(
                 result => {
-                    console.log(result['code']);
                     if(result['code']==400)
                     {
                         that.emailFormControl.setErrors({

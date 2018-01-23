@@ -54,6 +54,9 @@ export class NomencladoresService{
         return this.http.get(url+'/habilidades/getall');
     }
 
+    getPostulacionesPre(url:any):Observable<any>{
+        return this.http.get(url+'/postulacionespre/getall');
+    }
 
 
 

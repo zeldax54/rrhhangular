@@ -27,7 +27,7 @@ export class RegisterFormHostComponent implements OnInit{
             .subscribe(({ }) => {
 
             });
-        this.router.navigate(['/registrar/address']);
+        this.router.navigate(['/registrar/personal']);
 
     }
 

@@ -177,6 +177,13 @@ class Curriculum {
      */
     private $estudios;
 
+
+    /**
+     * @ORM\Column(name="hasexp", type="boolean", nullable=true)
+     */
+    private $hasexp;
+
+
     /**
      * @ORM\OneToMany(targetEntity="ExperienciaLaboral" , mappedBy="curriculum", cascade={"persist", "detach"})
      */
@@ -818,5 +825,29 @@ class Curriculum {
     public function getExperienciaslaborales()
     {
         return $this->experienciaslaborales;
+    }
+
+    /**
+     * Set hasexp
+     *
+     * @param boolean $hasexp
+     *
+     * @return Curriculum
+     */
+    public function setHasexp($hasexp)
+    {
+        $this->hasexp = $hasexp;
+
+        return $this;
+    }
+
+    /**
+     * Get hasexp
+     *
+     * @return boolean
+     */
+    public function getHasexp()
+    {
+        return $this->hasexp;
     }
 }

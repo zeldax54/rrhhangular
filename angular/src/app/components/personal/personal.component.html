@@ -1,5 +1,5 @@
 
-<form #personalForm="ngForm" class="editForm"  novalidate>
+<form #personalForm="ngForm" class="editForm" >
     <div class="tab-pane fade in active">
         <h4 class="head text-center">{{title}}</h4>
         <br/>
@@ -65,7 +65,7 @@
 
                     <mat-form-field class="example-full-width">
                         <input matInput placeholder="Email@email.com" [formControl]="emailFormControl" [errorStateMatcher]="matcher" id="email" name="email" type="email"  [(ngModel)]="personal.email" (keyup)="validateMail(personalForm);">
-                        <mat-hint><span class="requerido" *ngIf="nrodocumentoFormControl.value==''">campo obligatorio</span></mat-hint>
+                        <mat-hint><span class="requerido" *ngIf="emailFormControl.value==''">campo obligatorio</span></mat-hint>
                         <mat-error *ngIf="emailFormControl.hasError('required')">
                             Campo <strong>requerido</strong> y <strong>válido</strong>
                         </mat-error>
@@ -266,37 +266,9 @@
                                 Campo <strong>requerido</strong>
                             </mat-error>
                         </mat-form-field>
-
-
-
-                    <!--<mat-form-field class="example-full-width" >-->
-                        <!--<input matInput placeholder="País" aria-label="País" [matAutocomplete]="auto" [formControl]="paisFormControl" [(ngModel)]="personal.pais" name="pais" id="pais">-->
-                        <!--<mat-autocomplete #auto="matAutocomplete" >-->
-                            <!--<mat-option *ngFor="let state of filteredpaises | async" [value]="state.id">-->
-                                <!--<span>{{ state.nombre }}</span>-->
-                            <!--</mat-option>-->
-                        <!--</mat-autocomplete>-->
-                    <!--</mat-form-field>-->
-                    <!--<br/>-->
-                    <!--<mat-slide-toggle-->
-                            <!--[checked]="paisFormControl.disabled"-->
-                            <!--(change)="paisFormControl.disabled ? paisFormControl.enable() : paisFormControl.disable()">-->
-                        <!--Bloquear-->
-                    <!--</mat-slide-toggle>-->
                     </div>
 
                     <div class='col-xs-6 col-sm-4'>
-
-                        <!--<div class="form-group">-->
-                            <!--<label class="control-label" for="provincia">Provincia</label>-->
-
-                            <!--<select #provincia="ngModel" [(ngModel)]="personal.provincia" name="provincia" id="provincia" class="form-control input-md" (change)="changeprovincia(personal.provincia);">-->
-                                <!--<option *ngFor="let p of (paises | filter:{'id':personal.pais})[0].provincias" value= {{p.id}}>-->
-                                    <!--{{p.nombre}}-->
-                                <!--</option>-->
-                            <!--</select>-->
-                        <!--</div>-->
-
 
                     <mat-form-field class="example-full-width">
                         <mat-select placeholder="Provincia"   [(ngModel)]="personal.provincia" name="provincia" id="provincia" (change)="changeprovincia(personal.provincia);">
@@ -429,6 +401,9 @@
                         </mat-form-field>
 
                     </div>
+
+
+
 
 
                 </div>

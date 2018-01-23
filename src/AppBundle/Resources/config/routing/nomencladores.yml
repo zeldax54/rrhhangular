@@ -25,3 +25,7 @@ niveles:
 habilidad:
     path:     /habilidades/getall
     defaults: { _controller: AppBundle:Nomencladores:habilidadesget }
+
+postulacionespre:
+    path:     /postulacionespre/getall
+    defaults: { _controller: AppBundle:Nomencladores:postulacionespreget }

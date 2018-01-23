@@ -91,6 +91,15 @@ class NomencladoresController extends Controller
 
     }
 
+    public function postulacionespregetAction(){
+
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('AppBundle:PostulacionesPre')->findAll();
+        $helper=$this->get(Helpers::class);
+        return $helper->JMSSerializar($entities,$this->container->get('jms_serializer'));
+
+    }
+
 
 
 
