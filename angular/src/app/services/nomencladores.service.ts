@@ -58,6 +58,10 @@ export class NomencladoresService{
         return this.http.get(url+'/postulacionespre/getall');
     }
 
+    getActividadEmpresa(url:any):Observable<any>{
+        return this.http.get(url+'/actividadempresa/getall');
+    }
+
 
 
 

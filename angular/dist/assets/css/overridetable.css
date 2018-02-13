@@ -1,0 +1,20 @@
+.ngx-datatable .datatable-row-left,
+.ngx-datatable .datatable-row-center,
+.ngx-datatable .datatable-row-grouping,
+.ngx-datatable .datatable-row-right,
+.ngx-datatable .datatable-body
+
+{
+    display: flex !important;
+}
+
+
+
+.tablecontainer{
+    overflow-x: auto;
+    width: 500px;
+}
+
+.agregaridioma{
+    font-size: 10px !important;
+}

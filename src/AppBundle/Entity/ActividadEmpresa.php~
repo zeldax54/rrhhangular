@@ -1,0 +1,49 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
+
+
+
+/**
+ * ActividadEmpresa
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\AnnoRepository")
+ * @UniqueEntity(fields="actividad", message="Esta actividad ya existe")
+ * @ORM\Table(name="actividadempresa")
+ */
+class ActividadEmpresa
+{
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="actividad", type="text",nullable=false )
+     */
+    private $actividad;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="ExperienciaLaboral" , mappedBy="actividadempresa", cascade={"persist", "detach"})
+     */
+    private $experiencias;
+
+
+
+
+
+}

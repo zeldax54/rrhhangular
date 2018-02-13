@@ -52,10 +52,13 @@ class Helpers{
         $cantidad=count($this->manager->getRepository('AppBundle:Usuario')->findBy(
           array( 'correo'=>$email )
         ));
+        $cantidad2=count($this->manager->getRepository('AppBundle:Usuario')->findBy(
+            array( 'correo2'=>$email )
+        ));
 
         $emailConstraint=new Assert\Email();
         $validate_email=$validator->validate($email,$emailConstraint);
-        if(count($validate_email)>0 || $cantidad>0 || $email==null || $email=='')
+        if(count($validate_email)>0 || $cantidad>0 || $cantidad2>0 || $email==null || $email=='')
             $array= array(
                 'code'=>400
             );

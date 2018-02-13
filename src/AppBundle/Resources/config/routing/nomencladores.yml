@@ -29,3 +29,7 @@ habilidad:
 postulacionespre:
     path:     /postulacionespre/getall
     defaults: { _controller: AppBundle:Nomencladores:postulacionespreget }
+
+actividadempresa:
+    path:     /actividadempresa/getall
+    defaults: { _controller: AppBundle:Nomencladores:actividadempresaget }

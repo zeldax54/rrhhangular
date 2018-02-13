@@ -40,6 +40,12 @@ class ExperienciaLaboral
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="ActividadEmpresa",inversedBy="experiencias", cascade={"persist"})
+     */
+
+    private $actividadempresa;
+
+    /**
      * @var \DateTime
      * @ORM\Column(name="fechainreso", type="date",nullable=true)
      */
@@ -83,44 +89,12 @@ class ExperienciaLaboral
      */
     private $principalestareas;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="direccion",type="text")
-     */
-    private $direccion;
-
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="actividad",type="text")
-     */
-    private $actividad;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="actividadempresa",type="text")
-     */
-    private $actividadempresa;
-
 
     /**
      * @ORM\ManyToOne(targetEntity="Pais",inversedBy="experiencias", cascade={"persist"})
      */
     private $pais;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Provincia",inversedBy="experiencias", cascade={"persist"})
-     */
-    private $provincia;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Localidad",inversedBy="experiencias", cascade={"persist"})
-     */
-    private $localidad;
 
     /**
      * @var string

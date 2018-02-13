@@ -64,11 +64,7 @@
                             </mat-autocomplete>
                         </mat-form-field>
                         <br/>
-                        <mat-slide-toggle
-                                [checked]="estudiotitulosCtrl.disabled"
-                                (change)="estudiotitulosCtrl.disabled ? estudiotitulosCtrl.enable() : estudiotitulosCtrl.disable()">
-                            Bloquear
-                        </mat-slide-toggle>
+
 
 
                     </div>
@@ -85,11 +81,7 @@
                             <mat-hint>Año</mat-hint>
                         </mat-form-field>
                         <br/>
-                        <mat-slide-toggle
-                                [checked]="annoingresoCtrl.disabled"
-                                (change)="annoingresoCtrl.disabled ? annoingresoCtrl.enable() : annoingresoCtrl.disable()">
-                            Bloquear
-                        </mat-slide-toggle>
+
 
 
                     </div>
@@ -106,11 +98,7 @@
                             <mat-hint>Año</mat-hint>
                         </mat-form-field>
                         <br/>
-                        <mat-slide-toggle
-                                [checked]="annoegresoCtrl.disabled"
-                                (change)="annoegresoCtrl.disabled ? annoegresoCtrl.enable() : annoegresoCtrl.disable()">
-                            Bloquear
-                        </mat-slide-toggle>
+
 
 
                     </div>
@@ -289,13 +277,13 @@
 
                 </div>
 
-
+                <br><br>
 
 
 
                 <div class="form-group text-center space-20" style="margin-bottom: 40px">
-                    <button class="btn btn-borders btn-warning mr-xs mb-sm" (click)="goToPrevious(workForm)"> <span style="margin-right:10px;" class="glyphicon glyphicon-arrow-left"></span> Anterior</button>
-                    <button class="btn btn-borders btn-quaternary mr-xs mb-sm" [disabled]="!workForm.valid" (click)="goToNext(workForm)"> Siguiente <span style="margin-left:10px;" class="glyphicon glyphicon-arrow-right"></span></button>
+                    <button style="float: left"  class="btn btn-borders btn-warning mr-xs mb-sm" (click)="goToPrevious(workForm)"> <span style="margin-right:10px;" class="glyphicon glyphicon-arrow-left"></span> Anterior</button>
+                    <button style="float: right"  class="btn btn-borders btn-quaternary mr-xs mb-sm" [disabled]="!workForm.valid" (click)="goToNext(workForm)"> Siguiente <span style="margin-left:10px;" class="glyphicon glyphicon-arrow-right"></span></button>
 
                 </div>
 

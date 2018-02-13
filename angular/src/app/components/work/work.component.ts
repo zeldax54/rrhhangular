@@ -196,7 +196,7 @@ export class WorkComponent implements OnInit {
         this.nomencladoresservice.getEstudiosTitulo(this.url).retry(this.retries).subscribe(
             result => {
                 this.estudiotitulos=result;
-                this.estudiotitulosPlaceholder='Título';
+                this.estudiotitulosPlaceholder='Título(s)';
                 this.estudio.cacheEstudio.estudiotitulos=result;
             },
             error => {

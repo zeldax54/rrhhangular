@@ -11,6 +11,7 @@ import {NomencladoresService} from "../../services/nomencladores.service";
 import {PaisesService} from "../../services/paises.services";
 import {EnvironmentSpecificService} from "../../services/enviromentSpecific";
 import {MatSnackBar} from '@angular/material';
+
 @Component ({
     selector:     'mt-wizard-address'
     ,templateUrl: './address.component.html'
@@ -26,15 +27,18 @@ export class AddressComponent implements OnInit {
     hasexperienciaList=[{id:0,valor:'No'},{id:1,valor:'Si'}]
     hasexperienciabool:boolean=false;
     paises:Array<any>=[];
+    actividadesempresa:Array<any>=[];
     url:any;
     displayedColumns = ['empresa','fechaingreso','fechaegreso','actions'];
     dataSource: MatTableDataSource<any>;
+    addexperiencieEnable:boolean=false;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
 
     constructor(private router: Router, private formDataService: FormDataService,
-                public dialog: MatDialog,private envspecific:EnvironmentSpecificService, private paisesservice:PaisesService,public snackBar: MatSnackBar) {
+                public dialog: MatDialog,private envspecific:EnvironmentSpecificService, private paisesservice:PaisesService,public snackBar: MatSnackBar,
+     private nomencladoresService:NomencladoresService) {
         this.url=envspecific.envSpecific.APIURL;
         this.dataSource=  new MatTableDataSource(this.experienciaLaboral.experiencias);
     }
@@ -57,6 +61,21 @@ export class AddressComponent implements OnInit {
                     console.log(<any>error);
                 }
             );
+        }
+        if(this.actividadesempresa.length==0 || this.actividadesempresa==undefined){
+
+            this.nomencladoresService.getActividadEmpresa(this.url).retry(3).subscribe(
+                result => {
+                    this.actividadesempresa=result;
+                    this.addexperiencieEnable=true;
+
+                },
+                error => {
+
+                    console.log(<any>error);
+                }
+            );
+
         }
         if(this.experienciaLaboral.experiencias!=[] && this.experienciaLaboral.experiencias.length>0){
 
@@ -82,6 +101,9 @@ export class AddressComponent implements OnInit {
     }
 
     goToNext(form: any) {
+        if(this.hasexperienciabool==true && (this.experienciaLaboral.experiencias.length==0 || this.experienciaLaboral.experiencias==undefined))
+            this.openSnackBar("Debe introducir al menos una experiencia!")
+        else
         if (this.save(form)) {
             // Navigate to the result page
             this.router.navigate(['registrar/result']);
@@ -93,23 +115,30 @@ export class AddressComponent implements OnInit {
     }
 
     addNew() {
-        const dialogRef = this.dialog.open(AddDialogComponent, {
-           data: {experiencia: this.experiencia,paises:this.paises}
-        });
+        if(this.addexperiencieEnable){
+            const dialogRef = this.dialog.open(AddDialogComponent, {
+                data: {experiencia: this.experiencia,paises:this.paises,actividadesempresa:this.actividadesempresa}
+            });
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result === 1) {
-                if(this.findEmpresaInList(this.experiencia.empresa)){
-                    this.openSnackBar('Ya ha agregado esta empresa !!!');
+            dialogRef.afterClosed().subscribe(result => {
+                if (result === 1) {
+                    if(this.findEmpresaInList(this.experiencia.empresa)){
+                        this.openSnackBar('Ya ha agregado esta empresa !!!');
 
-                }else{
-                    this.experienciaLaboral.experiencias.push(this.experiencia);
-                    this.dataSource=  new MatTableDataSource(this.experienciaLaboral.experiencias);
-                    this.experiencia=new Experiencia();
+                    }else{
+                        this.experienciaLaboral.experiencias.push(this.experiencia);
+                        this.dataSource=  new MatTableDataSource(this.experienciaLaboral.experiencias);
+                        this.experiencia=new Experiencia();
+                    }
+
                 }
+            });
 
-            }
-        });
+        }
+        else{
+            this.openSnackBar('Ycargando nomencladores. Espere por favor');
+        }
+
     }
 
 

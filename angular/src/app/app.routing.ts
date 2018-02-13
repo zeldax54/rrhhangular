@@ -3,6 +3,7 @@ import { NgModule }             from '@angular/core';
 import {ModuleWithProviders} from '@angular/core'
 import {Routes,RouterModule} from '@angular/router'
 import {MainComponent} from './components/main.component';
+import {LoginComponent} from './components/login.component';
 import {RegisterFormHostComponent} from "./components/registerformhost.component";
 import {ResultComponent} from "./components/result/result.component";
 import {PersonalComponent} from "./components/personal/personal.component";
@@ -15,6 +16,7 @@ import {EnvironmentSpecificResolver} from "./services/configuration.service";
 const appRoutes:Routes=[
 
     {path:'',component:MainComponent},
+    {path:'login',component:LoginComponent},
 
     {path:'registrar',component:RegisterFormHostComponent,resolve: { envSpecific: EnvironmentSpecificResolver },children:[
 

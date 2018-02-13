@@ -29,6 +29,7 @@ export class FormDataService {
             nrodoc:this.formData.nrodoc,
             apellidos: this.formData.apellidos,
             email: this.formData.email,
+            email2: this.formData.email,
             fechanacimiento:this.formData.fechanacimiento,
             lugarnacimiento:this.formData.lugarnacimiento,
             sexo:this.formData.sexo,
@@ -60,6 +61,7 @@ export class FormDataService {
         this.formData.nrodoc = data.nrodoc;
         this.formData.apellidos = data.apellidos;
         this.formData.email = data.email;
+        this.formData.email2 = data.email;
         this.formData.fechanacimiento=data.fechanacimiento;
         this.formData.lugarnacimiento=data.lugarnacimiento;
         this.formData.sexo=data.sexo;
@@ -155,6 +157,8 @@ export class FormDataService {
 
         this.formData.postulaciones = data.postulaciones;
         this.formData.otraspostulaciones = data.otraspostulaciones;
+        this.formData.comentarios = data.comentarios;
+        this.formData.subscribir = data.subscribir;
 
     }
 
@@ -163,6 +167,8 @@ export class FormDataService {
         var result: Result= {
             postulaciones:this.formData.postulaciones,
             otraspostulaciones:this.formData.otraspostulaciones,
+            comentarios:this.formData.comentarios,
+            subscribir:this.formData.subscribir
         };
         return result;
     }

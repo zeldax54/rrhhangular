@@ -20,7 +20,7 @@ import {Hijo} from "../../data/formData.model";
 import {Telefono} from "../../data/formData.model";
 import {EnvironmentSpecificService} from "../../services/enviromentSpecific";
 import {MatTableDataSource} from '@angular/material';
-
+import {MatSnackBar} from '@angular/material';
 
 
 @Component ({
@@ -45,6 +45,7 @@ export class PersonalComponent implements OnInit {
     url:any;
     //Form Control View
     matcher = new MyErrorStateMatcher();
+    matcher2 = new MyErrorStateMatcher();
     retries:number=3;
     placeholdererror:string='Error de red';
     nombreFormControl = new FormControl('', [Validators.required,]);
@@ -53,6 +54,7 @@ export class PersonalComponent implements OnInit {
     placeholdertipodoc:string='Cargando...';
     nrodocumentoFormControl = new FormControl('', [Validators.required,]);
     emailFormControl = new FormControl('', [Validators.required,Validators.email]);
+    emailFormControl2 = new FormControl('', [Validators.required,Validators.email]);
     fechadenacimientoFormControl = new FormControl('', [Validators.required]);
     lucagarNacimientoFormControl=new FormControl('', [Validators.required]);
     sexoFormControl=new FormControl('', [Validators.required]);
@@ -95,7 +97,8 @@ export class PersonalComponent implements OnInit {
         private validatorservice:ValidatorService,
         private estadocivilservice:EstadoCivilService,
         private paisesservice:PaisesService,
-        private nomencladoresservice:NomencladoresService) {
+        private nomencladoresservice:NomencladoresService,
+        public snackBar: MatSnackBar) {
 
         this.url=envspecific.envSpecific.APIURL;
 
@@ -204,6 +207,34 @@ export class PersonalComponent implements OnInit {
             );
 
         }, 2500);
+    }
+
+    validateMail2(furmulario:any){
+
+        clearTimeout(this.timeout);
+        var that=this;
+        this.timeout = setTimeout(function (e) {
+
+            if(that.personal.email!=that.personal.email2){
+
+                that.emailFormControl2.setErrors({
+                    "repetido": true
+                });
+                that.openSnackBar('Los emails no coinciden.')
+
+            }
+            else{
+                that.emailFormControl2.clearValidators();
+            }
+
+        }, 700);
+
+    }
+
+    openSnackBar(message: string, action: string='') {
+        this.snackBar.open(message, action, {
+            duration: 2000,
+        });
     }
 
     save(form: any): boolean {

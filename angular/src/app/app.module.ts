@@ -14,6 +14,7 @@ import { MyOwnCustomMaterialModule } from './modules/components.module';
 import { MainComponent } from './components/main.component';
 import { HeadComponent } from './components/head.component';
 import { FooterComponent } from './components/footer.component';
+import { LoginComponent } from './components/login.component';
 import { RegisterFormHostComponent } from './components/registerformhost.component';
 
 
@@ -51,6 +52,7 @@ import {EnvironmentSpecificResolver} from "./services/configuration.service";
       AppComponent,
       HeadComponent,
       FooterComponent,
+      LoginComponent,
       MainComponent,
       RegisterFormHostComponent,
       AddressComponent,

@@ -97,7 +97,14 @@ class NomencladoresController extends Controller
         $entities = $em->getRepository('AppBundle:PostulacionesPre')->findAll();
         $helper=$this->get(Helpers::class);
         return $helper->JMSSerializar($entities,$this->container->get('jms_serializer'));
+    }
 
+
+    public function actividadempresagetAction(){
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('AppBundle:ActividadEmpresa')->findAll();
+        $helper=$this->get(Helpers::class);
+        return $helper->JMSSerializar($entities,$this->container->get('jms_serializer'));
     }
 
 

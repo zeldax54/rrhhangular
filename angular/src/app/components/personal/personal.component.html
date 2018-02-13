@@ -58,9 +58,11 @@
                             </mat-error>
                         </mat-form-field>
                     </div>
-                </div>
+                </div><br>
 
-                <div class="form-group">
+                <div class="row">
+
+                    <div class='col-xs-12 col-sm-6'>
 
 
                     <mat-form-field class="example-full-width">
@@ -74,8 +76,30 @@
                         </mat-error>
                     </mat-form-field>
 
+                </div>
 
-                </div><br>
+                    <div class='col-xs-12 col-sm-6'>
+
+
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Repita su email" [formControl]="emailFormControl2" [errorStateMatcher]="matcher2" id="email2" name="email2" type="email"  [(ngModel)]="personal.email2" (keyup)="validateMail2(personalForm);" (cut)="$event.preventDefault()" (copy)="$event.preventDefault()" (paste)="$event.preventDefault()">
+                            <mat-hint><span class="requerido" *ngIf="emailFormControl2.value==''">campo obligatorio</span></mat-hint>
+                            <mat-error *ngIf="emailFormControl2.hasError('required')">
+                                Campo <strong>requerido</strong> y <strong>válido</strong>
+                            </mat-error>
+                            <mat-error *ngIf="emailFormControl2.hasError('notUnique')">
+                                Email <strong>en uso</strong>
+                            </mat-error>
+                            <mat-error *ngIf="emailFormControl2.hasError('repetido')">
+                                <strong>Ingrese el mismo email en los dos campos.</strong>
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
+
+                </div>
+
+                    <br>
 
                 <div class="row">
                     <div class='col-xs-12 col-sm-6'>
@@ -407,7 +431,7 @@
 
 
                 </div>
-
+                <br><br>
 
                 <div class="form-group text-center">
                     <button class="btn btn-borders btn-quaternary mr-xs mb-sm" [disabled]="!personalForm.valid" (click)="goToNext(personalForm)" style="float: right;margin: 40px"> Siguiente <span style="margin-left:10px;" class="glyphicon glyphicon-arrow-right"></span></button>
@@ -416,4 +440,5 @@
         </div>
     </div>
 </form>
+
 

@@ -19,7 +19,7 @@ import {
     MatTableModule,
     MatPaginatorModule,
     MatSnackBarModule,
-    MatDialogModule
+    MatDialogModule,
 
 
 

@@ -7,6 +7,7 @@ export class FormData {
     tipodoc : string = '';
     nrodoc:string='';
     email: string = '';
+    email2: string = '';
     fechanacimiento:Date=null;
     lugarnacimiento:string='';
     sexo:string='';
@@ -45,6 +46,8 @@ export class FormData {
    //Final
     postulaciones:Array<any>=[];
     otraspostulaciones:string='';
+    comentarios:string='';
+    subscribir:boolean=true;
 
 
 
@@ -62,6 +65,7 @@ export class FormData {
         this.tipodoc = '';
         this.nrodoc='';
         this.email = '';
+        this.email2 = '';
         this.fechanacimiento=null;
         this.lugarnacimiento='';
         this.sexo='';
@@ -100,6 +104,8 @@ export class FormData {
         //final
         this.postulaciones=[];
         this.otraspostulaciones='';
+        this.comentarios='';
+        this.subscribir=true;
 
 
 
@@ -118,6 +124,7 @@ export class Personal {
     tipodoc:string='';
     nrodoc:string='';
     email: string = '';
+    email2: string = '';
     fechanacimiento:Date=null;
     lugarnacimiento:string='';
     sexo:string='';
@@ -219,25 +226,24 @@ export  class Experiencia{
     empresa:string='';
     fechaingreso:Date=null;
     fechaegreso:Date=null;
+    actualmente:boolean=true;
+    modoegreso:string='acuerdo';
     motivoegreso:string='';
     puestodesempenado:string='';
     principalesresponsabilidades:string='';
     principalestareas:string='';
-    direccion:string='';
-    actividad:string='';
-    actividadempresa:string='';
-    localidad:string='';
+    actividadempresa:number=0;
     pais:number=0;
-    provincia:number=0;
+
     telefono:string='';
     referencias:string='';
+
 }
 
 export class Result{
-
     postulaciones:Array<any>=[];
     otraspostulaciones:string='';
-
-
+    comentarios:string='';
+    subscribir:boolean=true;
 }
 

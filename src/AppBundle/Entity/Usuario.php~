@@ -44,6 +44,7 @@ class Usuario
      */
     private $correo;
 
+
     /**
      * @var string
      * @Assert\Length(min = 6)
@@ -244,4 +245,6 @@ class Usuario
     {
         return $this->fechacreacion;
     }
+
+
 }

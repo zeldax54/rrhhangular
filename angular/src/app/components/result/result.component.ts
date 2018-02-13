@@ -8,6 +8,7 @@ import {ValidatorService} from "../../services/validator.service";
 import {EnvironmentSpecificService} from "../../services/enviromentSpecific";
 import {Result} from "../../data/formData.model";
 import {NomencladoresService} from "../../services/nomencladores.service";
+import {MyErrorStateMatcher} from "../../services/global";
 @Component ({
     selector:     'mt-wizard-result'
     ,templateUrl: './result.component.html'
@@ -25,6 +26,7 @@ export class ResultComponent implements OnInit {
     //fechanacimiento:Date=null;
     personal:Personal;
     nombreFormControl = new FormControl('', [Validators.required,]);
+    pstulacionesFormControl = new FormControl('', [Validators.required,]);
     apellidosFormControl = new FormControl('', [Validators.required,]);
     emailFormControl = new FormControl('', [Validators.required,Validators.email]);
     fechadenacimientoFormControl = new FormControl('', [Validators.required]);
@@ -32,6 +34,7 @@ export class ResultComponent implements OnInit {
     result:Result=new Result();
     retries:number=3;
     postulacionespreplaceholder:string='Cargando...';
+    matcher = new MyErrorStateMatcher();
     constructor(
         private formDataService: FormDataService,
         private envspecific:EnvironmentSpecificService,
@@ -77,7 +80,7 @@ export class ResultComponent implements OnInit {
         this.isFormValid = false;
     }
 
-    validateMail(formulario:any){
+    validateMail(){
         clearTimeout(this.timeout);
         var that=this;
         this.timeout = setTimeout(function (e) {

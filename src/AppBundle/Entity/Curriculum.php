@@ -69,6 +69,8 @@ class Curriculum {
     private $lugarnacimiento;
 
 
+
+
     /**
      * @var string
      *

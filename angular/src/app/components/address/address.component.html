@@ -107,11 +107,11 @@
                      <br *ngIf="hasexperienciabool==true">
                      <br *ngIf="hasexperienciabool==true">
 
-
+                <br><br>
 
                 <div class="row" style="text-align: center">
-                    <button class="btn btn-borders btn-warning mr-xs mb-sm" (click)="goToPrevious(addressForm)"> <span style="margin-right:10px;" class="glyphicon glyphicon-arrow-left"></span> Anterior</button>
-                    <button class="btn btn-borders btn-quaternary mr-xs mb-sm" [disabled]="!addressForm.valid" (click)="goToNext(addressForm)"> Siguiente <span style="margin-left:10px;" class="glyphicon glyphicon-arrow-right"></span></button>
+                    <button style="float: left" class="btn btn-borders btn-warning mr-xs mb-sm" (click)="goToPrevious(addressForm)"> <span style="margin-right:10px;" class="glyphicon glyphicon-arrow-left"></span> Anterior</button>
+                    <button style="float: right" class="btn btn-borders btn-quaternary mr-xs mb-sm" [disabled]="!addressForm.valid" (click)="goToNext(addressForm)"> Siguiente <span style="margin-left:10px;" class="glyphicon glyphicon-arrow-right"></span></button>
 
 
                 </div><br><br>

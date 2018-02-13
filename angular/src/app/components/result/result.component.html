@@ -12,11 +12,15 @@
         <div class='col-xs-6 col-sm-12'>
 
             <mat-form-field class="example-full-width">
-                <mat-select [placeholder]="postulacionespreplaceholder"   [(ngModel)]="result.postulaciones" name="postulacionespre" id="postulacionespre" multiple >
+                <mat-select [placeholder]="postulacionespreplaceholder" [formControl]="pstulacionesFormControl"   [(ngModel)]="result.postulaciones" name="postulacionespre" id="postulacionespre" multiple >
                     <mat-option *ngFor="let p of postulacionespre" [value]="p.id">
                         {{ p.nombre }}
                     </mat-option>
                 </mat-select>
+
+                <mat-error *ngIf="pstulacionesFormControl.hasError('required')">
+                    Indique al menos <strong>una</strong> postulación.
+                </mat-error>
             </mat-form-field>
         </div>
 
@@ -26,7 +30,7 @@
 
     <div class="row">
 
-        <div class='col-xs-6 col-sm-4'>
+        <div class='col-xs-6 col-sm-6'>
             <mat-form-field class="example-full-width">
 
            <textarea  matInput  matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="5"  name="otraspostulaciones" type="text" placeholder="Otras postulaciones" [(ngModel)]="result.otraspostulaciones">
@@ -37,9 +41,29 @@
     </div>
 
 
-   <br><br>
+   <br>
+            <div class="row">
 
-    <p style="text-align: left"> Por favor chequea estos datos</p>
+                <div class='col-xs-6 col-sm-6'>
+                    <mat-form-field class="example-full-width">
+
+           <textarea  matInput  matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="5"  name="comentarios" type="text" placeholder="Comentarios" [(ngModel)]="result.comentarios">
+                        </textarea>
+                    </mat-form-field>
+
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class='col-xs-12 col-sm-6 col-md-3'>
+                    <mat-checkbox class="example-margin" [(ngModel)]="result.subscribir" name="subscribir" id="subscribir">Deseo suscribirme a avisos de postulaciones</mat-checkbox>
+                </div>
+                </div>
+            <br><br>
+
+    <p style="text-align: left"> Por favor chequea que estos datos sean correctos.</p>
 
     <div class='row'>
         <div class='col-xs-12 col-sm-4'>
@@ -69,7 +93,7 @@
     <div class="row">
         <div class='col-xs-12 col-sm-4'>
         <mat-form-field class="example-full-width">
-            <input matInput placeholder="Email@email.com" [formControl]="emailFormControl" [errorStateMatcher]="matcher" id="email" name="email" type="email"  [(ngModel)]="personal.email" (keyup)="validateMail(personalForm);">
+            <input matInput placeholder="Email@email.com" [formControl]="emailFormControl" [errorStateMatcher]="matcher" id="email" name="email" type="email"  [(ngModel)]="personal.email" (keyup)="validateMail();">
             <mat-hint><span class="requerido" *ngIf="emailFormControl.value==''">campo obligatorio</span></mat-hint>
             <mat-error *ngIf="emailFormControl.hasError('required')">
                 Campo <strong>requerido</strong> y <strong>válido</strong>
