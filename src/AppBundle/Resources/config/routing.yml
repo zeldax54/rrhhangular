@@ -19,3 +19,9 @@ tipotelefono:
 
 nomencladores:
     resource: "@AppBundle/Resources/config/routing/nomencladores.yml"
+
+cv:
+    resource: "@AppBundle/Resources/config/routing/cv.yml"
+
+security:
+    resource: "@AppBundle/Resources/config/routing/security.yml"

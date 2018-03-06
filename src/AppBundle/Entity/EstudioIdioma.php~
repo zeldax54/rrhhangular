@@ -49,9 +49,10 @@ class EstudioIdioma
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Estudio" , inversedBy="estudioidiomas", cascade={"persist", "detach"})
+     * @ORM\ManyToOne(targetEntity="Curriculum",inversedBy="estudioidiomas", cascade={"persist"})
      */
-    private $estudio;
+    private $curriculum;
+
 
 
 
@@ -274,5 +275,29 @@ class EstudioIdioma
     public function getEstudio()
     {
         return $this->estudio;
+    }
+
+    /**
+     * Set curriculum
+     *
+     * @param \AppBundle\Entity\Curriculum $curriculum
+     *
+     * @return EstudioIdioma
+     */
+    public function setCurriculum(\AppBundle\Entity\Curriculum $curriculum = null)
+    {
+        $this->curriculum = $curriculum;
+
+        return $this;
+    }
+
+    /**
+     * Get curriculum
+     *
+     * @return \AppBundle\Entity\Curriculum
+     */
+    public function getCurriculum()
+    {
+        return $this->curriculum;
     }
 }

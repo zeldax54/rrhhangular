@@ -18,7 +18,8 @@ class EstadoCivilController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('AppBundle:Estadocivil')->findAll();
         $helper=$this->get(Helpers::class);
-        return $helper->json($entities);
+        return $helper->JMSSerializar($entities,$this->container->get('jms_serializer'));
+
 
 
     }

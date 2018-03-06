@@ -77,3 +77,10 @@
     box-shadow: 2px 2px 2px rgba(0,0,0,.24),2px 2px 2px rgba(0,0,0,.12);
     margin: 4px;
 }
+
+
+.tablaestudios{
+    border: 1px solid rgba(.03,.03,.03,.03);
+    box-shadow: 2px 2px 2px rgba(.24,.24,.24,.24),2px 2px 2px rgba(.12,.12,.12,.12);
+    margin: 4px;
+}

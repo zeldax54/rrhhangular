@@ -9,14 +9,17 @@ import {ResultComponent} from "./components/result/result.component";
 import {PersonalComponent} from "./components/personal/personal.component";
 import {WorkComponent} from "./components/work/work.component";
 import {AddressComponent} from "./components/address/address.component";
+import {AfterSendComponent} from "./components/aftersend/aftersend.component";
 import {WorkflowGuard} from "./workflow/workflow-guard.service";
 import {EnvironmentSpecificResolver} from "./services/configuration.service";
+import {AboutmeComponent} from "./components/aboutme/aboutme.component";
 
 
 const appRoutes:Routes=[
 
     {path:'',component:MainComponent},
-    {path:'login',component:LoginComponent},
+    {path:'login',component:LoginComponent,resolve: { envSpecific: EnvironmentSpecificResolver }},
+    {path:'aboutme',component:AboutmeComponent,resolve: { envSpecific: EnvironmentSpecificResolver }},
 
     {path:'registrar',component:RegisterFormHostComponent,resolve: { envSpecific: EnvironmentSpecificResolver },children:[
 
@@ -27,6 +30,7 @@ const appRoutes:Routes=[
         { path: 'address',  component: AddressComponent, canActivate: [WorkflowGuard] },
         // 4th Route
         { path: 'result',  component: ResultComponent, canActivate: [WorkflowGuard] },
+        { path: 'aftersend',  component: AfterSendComponent },
     ]},
 
 

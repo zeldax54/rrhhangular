@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -18,7 +19,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity(fields="correo", message="Este correo ya existe")
  * @ORM\Table(name="usuario")
  */
-class Usuario
+class Usuario implements UserInterface
 {
 
     /**
@@ -40,7 +41,7 @@ class Usuario
     /**
      * @var string
      *
-     * @ORM\Column(name="correo", type="text",nullable=false )
+     * @ORM\Column(name="correo", type="text",nullable=false)
      */
     private $correo;
 
@@ -66,6 +67,61 @@ class Usuario
      * @ORM\Column(name="fechacreacion", type="date",nullable=false )
      */
     private $fechacreacion;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Tipodoc",inversedBy="usuarios", cascade={"persist"})
+     */
+    private $tipodoc;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nrodoc", type="string", length=255)
+     */
+    private $nrodoc;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Salt", type="string", length=255)
+     */
+    private $salt;
+
+    /**
+     * @ORM\Column(name="habilitado", type="boolean", nullable=true)
+     */
+    private $habilitado;
+
+
+
+    public function eraseCredentials() {
+
+    }
+
+    /**
+     * Get password
+     * @return string
+     */
+    public function getPassword() {
+        return $this->password;
+    }
+
+    public function getSalt() {
+        return $this->salt;
+    }
+
+    public function getUsername() {
+        return $this->getUsuario();
+    }
+
+    public function __toString() {
+        return $this->getUsername();
+    }
+
+    public function getRoles() {
+        return $this->roles != null ? array($this->roles->getNombre()) : "";
+    }
 
 
     /**
@@ -140,15 +196,7 @@ class Usuario
         return $this;
     }
 
-    /**
-     * Get password
-     *
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
+
 
     /**
      * Set roles
@@ -164,39 +212,8 @@ class Usuario
         return $this;
     }
 
-    /**
-     * Get roles
-     *
-     * @return \AppBundle\Entity\Rol
-     */
-    public function getRoles()
-    {
-        return $this->roles;
-    }
 
-    /**
-     * Set usuario
-     *
-     * @param \AppBundle\Entity\Curriculum $usuario
-     *
-     * @return Usuario
-     */
-    public function setUsuario(\AppBundle\Entity\Curriculum $usuario = null)
-    {
-        $this->usuario = $usuario;
 
-        return $this;
-    }
-
-    /**
-     * Get usuario
-     *
-     * @return \AppBundle\Entity\Curriculum
-     */
-    public function getUsuario()
-    {
-        return $this->usuario;
-    }
 
     /**
      * Set curriculum
@@ -247,4 +264,113 @@ class Usuario
     }
 
 
+
+    /**
+     * Set nrodoc
+     *
+     * @param string $nrodoc
+     *
+     * @return Usuario
+     */
+    public function setNrodoc($nrodoc)
+    {
+        $this->nrodoc = $nrodoc;
+
+        return $this;
+    }
+
+    /**
+     * Get nrodoc
+     *
+     * @return string
+     */
+    public function getNrodoc()
+    {
+        return $this->nrodoc;
+    }
+
+    /**
+     * Set tipodoc
+     *
+     * @param \AppBundle\Entity\Tipodoc $tipodoc
+     *
+     * @return Usuario
+     */
+    public function setTipodoc(\AppBundle\Entity\Tipodoc $tipodoc = null)
+    {
+        $this->tipodoc = $tipodoc;
+
+        return $this;
+    }
+
+    /**
+     * Get tipodoc
+     *
+     * @return \AppBundle\Entity\Tipodoc
+     */
+    public function getTipodoc()
+    {
+        return $this->tipodoc;
+    }
+
+    /**
+     * Set salt
+     *
+     * @param string $salt
+     *
+     * @return Usuario
+     */
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Set habilitado
+     *
+     * @param boolean $habilitado
+     *
+     * @return Usuario
+     */
+    public function setHabilitado($habilitado)
+    {
+        $this->habilitado = $habilitado;
+
+        return $this;
+    }
+
+    /**
+     * Get habilitado
+     *
+     * @return boolean
+     */
+    public function getHabilitado()
+    {
+        return $this->habilitado;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param string $usuario
+     * @return Usuario
+     */
+    public function setUsuario($usuario) {
+        $this->nombre = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario() {
+        return $this->nombre;
+    }
 }

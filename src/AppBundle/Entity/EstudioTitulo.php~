@@ -41,6 +41,7 @@ class EstudioTitulo
     /**
      * @var string
      *
+     * @JMS\Exclude();
      * @ORM\Column(name="codigo", type="text",nullable=false )
      */
     private $codigo;

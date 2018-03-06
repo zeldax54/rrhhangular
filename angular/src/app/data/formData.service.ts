@@ -88,15 +88,7 @@ export class FormDataService {
     getEstudio() : Estudio {
         // Return the work type
         var estudio: Estudio= {
-            estudiotipo:this.formData.estudiotipo,
-            estudioestado:this.formData.estudioestado,
-            institucion:this.formData.institucion,
-            estudiotitulo:this.formData.estudiotitulo,
-            annoingreso:this.formData.annoingreso,
-            annoegreso:this.formData.annoegreso,
-            materiasaprobadas:this.formData.materiasaprobadas,
-            cantidadmaterias:this.formData.cantidadmaterias,
-            annosaprobadoscursados:this.formData.annosaprobadoscursados,
+             estudioscursados:this.formData.estudioscursados,
             estudioIdiomas:this.formData.estudioIdiomas,
             cacheEstudio:this.formData.cacheEstudio,
             cursos:this.formData.cursos,
@@ -113,15 +105,7 @@ export class FormDataService {
     setEstudio(data: Estudio) {
 
         this.isWorkFormValid = true;
-        this.formData.estudiotipo = data.estudiotipo;
-        this.formData.estudioestado = data.estudioestado;
-        this.formData.institucion = data.institucion;
-        this.formData.estudiotitulo = data.estudiotitulo;
-        this.formData.annoingreso = data.annoingreso;
-        this.formData.annoegreso = data.annoegreso;
-        this.formData.materiasaprobadas = data.materiasaprobadas;
-        this.formData.cantidadmaterias = data.cantidadmaterias;
-        this.formData.annosaprobadoscursados = data.annosaprobadoscursados;
+        this.formData.estudioscursados=data.estudioscursados;
         this.formData.estudioIdiomas = data.estudioIdiomas;
         this.formData.cacheEstudio = data.cacheEstudio;
         this.formData.cursos = data.cursos;

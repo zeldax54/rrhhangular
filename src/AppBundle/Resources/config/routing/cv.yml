@@ -1,0 +1,5 @@
+registrarcv:
+    path:     /cv/registrar
+    defaults: { _controller: AppBundle:Cv:create }
+    methods: POST
+

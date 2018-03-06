@@ -108,7 +108,7 @@ class Idioma
      */
     public function removeEstudiodioma(\AppBundle\Entity\EstudioIdioma $estudiodioma)
     {
-        $this->estudiodioma->removeElement($estudiodioma);
+        $this->estudiosidioma->removeElement($estudiodioma);
     }
 
     /**
@@ -118,7 +118,7 @@ class Idioma
      */
     public function getEstudiodioma()
     {
-        return $this->estudiodioma;
+        return $this->estudiosidioma;
     }
 
     /**

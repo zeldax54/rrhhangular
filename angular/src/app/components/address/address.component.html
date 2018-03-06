@@ -8,13 +8,18 @@
 
               <div class="row">
                 <div class='col-xs-6 col-sm-4'>
-                    <mat-form-field class="">
-                        <mat-select placeholder="Experiencia Laboral" #hasexperiencia  [(ngModel)]="experienciaLaboral.hasexperiencia" name="hasexperiencia" id="hasexperiencia" (change)="changeExp();">
-                            <mat-option *ngFor="let t of hasexperienciaList" [value]="t.id">
-                                {{ t.valor }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                    <section class="example-section">
+
+                    <mat-slide-toggle
+                            class="example-margin"
+                            color="warn"
+                            [(ngModel)]="experienciaLaboral.hasexperiencia"
+                            name="hasexperiencia"
+                            id="hasexperiencia"
+                            (change)="changeExp();" >
+                        Experiencia Laboral
+                    </mat-slide-toggle>
+                        </section>
 
                 </div>
 
@@ -24,9 +29,13 @@
 
 
 
-                    <div *ngIf="hasexperienciabool==true" class="row" style="text-align: center;margin: 0 auto">
-                    <div class='col-xs-6 col-sm-4'>
-                            <button class="btn btn-borders btn-quaternary mr-xs mb-sm agregaridioma" (click)="addNew()">Agregar Experiencia</button>
+                    <div *ngIf="hasexperienciabool==true" class="row" style="text-align: left;margin: 0 auto">
+                    <div class='col-xs-12 col-sm-12'>
+                            <button class="btn btn-borders btn-quaternary mr-xs mb-sm agregaridioma" (click)="addNew()">
+                                <span class="glyphicon glyphicon-plus"></span>
+                                Agregar Experiencia
+
+                            </button>
 
                     </div>
                     </div>
@@ -36,7 +45,7 @@
 
 
 
-                        <div class="row">
+                        <div class="row tablaestudios">
 
                             <div class='tablecontainer2'>
                                 <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">

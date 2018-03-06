@@ -28,20 +28,13 @@ export class FormData {
 
     cacheEstudio:CacheEstudio=new CacheEstudio();
     estudioIdiomas:EstudioIdioma[]=[];
-    estudiotipo:number=null;
-    estudioestado:number=null;
-    institucion:string='';
-    estudiotitulo:number=null;
-    annoingreso:number=null;
-    annoegreso:number=null;
-    materiasaprobadas:string=null;
-    cantidadmaterias:number=null;
-    annosaprobadoscursados:string=null;
+    estudioscursados:Array<EstudioCursado>=[];
+
     cursos:string='';
     seminarios:string='';
     congresos:string='';
     //Experiencia
-    hasexperiencia:number=0;
+    hasexperiencia:boolean=false;
     experiencias:Array<Experiencia>=[];
    //Final
     postulaciones:Array<any>=[];
@@ -85,21 +78,13 @@ export class FormData {
         this.movilidadpropia='';
         //Estudios
         this.cacheEstudio=new CacheEstudio();
-        this.estudiotipo=null;
-        this.estudioestado=null;
-        this.institucion='';
-        this.estudiotitulo=null;
-        this.annoingreso=null;
-        this.annoegreso=null;
-        this.materiasaprobadas=null;
-        this.cantidadmaterias=null;
-        this.annosaprobadoscursados=null;
+        this.estudioscursados=[];
         this.estudioIdiomas=[];
         this.cursos='';
         this.seminarios='';
         this.congresos='';
         //Experiencia
-        this.hasexperiencia=0;
+        this.hasexperiencia=false;
         this.experiencias=[];
         //final
         this.postulaciones=[];
@@ -169,6 +154,17 @@ export class CachePersonal{
 
 export class Estudio{
 
+    estudioscursados:Array<EstudioCursado>=[];
+    estudioIdiomas:EstudioIdioma[];
+    cursos:string='';
+    seminarios:string='';
+    congresos:string='';
+    cacheEstudio:CacheEstudio=new CacheEstudio();
+
+}
+
+export class EstudioCursado{
+
     estudiotipo:number=null;
     estudioestado:number=null;
     institucion:string='';
@@ -178,11 +174,6 @@ export class Estudio{
     materiasaprobadas:string=null;
     cantidadmaterias:number=null;
     annosaprobadoscursados:string=null;
-    estudioIdiomas:EstudioIdioma[];
-    cursos:string='';
-    seminarios:string='';
-    congresos:string='';
-    cacheEstudio:CacheEstudio=new CacheEstudio();
 
 }
 
@@ -216,7 +207,7 @@ export class EstuduiIdiomaVisual{
 export class ExperienciaLaboral {
 
 
-    hasexperiencia:number=0;
+    hasexperiencia:boolean=false;
     experiencias:Array<Experiencia>=[];
 
 }
@@ -237,6 +228,7 @@ export  class Experiencia{
 
     telefono:string='';
     referencias:string='';
+    email:string='';
 
 }
 

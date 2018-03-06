@@ -105,10 +105,10 @@ class Rol {
     /**
      * Add usuarios
      *
-     * @param \GEMA\gemaBundle\Entity\Usuario $usuarios
+     * @param \AppBundle\Entity\Usuario $usuarios
      * @return Rol
      */
-    public function addUsuario(\GEMA\gemaBundle\Entity\Usuario $usuarios) {
+    public function addUsuario(\AppBundle\Entity\Usuario $usuarios) {
         $this->usuarios[] = $usuarios;
 
         return $this;
@@ -117,9 +117,9 @@ class Rol {
     /**
      * Remove usuarios
      *
-     * @param \GEMA\gemaBundle\Entity\Usuario $usuarios
+     * @param \AppBundle\Entity\Usuario $usuarios
      */
-    public function removeUsuario(\GEMA\gemaBundle\Entity\Usuario $usuarios) {
+    public function removeUsuario(\AppBundle\Entity\Usuario $usuarios) {
         $this->usuarios->removeElement($usuarios);
     }
 

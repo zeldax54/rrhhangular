@@ -22,10 +22,35 @@ import {EnvironmentSpecificService} from "../../services/enviromentSpecific";
 import {MatTableDataSource} from '@angular/material';
 import {MatSnackBar} from '@angular/material';
 
+//Date provider
+import {MomentDateAdapter} from '@angular/material-moment-adapter';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+
+import * as _moment from 'moment';
+const moment = _moment;
+
+export const CUSTOM_DATE_FORMAT = {
+    parse: {
+        dateInput: 'LL',
+    },
+    display: {
+        dateInput: 'LL',
+        monthYearLabel: 'MMM YYYY',
+        dateA11yLabel: 'LL',
+        monthYearA11yLabel: 'MMMM YYYY',
+    },
+};
+
 
 @Component ({
     selector:     'mt-wizard-personal'
     ,templateUrl: './personal.component.html',
+    styleUrls: ['personal.component.css'],
+    providers: [
+        {provide: MAT_DATE_LOCALE, useValue: 'es-ES'},
+        {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+        {provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMAT},
+    ],
 
 })
 
@@ -85,6 +110,8 @@ export class PersonalComponent implements OnInit {
         {'id':'No','nombre':'No'}
     ];
 
+    classbtnAgregarHijos:string='btn btn-quaternary mr-xs mb-sm';
+    classbtnAgregartelefono:string='btn btn-quaternary mr-xs mb-sm';
 
 
 
@@ -257,7 +284,7 @@ export class PersonalComponent implements OnInit {
             this.Hijos.push(this.Hijo);
             this.personal.hijos=this.Hijos;
             this.Hijo=new Hijo();
-            console.log(this.personal.hijos);
+            this.classbtnAgregarHijos='btn btn-quaternary mr-xs mb-sm';
         }
     }
 
@@ -283,10 +310,15 @@ export class PersonalComponent implements OnInit {
 
 
     addTelefono(){
+       if(this.Telefono.tipo===null || this.Telefono.tipo===""){
+           this.openSnackBar("Especifique el tipo de teléfono!!!")
+           return;
+       }
         if(this.Telefono.numero!=null && this.Telefono.numero!=''){
             this.Telefonos.push(this.Telefono);
             this.personal.telefonos=this.Telefonos;
             this.Telefono=new Telefono();
+            this.classbtnAgregartelefono='btn btn-quaternary mr-xs mb-sm';
 
         }
     }
@@ -294,5 +326,19 @@ export class PersonalComponent implements OnInit {
     deleteTelefono(index) {
         this.Telefonos.splice(index, 1);
         this.personal.telefonos=this.Telefonos;
+    }
+
+    Colorear(){
+        if(this.Hijo.fechanacimiento!=null)
+        this.classbtnAgregarHijos='btn btn-warning mr-xs mb-sm';
+        else
+            this.classbtnAgregarHijos='btn btn-quaternary mr-xs mb-sm';
+    }
+
+    ColorearAddTelefono(){
+        if(this.Telefono.numero!=null)
+            this.classbtnAgregartelefono='btn btn-warning mr-xs mb-sm';
+        else
+            this.classbtnAgregartelefono='btn btn-quaternary mr-xs mb-sm';
     }
 }

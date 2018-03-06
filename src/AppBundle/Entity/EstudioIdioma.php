@@ -49,9 +49,10 @@ class EstudioIdioma
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Estudio" , inversedBy="estudioidiomas", cascade={"persist", "detach"})
+     * @ORM\ManyToOne(targetEntity="Curriculum",inversedBy="estudioidiomas", cascade={"persist"})
      */
-    private $estudio;
+    private $curriculum;
+
 
 
 
@@ -142,39 +143,7 @@ class EstudioIdioma
         return $this->nivel;
     }
 
-    /**
-     * Add estudio
-     *
-     * @param \AppBundle\Entity\Estudio $estudio
-     *
-     * @return EstudioIdioma
-     */
-    public function addEstudio(\AppBundle\Entity\Estudio $estudio)
-    {
-        $this->estudios[] = $estudio;
 
-        return $this;
-    }
-
-    /**
-     * Remove estudio
-     *
-     * @param \AppBundle\Entity\Estudio $estudio
-     */
-    public function removeEstudio(\AppBundle\Entity\Estudio $estudio)
-    {
-        $this->estudios->removeElement($estudio);
-    }
-
-    /**
-     * Get estudios
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEstudios()
-    {
-        return $this->estudios;
-    }
 
     /**
      * Add habilidad
@@ -252,27 +221,29 @@ class EstudioIdioma
         return $this;
     }
 
+
+
     /**
-     * Set estudio
+     * Set curriculum
      *
-     * @param \AppBundle\Entity\Estudio $estudio
+     * @param \AppBundle\Entity\Curriculum $curriculum
      *
      * @return EstudioIdioma
      */
-    public function setEstudio(\AppBundle\Entity\Estudio $estudio = null)
+    public function setCurriculum(\AppBundle\Entity\Curriculum $curriculum = null)
     {
-        $this->estudio = $estudio;
+        $this->curriculum = $curriculum;
 
         return $this;
     }
 
     /**
-     * Get estudio
+     * Get curriculum
      *
-     * @return \AppBundle\Entity\Estudio
+     * @return \AppBundle\Entity\Curriculum
      */
-    public function getEstudio()
+    public function getCurriculum()
     {
-        return $this->estudio;
+        return $this->curriculum;
     }
 }

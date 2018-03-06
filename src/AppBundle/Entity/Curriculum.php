@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ManyToMany;
 
 /**
  * Rol
@@ -179,6 +180,36 @@ class Curriculum {
      */
     private $estudios;
 
+    /**
+     * @ORM\OneToMany(targetEntity="EstudioIdioma" , mappedBy="curriculum", cascade={"persist", "detach"})
+     */
+    private $estudioidiomas;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cursos",type="text",nullable=true )
+     */
+    private $cursos;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="seminarios",type="text",nullable=true )
+     */
+    private $seminarios;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="congresos",type="text",nullable=true )
+     */
+    private $congresos;
+
+
+
 
     /**
      * @ORM\Column(name="hasexp", type="boolean", nullable=true)
@@ -186,10 +217,44 @@ class Curriculum {
     private $hasexp;
 
 
+
+
+
     /**
      * @ORM\OneToMany(targetEntity="ExperienciaLaboral" , mappedBy="curriculum", cascade={"persist", "detach"})
      */
     private $experienciaslaborales;
+
+    /**
+     * @ORM\Column(name="subscribir", type="boolean", nullable=true)
+     */
+     private $subscribir;
+
+
+    /**
+     * @ORM\ManyToMany(targetEntity="PostulacionesPre", inversedBy="curriculumns")
+     * @ORM\JoinTable(name="curriculums_postulaciones")
+     */
+
+    private $postulaciones;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="otraspostulaciones",type="text",nullable=true )
+     */
+    private $otraspostulaciones;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comentarios",type="text",nullable=true )
+     */
+    private $comentarios;
+
+
 
 
 
@@ -216,7 +281,6 @@ class Curriculum {
     public function setNombre($nombre)
     {
         $this->nombre = $nombre;
-
         return $this;
     }
 
@@ -851,5 +915,219 @@ class Curriculum {
     public function getHasexp()
     {
         return $this->hasexp;
+    }
+
+
+
+    /**
+     * Add estudioidioma
+     *
+     * @param \AppBundle\Entity\EstudioIdioma $estudioidioma
+     *
+     * @return Curriculum
+     */
+    public function addEstudioidioma(\AppBundle\Entity\EstudioIdioma $estudioidioma)
+    {
+        $this->estudioidiomas[] = $estudioidioma;
+
+        return $this;
+    }
+
+    /**
+     * Remove estudioidioma
+     *
+     * @param \AppBundle\Entity\EstudioIdioma $estudioidioma
+     */
+    public function removeEstudioidioma(\AppBundle\Entity\EstudioIdioma $estudioidioma)
+    {
+        $this->estudioidiomas->removeElement($estudioidioma);
+    }
+
+    /**
+     * Get estudioidiomas
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEstudioidiomas()
+    {
+        return $this->estudioidiomas;
+    }
+
+    /**
+     * Set cursos
+     *
+     * @param string $cursos
+     *
+     * @return Curriculum
+     */
+    public function setCursos($cursos)
+    {
+        $this->cursos = $cursos;
+
+        return $this;
+    }
+
+    /**
+     * Get cursos
+     *
+     * @return string
+     */
+    public function getCursos()
+    {
+        return $this->cursos;
+    }
+
+    /**
+     * Set seminarios
+     *
+     * @param string $seminarios
+     *
+     * @return Curriculum
+     */
+    public function setSeminarios($seminarios)
+    {
+        $this->seminarios = $seminarios;
+
+        return $this;
+    }
+
+    /**
+     * Get seminarios
+     *
+     * @return string
+     */
+    public function getSeminarios()
+    {
+        return $this->seminarios;
+    }
+
+    /**
+     * Set congresos
+     *
+     * @param string $congresos
+     *
+     * @return Curriculum
+     */
+    public function setCongresos($congresos)
+    {
+        $this->congresos = $congresos;
+
+        return $this;
+    }
+
+    /**
+     * Get congresos
+     *
+     * @return string
+     */
+    public function getCongresos()
+    {
+        return $this->congresos;
+    }
+
+    /**
+     * Set subscribir
+     *
+     * @param boolean $subscribir
+     *
+     * @return Curriculum
+     */
+    public function setSubscribir($subscribir)
+    {
+        $this->subscribir = $subscribir;
+
+        return $this;
+    }
+
+    /**
+     * Get subscribir
+     *
+     * @return boolean
+     */
+    public function getSubscribir()
+    {
+        return $this->subscribir;
+    }
+
+    /**
+     * Set otraspostulaciones
+     *
+     * @param string $otraspostulaciones
+     *
+     * @return Curriculum
+     */
+    public function setOtraspostulaciones($otraspostulaciones)
+    {
+        $this->otraspostulaciones = $otraspostulaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get otraspostulaciones
+     *
+     * @return string
+     */
+    public function getOtraspostulaciones()
+    {
+        return $this->otraspostulaciones;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return Curriculum
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
+    }
+
+    /**
+     * Add postulacione
+     *
+     * @param \AppBundle\Entity\PostulacionesPre $postulacione
+     *
+     * @return Curriculum
+     */
+    public function addPostulacione(\AppBundle\Entity\PostulacionesPre $postulacione)
+    {
+        $this->postulaciones[] = $postulacione;
+
+        return $this;
+    }
+
+    /**
+     * Remove postulacione
+     *
+     * @param \AppBundle\Entity\PostulacionesPre $postulacione
+     */
+    public function removePostulacione(\AppBundle\Entity\PostulacionesPre $postulacione)
+    {
+        $this->postulaciones->removeElement($postulacione);
+    }
+
+    /**
+     * Get postulaciones
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPostulaciones()
+    {
+        return $this->postulaciones;
     }
 }

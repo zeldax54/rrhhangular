@@ -73,7 +73,7 @@ class Estudio
     /**
      * @var string
      *
-     * @ORM\Column(name="materiasaprobadas", type="string",length=250 )
+     * @ORM\Column(name="materiasaprobadas", type="string",length=250,nullable=true  )
      */
     private $materiasaprobadas;
 
@@ -98,33 +98,8 @@ class Estudio
     private $curriculum;
 
 
-    /**
-     * @ORM\OneToMany(targetEntity="EstudioIdioma" , mappedBy="estudio", cascade={"persist", "detach"})
-     */
-    private $estudioidiomas;
 
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="cursos",type="text")
-     */
-     private $cursos;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="seminarios",type="text")
-     */
-    private $seminarios;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="congresos",type="text")
-     */
-    private $congresos;
 
 
 
@@ -391,112 +366,10 @@ class Estudio
      */
     public function __construct()
     {
-        $this->estudioidiomas = new \Doctrine\Common\Collections\ArrayCollection();
+
     }
 
-    /**
-     * Add estudioidioma
-     *
-     * @param \AppBundle\Entity\EstudioIdioma $estudioidioma
-     *
-     * @return Estudio
-     */
-    public function addEstudioidioma(\AppBundle\Entity\EstudioIdioma $estudioidioma)
-    {
-        $this->estudioidiomas[] = $estudioidioma;
 
-        return $this;
-    }
 
-    /**
-     * Remove estudioidioma
-     *
-     * @param \AppBundle\Entity\EstudioIdioma $estudioidioma
-     */
-    public function removeEstudioidioma(\AppBundle\Entity\EstudioIdioma $estudioidioma)
-    {
-        $this->estudioidiomas->removeElement($estudioidioma);
-    }
 
-    /**
-     * Get estudioidiomas
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEstudioidiomas()
-    {
-        return $this->estudioidiomas;
-    }
-
-    /**
-     * Set cursos
-     *
-     * @param string $cursos
-     *
-     * @return Estudio
-     */
-    public function setCursos($cursos)
-    {
-        $this->cursos = $cursos;
-
-        return $this;
-    }
-
-    /**
-     * Get cursos
-     *
-     * @return string
-     */
-    public function getCursos()
-    {
-        return $this->cursos;
-    }
-
-    /**
-     * Set seminarios
-     *
-     * @param string $seminarios
-     *
-     * @return Estudio
-     */
-    public function setSeminarios($seminarios)
-    {
-        $this->seminarios = $seminarios;
-
-        return $this;
-    }
-
-    /**
-     * Get seminarios
-     *
-     * @return string
-     */
-    public function getSeminarios()
-    {
-        return $this->seminarios;
-    }
-
-    /**
-     * Set congresos
-     *
-     * @param string $congresos
-     *
-     * @return Estudio
-     */
-    public function setCongresos($congresos)
-    {
-        $this->congresos = $congresos;
-
-        return $this;
-    }
-
-    /**
-     * Get congresos
-     *
-     * @return string
-     */
-    public function getCongresos()
-    {
-        return $this->congresos;
-    }
 }

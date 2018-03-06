@@ -110,7 +110,7 @@ class Nivel
      */
     public function removeEstudionivel(\AppBundle\Entity\EstudioIdioma $estudionivel)
     {
-        $this->estudionivel->removeElement($estudionivel);
+        $this->estudiosnivel->removeElement($estudionivel);
     }
 
     /**
@@ -120,7 +120,7 @@ class Nivel
      */
     public function getEstudionivel()
     {
-        return $this->estudionivel;
+        return $this->estudiosnivel;
     }
 
     /**

@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use JMS\Serializer\Annotation as JMS;
 
 
 
@@ -38,9 +39,18 @@ class Tipodoc
 
 
     /**
+     * @JMS\Exclude();
      * @ORM\OneToMany(targetEntity="Curriculum" , mappedBy="tipodoc", cascade={"persist", "detach"})
      */
     private $curriculums;
+
+    /**
+     * @JMS\Exclude();
+     * @ORM\OneToMany(targetEntity="Usuario" , mappedBy="tipodoc", cascade={"persist", "detach"})
+     */
+    private $usuarios;
+
+
 
 
     /**
@@ -116,5 +126,39 @@ class Tipodoc
     public function getCurriculums()
     {
         return $this->curriculums;
+    }
+
+    /**
+     * Add usuario
+     *
+     * @param \AppBundle\Entity\Usuario $usuario
+     *
+     * @return Tipodoc
+     */
+    public function addUsuario(\AppBundle\Entity\Usuario $usuario)
+    {
+        $this->usuarios[] = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Remove usuario
+     *
+     * @param \AppBundle\Entity\Usuario $usuario
+     */
+    public function removeUsuario(\AppBundle\Entity\Usuario $usuario)
+    {
+        $this->usuarios->removeElement($usuario);
+    }
+
+    /**
+     * Get usuarios
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUsuarios()
+    {
+        return $this->usuarios;
     }
 }

@@ -25,6 +25,13 @@ export class ValidatorService{
         return this.http.post(url+'/clientvalidate/validatemail', params, {headers: headers});
     }
 
+    login(url:string,loginData:any){
+        let jsonLogin=JSON.stringify(loginData);
+        let params='jsonLogin='+jsonLogin;
+        const headers = new HttpHeaders({'Content-Type':'application/x-www-form-urlencoded'});
+        return this.http.post(url+'/login',params,{headers:headers});
+    }
+
 
 
 

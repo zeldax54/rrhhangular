@@ -100,7 +100,7 @@ class Habilidad
      */
     public function addEstudiohabilidad(\AppBundle\Entity\EstudioIdioma $estudiohabilidad)
     {
-        $this->estudiohabilidad[] = $estudiohabilidad;
+        $this->estudioshabilidad[] = $estudiohabilidad;
 
         return $this;
     }
@@ -112,7 +112,7 @@ class Habilidad
      */
     public function removeEstudiohabilidad(\AppBundle\Entity\EstudioIdioma $estudiohabilidad)
     {
-        $this->estudiohabilidad->removeElement($estudiohabilidad);
+        $this->estudioshabilidad->removeElement($estudiohabilidad);
     }
 
     /**
@@ -122,7 +122,7 @@ class Habilidad
      */
     public function getEstudiohabilidad()
     {
-        return $this->estudiohabilidad;
+        return $this->estudioshabilidad;
     }
 
     /**

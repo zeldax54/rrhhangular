@@ -13,8 +13,9 @@ import {EnvironmentSpecificService} from "../../services/enviromentSpecific";
 import {MatSnackBar} from '@angular/material';
 
 @Component ({
-    selector:     'mt-wizard-address'
-    ,templateUrl: './address.component.html'
+    selector:     'mt-wizard-address',
+    styleUrls: ['address.component.css'],
+    templateUrl: './address.component.html'
 })
 
 export class AddressComponent implements OnInit {
@@ -24,7 +25,6 @@ export class AddressComponent implements OnInit {
     experiencia:Experiencia=new Experiencia();
     form: any;
     perosnal:any;
-    hasexperienciaList=[{id:0,valor:'No'},{id:1,valor:'Si'}]
     hasexperienciabool:boolean=false;
     paises:Array<any>=[];
     actividadesempresa:Array<any>=[];
@@ -45,7 +45,7 @@ export class AddressComponent implements OnInit {
 
     ngOnInit() {
           this.experienciaLaboral = this.formDataService.getExperienciaLaboral();
-             if(this.experienciaLaboral.hasexperiencia==1)
+             if(this.experienciaLaboral.hasexperiencia==true)
                  this.hasexperienciabool=true;
 
         this.perosnal=this.formDataService.getPersonal();
@@ -136,7 +136,7 @@ export class AddressComponent implements OnInit {
 
         }
         else{
-            this.openSnackBar('Ycargando nomencladores. Espere por favor');
+            this.openSnackBar('Cargando nomencladores. Espere por favor');
         }
 
     }
@@ -188,4 +188,6 @@ export class AddressComponent implements OnInit {
             duration: 2000,
         });
     }
+
+
 }

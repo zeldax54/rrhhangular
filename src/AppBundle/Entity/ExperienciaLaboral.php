@@ -40,6 +40,12 @@ class ExperienciaLaboral
 
 
     /**
+     * @ORM\Column(name="actualmente", type="boolean", nullable=true)
+     */
+    private $actualmente;
+
+
+    /**
      * @ORM\ManyToOne(targetEntity="ActividadEmpresa",inversedBy="experiencias", cascade={"persist"})
      */
 
@@ -73,6 +79,13 @@ class ExperienciaLaboral
      * @ORM\Column(name="puestodesempenado",type="string", length=255)
      */
     private $puestodesempenado;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="modoegreso",type="string", length=255)
+     */
+    private $modoegreso;
 
     /**
      * @var string
@@ -112,6 +125,14 @@ class ExperienciaLaboral
 
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="email",type="string", length=500)
+     */
+    private $email;
+
+
+    /**
      * @ORM\ManyToOne(targetEntity="Curriculum",inversedBy="experienciaslaborales", cascade={"persist"})
      */
     private $curriculum;
@@ -129,29 +150,7 @@ class ExperienciaLaboral
         return $this->id;
     }
 
-    /**
-     * Set hasexp
-     *
-     * @param boolean $hasexp
-     *
-     * @return ExperienciaLaboral
-     */
-    public function setHasexp($hasexp)
-    {
-        $this->hasexp = $hasexp;
 
-        return $this;
-    }
-
-    /**
-     * Get hasexp
-     *
-     * @return boolean
-     */
-    public function getHasexp()
-    {
-        return $this->hasexp;
-    }
 
     /**
      * Set empresa
@@ -322,54 +321,6 @@ class ExperienciaLaboral
     }
 
     /**
-     * Set direccion
-     *
-     * @param string $direccion
-     *
-     * @return ExperienciaLaboral
-     */
-    public function setDireccion($direccion)
-    {
-        $this->direccion = $direccion;
-
-        return $this;
-    }
-
-    /**
-     * Get direccion
-     *
-     * @return string
-     */
-    public function getDireccion()
-    {
-        return $this->direccion;
-    }
-
-    /**
-     * Set actividad
-     *
-     * @param string $actividad
-     *
-     * @return ExperienciaLaboral
-     */
-    public function setActividad($actividad)
-    {
-        $this->actividad = $actividad;
-
-        return $this;
-    }
-
-    /**
-     * Get actividad
-     *
-     * @return string
-     */
-    public function getActividad()
-    {
-        return $this->actividad;
-    }
-
-    /**
      * Set actividadempresa
      *
      * @param string $actividadempresa
@@ -465,53 +416,7 @@ class ExperienciaLaboral
         return $this->pais;
     }
 
-    /**
-     * Set provincia
-     *
-     * @param \AppBundle\Entity\Provincia $provincia
-     *
-     * @return ExperienciaLaboral
-     */
-    public function setProvincia(\AppBundle\Entity\Provincia $provincia = null)
-    {
-        $this->provincia = $provincia;
 
-        return $this;
-    }
-
-    /**
-     * Get provincia
-     *
-     * @return \AppBundle\Entity\Provincia
-     */
-    public function getProvincia()
-    {
-        return $this->provincia;
-    }
-
-    /**
-     * Set localidad
-     *
-     * @param \AppBundle\Entity\Localidad $localidad
-     *
-     * @return ExperienciaLaboral
-     */
-    public function setLocalidad(\AppBundle\Entity\Localidad $localidad = null)
-    {
-        $this->localidad = $localidad;
-
-        return $this;
-    }
-
-    /**
-     * Get localidad
-     *
-     * @return \AppBundle\Entity\Localidad
-     */
-    public function getLocalidad()
-    {
-        return $this->localidad;
-    }
 
     /**
      * Set curriculum
@@ -535,5 +440,77 @@ class ExperienciaLaboral
     public function getCurriculum()
     {
         return $this->curriculum;
+    }
+
+    /**
+     * Set actualmente
+     *
+     * @param boolean $actualmente
+     *
+     * @return ExperienciaLaboral
+     */
+    public function setActualmente($actualmente)
+    {
+        $this->actualmente = $actualmente;
+
+        return $this;
+    }
+
+    /**
+     * Get actualmente
+     *
+     * @return boolean
+     */
+    public function getActualmente()
+    {
+        return $this->actualmente;
+    }
+
+    /**
+     * Set modoegreso
+     *
+     * @param string $modoegreso
+     *
+     * @return ExperienciaLaboral
+     */
+    public function setModoegreso($modoegreso)
+    {
+        $this->modoegreso = $modoegreso;
+
+        return $this;
+    }
+
+    /**
+     * Get modoegreso
+     *
+     * @return string
+     */
+    public function getModoegreso()
+    {
+        return $this->modoegreso;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return ExperienciaLaboral
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 }

@@ -17,12 +17,8 @@ class TipodocController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('AppBundle:Tipodoc')->findAll();
-//        $tipos=array();
-//        foreach($entities as $td)
-//            $tipos[]=array('id'=> $td->getId(),'tipo'=>$td->getTipo());
-
         $helper=$this->get(Helpers::class);
-        return $helper->json($entities);
+        return $helper->JMSSerializar($entities,$this->container->get('jms_serializer'));
 
 
     }

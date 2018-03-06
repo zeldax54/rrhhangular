@@ -23,7 +23,11 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { PersonalComponent } from './components/personal/personal.component';
 import { WorkComponent } from './components/work/work.component';
 import { ResultComponent } from './components/result/result.component';
+import { AfterSendComponent } from './components/aftersend/aftersend.component';
 import { AddDialogComponent } from './components/dialogos/add_experiencia.dialogg';
+import { AddEstudioDialogComponent } from './components/dialogos/add_estudio.dialog';
+
+import { AboutmeComponent } from './components/aboutme/aboutme.component';
 
 /* Shared Service */
 import { EnvironmentSpecificService }    from './services/enviromentSpecific';
@@ -38,6 +42,7 @@ import {PaisesService} from './services/paises.services';
 import {FilterPipe} from './pipes/filter.pipe';
 import {NomencladoresService} from "./services/nomencladores.service";
 import {EnvironmentSpecificResolver} from "./services/configuration.service";
+import {CvService} from "./services/cv.service";
 //import	{	NgxDatatableModule	}	from	'@swimlane/ngx-datatable';
 
 
@@ -60,11 +65,15 @@ import {EnvironmentSpecificResolver} from "./services/configuration.service";
       PersonalComponent,
       WorkComponent,
       ResultComponent,
+      AfterSendComponent,
       FilterPipe,
-      AddDialogComponent
+      AddDialogComponent,
+      AddEstudioDialogComponent,
+      AboutmeComponent
   ],
     entryComponents: [
-        AddDialogComponent
+        AddDialogComponent,
+        AddEstudioDialogComponent
     ],
   imports: [
     BrowserModule,
@@ -89,6 +98,7 @@ import {EnvironmentSpecificResolver} from "./services/configuration.service";
       ValidatorService,
       EstadoCivilService,
       PaisesService,
+      CvService,
 
       WorkflowGuard,
       appRoutingProviders,

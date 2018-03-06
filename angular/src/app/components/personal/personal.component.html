@@ -8,7 +8,7 @@
                 <div class="row">
                     <div class='col-xs-12 col-sm-6'>
                           <mat-form-field class="example-full-width">
-                        <input matInput placeholder="Nombre(s)" [formControl]="nombreFormControl" [errorStateMatcher]="matcher" id="nombre" name="nombre" type="text" placeholder="*Nombre" [(ngModel)]="personal.nombre">
+                        <input matInput placeholder="Nombre(s)"  [formControl]="nombreFormControl" [errorStateMatcher]="matcher" id="nombre" name="nombre" type="text" placeholder="*Nombre" [(ngModel)]="personal.nombre">
                         <mat-hint><span class="requerido" *ngIf="nombreFormControl.value==null">campo obligatorio</span></mat-hint>
 
                         <mat-error *ngIf="nombreFormControl.hasError('required')">
@@ -170,7 +170,7 @@
                             <tr>
                                 <th>Hijo</th>
                                 <th>Fecha de Nacimiento</th>
-                                <th>Action</th>
+                                <th>Acción</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -190,7 +190,7 @@
                                 </td>
 
                                 <td>
-                                    <button mat-raised-button (click)="deleteFieldValue(i)">Eliminar</button>
+                                    <button  class="tabledeletebtn mat-icon-button mat-accent" (click)="deleteFieldValue(i)">Eliminar</button>
 
                                 </td>
                             </tr>
@@ -199,15 +199,15 @@
                                 <td>
                                     <!--<input class="form-control" type="date" id="newAttributeCode" [(ngModel)]="Hijo.fechanacimiento" name="newAttributeCode" />-->
                                     <mat-form-field class="">
-                                        <input matInput [matDatepicker]="picker3"   id="newAttributeCode" [(ngModel)]="Hijo.fechanacimiento" name="newAttributeCode">
+                                        <input matInput [matDatepicker]="picker3"   id="newAttributeCode" [(ngModel)]="Hijo.fechanacimiento" name="newAttributeCode" (ngModelChange)="Colorear();">
                                         <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                                         <mat-datepicker touchUi="true" #picker3></mat-datepicker>
                                     </mat-form-field>
                                 </td>
 
-                                <td>
+                                <td class="verticaltdcontent">
 
-                                    <button mat-raised-button  (click)="addHijo();">Agregar</button>
+                                    <button mat-raised-button class="{{classbtnAgregarHijos}}"  (click)="addHijo();">Agregar</button>
                                 </td>
                             </tr>
                             </tbody>
@@ -335,8 +335,9 @@
                             <tr *ngFor="let n of Telefonos; let i = index">
 
                                 <td>
-                                    <mat-form-field class="example-full-width">
-                                        <input matInput [(ngModel)]="n.numero"  class="form-control" type="tel" name="{{n.numero}}">
+
+                                    <mat-form-field class="">
+                                        <input matInput   name="{{n.numero}}" [(ngModel)] ="n.numero">
                                     </mat-form-field>
                                 </td>
 
@@ -350,9 +351,9 @@
                                     </mat-form-field>
                                 </td>
 
-                                <td>
+                                <td class="verticaltdcontent">
 
-                                    <button mat-raised-button  (click)="deleteTelefono(i)">Eliminar</button>
+                                    <button class="tabledeletebtn mat-icon-button mat-accent" (click)="deleteTelefono(i)">Eliminar</button>
                                 </td>
                             </tr>
                             <tr>
@@ -361,7 +362,7 @@
                                 <td>
 
                                     <mat-form-field class="example-full-width">
-                                        <input matInput type="tel" id="newNumero" [(ngModel)]="Telefono.numero" name="newNumero">
+                                        <input matInput type="tel" id="newNumero" [(ngModel)]="Telefono.numero" name="newNumero" (keyup)="ColorearAddTelefono()" (change)="ColorearAddTelefono()">
                                     </mat-form-field>
                                 </td>
 
@@ -377,7 +378,7 @@
                                 </td>
 
                                 <td>
-                                    <button mat-raised-button class="primary" (click)="addTelefono()">Agregar</button>
+                                    <button mat-raised-button class="{{classbtnAgregartelefono}}" (click)="addTelefono()">Agregar</button>
 
                                 </td>
                             </tr>

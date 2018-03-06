@@ -10,13 +10,16 @@ import {map} from 'rxjs/operators/map';
 
 import { EnvironmentSpecificService }     from '../../services/enviromentSpecific';
 import { NomencladoresService }     from '../../services/nomencladores.service';
+import {MatDialog, MatPaginator, MatSort,MatTableDataSource} from '@angular/material';
+import {AddEstudioDialogComponent} from '../../components/dialogos/add_estudio.dialog';
 
 import { FormDataService }     from '../../data/formData.service';
 import {Estudio} from "../../data/formData.model";
+import {EstudioCursado} from "../../data/formData.model";
 import { EnvSpecific} from "../../models/envSpecific";
 import {EstudioIdioma} from "../../data/formData.model";
 
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+
 import {EstuduiIdiomaVisual} from "../../data/formData.model";
 import {MatSnackBar} from '@angular/material';
 
@@ -39,33 +42,14 @@ export class WorkComponent implements OnInit {
     estudio: Estudio;
     form: any;
     estudiostipo:Array<any>=[];
-    estudiostipoPlaceholder:string='Cargando...';
     estudioestados:Array<any>=[];
-    estudioestadosPlaceholder:string='Cargando...';
     estudiotitulos:Array<any>=[];
-    estudiotitulosPlaceholder:string='Cargando...';
-    completado:boolean=false;
-    encurso:boolean=false;
-    incompleto:boolean=false;
 
-    institucionFormControl = new FormControl('', [Validators.required,]);
-    estudiotipoFormControl = new FormControl('', [
-        Validators.required,
-    ]);
-    estudioestadoFormControl=new FormControl('', [
-        Validators.required,
-    ]);
 
     annos:Array<any>=[];
     annoseg:Array<any>=[];
     retries:number=3;
 
-    estudiotitulosCtrl: FormControl;
-    annoingresoCtrl: FormControl;
-    annoegresoCtrl: FormControl;
-    filteredStates: Observable<any[]>;
-    filterannos: Observable<any[]>;
-    filterannoseg: Observable<any[]>;
 
     matcher = new MyErrorStateMatcher();
     //EstudioIdiomas
@@ -80,10 +64,16 @@ export class WorkComponent implements OnInit {
 
     //Table test
     displayedColumns = ['idioma','nivellectura','nivelescritura','nivelconversacion','actions'];
+    displayedEstudiosColumns = ['estudiotipo','estudioestado','estudiotitulo','actions'];
     dataSource: MatTableDataSource<any>;
+    dataSourceEstudios: MatTableDataSource<any>;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
+  //Multiples Estudios
+    addestudioEnable:boolean=false;
+    estudiocursado:EstudioCursado=new EstudioCursado();
+    estudiosCursadosArrayList:Array<EstudioCursado>=[];
 
 
 
@@ -92,62 +82,14 @@ export class WorkComponent implements OnInit {
 
     constructor(private router: Router,private envspecific:EnvironmentSpecificService,
                 private nomencladoresservice:NomencladoresService,
-                private formDataService: FormDataService,public snackBar: MatSnackBar) {
+                private formDataService: FormDataService,public snackBar: MatSnackBar,public dialog: MatDialog) {
         this.url=envspecific.envSpecific.APIURL;
-        this.estudiotitulosCtrl = new FormControl();
-        this.filteredStates = this.estudiotitulosCtrl.valueChanges
-            .pipe(
-                startWith(''),
-                map(state => state ? this.filterStates(state) : this.estudiotitulos.slice())
-            );
-
-        this.annoingresoCtrl=new FormControl();
-        this.filterannos = this.annoingresoCtrl.valueChanges
-            .pipe(
-                startWith(''),
-                map(state => state ? this.filterannosf(state) : this.annos.slice())
-            );
-
-        this.annoegresoCtrl=new FormControl();
-        this.filterannoseg = this.annoegresoCtrl.valueChanges
-            .pipe(
-                startWith(''),
-                map(state => state ? this.filterannosfeg(state) : this.annoseg.slice())
-            );
 
         this.dataSource=  new MatTableDataSource(this.estudioIdiomasList);
+        this.dataSourceEstudios=new MatTableDataSource(this.estudiosCursadosArrayList);
     }
 
-    filterannosf(anno: any){
 
-        return this.annos.filter(state =>
-        state.anno.toString().toLowerCase().indexOf(anno.toString().toLowerCase()) === 0);
-    }
-
-    filterannosfeg(anno: any){
-
-        return this.annoseg.filter(state =>
-        state.anno.toString().toLowerCase().indexOf(anno.toString().toLowerCase()) === 0);
-    }
-
-    filterStates(nombre: any) {
-        if(!isNaN(Number(nombre))){
-
-            return this.estudiotitulos.filter(state =>
-            state.id==nombre);
-        }
-        if(typeof nombre != 'object'){
-            return this.estudiotitulos.filter(state =>
-            state.nombre.toLowerCase().indexOf(nombre.toLowerCase()) === 0);
-        }
-
-        return this.estudiotitulos.filter(state =>
-        state.nombre.toLowerCase().indexOf(nombre.nombre.toLowerCase()) === 0);
-    }
-
-    displayFn(project): string {
-        return project ? project.nombre : project;
-    }
 
     ngOnInit() {
         this.estudio = this.formDataService.getEstudio();
@@ -155,53 +97,54 @@ export class WorkComponent implements OnInit {
         if(this.estudio.cacheEstudio.estudiostipo!=null)
         {
             this.estudiostipo=this.estudio.cacheEstudio.estudiostipo;
-            this.estudiostipoPlaceholder='Estudios';
+
         }
         else
         this.nomencladoresservice.getEstudiosTipo(this.url).retry(this.retries).subscribe(
             result => {
                 this.estudiostipo=result;
-                this.estudiostipoPlaceholder='Estudios';
+
                 this.estudio.cacheEstudio.estudiostipo=result;
             },
             error => {
                 console.log(<any>error);
-                this.estudiostipoPlaceholder='Error de red';
+
             }
         );
         if(this.estudio.cacheEstudio.estudioestados!=null){
             this.estudioestados=this.estudio.cacheEstudio.estudioestados;
-            this.estudioestadosPlaceholder='Estado';
+
         }
 
         else
         this.nomencladoresservice.getEstudiosEstado(this.url).retry(this.retries).subscribe(
             result => {
                 this.estudioestados=result;
-                this.estudioestadosPlaceholder='Estado';
+
                 this.estudio.cacheEstudio.estudioestados=result;
             },
             error => {
                 console.log(<any>error);
-                this.estudioestadosPlaceholder='Error de red';
+
             }
         );
         if(this.estudio.cacheEstudio.estudiotitulos!=null)
         {
             this.estudiotitulos=this.estudio.cacheEstudio.estudiotitulos;
-            this.estudiotitulosPlaceholder='Título';
+
+            this.addestudioEnable=true;
         }
 
         else
         this.nomencladoresservice.getEstudiosTitulo(this.url).retry(this.retries).subscribe(
             result => {
                 this.estudiotitulos=result;
-                this.estudiotitulosPlaceholder='Título(s)';
+
                 this.estudio.cacheEstudio.estudiotitulos=result;
             },
             error => {
                 console.log(<any>error);
-                this.estudiotitulosPlaceholder='Error de red';
+
             }
         );
         if(this.estudio.cacheEstudio.annos!=null)
@@ -251,15 +194,21 @@ export class WorkComponent implements OnInit {
                     this.niveles=result;
                     this.nivelesPlaceHolder='Nivel';
                     this.estudio.cacheEstudio.niveles=result;
+                    this.addestudioEnable=true;
                 },
                 error => {
                     this.nivelesPlaceHolder='Error de red';
                     console.log(<any>error);
                 }
             );
+        if( this.estudio.estudioscursados.length>0)
+        {
+            this.dataSourceEstudios=  new MatTableDataSource(this.estudio.estudioscursados);
+            this.estudiosCursadosArrayList=this.estudio.estudioscursados;
+        }
 
         this.updateVisualfromEstudioIdiomas();
-        this.handleState(this.estudio.estudioestado);
+        //this.handleState(this.estudio.estudioestado);
         window.scrollTo(0, 0);
     }
 
@@ -285,28 +234,6 @@ export class WorkComponent implements OnInit {
         }
     }
 
-    handleState(value:any){
-        this.completado=false;
-        this.encurso=false;
-        this.incompleto=false;
-         if(value==1){
-             this.completado=true;
-             this.encurso=false;
-             this.incompleto=false;
-
-         }
-        if(value==2){
-            this.completado=false;
-            this.encurso=true;
-            this.incompleto=false;
-        }
-        if(value==3){
-            this.completado=false;
-            this.encurso=false;
-            this.incompleto=true;
-        }
-
-    }
 
     AgregarIdioma(){
 
@@ -412,6 +339,97 @@ export class WorkComponent implements OnInit {
 
         return result;
     }
+
+    addNew() {
+        if(this.addestudioEnable){
+            const dialogRef = this.dialog.open(AddEstudioDialogComponent, {
+              //  width: '500px',
+                data: {estudioCursado: this.estudiocursado,estudioestados:this.estudioestados,estudiostipo:this.estudiostipo
+                    ,estudiotitulos:this.estudiotitulos,annos:this.annos,annoseg:this.annoseg}
+            });
+
+
+
+            dialogRef.afterClosed().subscribe(result => {
+                if (result === 1) {
+                    if(this.findTituloEstudio(this.estudiocursado)){
+                        this.openSnackBar('Ya ha agregado este estudio !!!');
+
+                    }else{
+                        this.estudiosCursadosArrayList.push(this.estudiocursado);
+                        this.dataSourceEstudios=  new MatTableDataSource(this.estudiosCursadosArrayList);
+                        this.estudio.estudioscursados=this.estudiosCursadosArrayList;
+                        this.estudiocursado=new EstudioCursado();
+
+                    }
+
+                }
+            });
+
+        }
+        else{
+            this.openSnackBar('Cargando nomencladores. Espere unos segundos e intente de nuevo...');
+        }
+
+    }
+
+    findTituloEstudio(estudiocursado:EstudioCursado){
+        if(estudiocursado.estudiotitulo==null)
+            return false;
+        return this.estudio.estudioscursados.findIndex(x => x.estudiotitulo==estudiocursado.estudiotitulo) >-1;
+    }
+
+    FromTipo(id:any){
+      return  this.estudiostipo.filter(x =>
+       x.id== id)[0].nombre;
+    }
+
+    FromEstado(id:any){
+        return  this.estudioestados.filter(x =>
+        x.id== id)[0].nombre;
+    }
+
+    FromNombre(estudio:any){
+        return estudio ? estudio.nombre : estudio;
+    }
+
+
+    deleteItemEstCursado(estudiocursado:any){
+        var index = this.estudiosCursadosArrayList.findIndex(x => x==estudiocursado );
+        if (index > -1) {
+            this.estudiosCursadosArrayList.splice(index, 1);
+            this.dataSourceEstudios=  new MatTableDataSource(this.estudiosCursadosArrayList);
+            this.estudio.estudioscursados=this.estudiosCursadosArrayList;        }
+    }
+    editItemEstCursado(estudiocursado:any){
+
+        let EC=this.estudiosCursadosArrayList.filter(x=>x==estudiocursado)[0];
+        const dialogRef = this.dialog.open(AddEstudioDialogComponent, {
+            //  width: '500px',
+            data: {estudioCursado: EC,estudioestados:this.estudioestados,estudiostipo:this.estudiostipo
+                ,estudiotitulos:this.estudiotitulos,annos:this.annos,annoseg:this.annoseg}
+        });
+
+
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result === 1) {
+                if(this.findTituloEstudio(this.estudiocursado)){
+                    this.openSnackBar('Ya ha agregado este estudio !!!');
+
+                }else{
+
+                }
+
+            }
+        });
+
+
+    }
+
+
+
+
 
 
 }

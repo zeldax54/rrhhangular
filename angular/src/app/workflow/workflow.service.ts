@@ -7,7 +7,8 @@ export class WorkflowService {
         { step: STEPS.personal, valid: false },
         { step: STEPS.work, valid: false },
         { step: STEPS.address, valid: false },
-        { step: STEPS.result, valid: false }
+        { step: STEPS.result, valid: false },
+        { step: STEPS.aftersend, valid: false },
     ];
     
     validateStep(step: string) {
