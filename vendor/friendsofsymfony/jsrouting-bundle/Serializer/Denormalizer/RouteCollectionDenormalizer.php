@@ -48,9 +48,9 @@ class RouteCollectionDenormalizer implements DenormalizerInterface
         if (!is_array($data)) {
             return false;
         }
-		
-		if (count($data) < 1) {
-           return true;
+        
+        if (count($data) < 1) {
+            return true;
         }
 
         $values = current($data);

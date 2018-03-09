@@ -3,3 +3,7 @@ login:
     defaults: { _controller: AppBundle:Security:login }
     methods: POST
 
+checktoken:
+    path:     /checktoken
+    defaults: { _controller: AppBundle:Security:checkToken }
+    methods: POST

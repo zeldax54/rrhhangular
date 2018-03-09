@@ -22,11 +22,14 @@ export class RegisterFormHostComponent implements OnInit{
     }
 
     ngOnInit() {
+
         this.formData = this.formDataService.getFormData();
         this.route.data
-            .subscribe(({ }) => {
+            .subscribe((E) => {
+                console.log(E);
 
             });
+
         this.router.navigate(['/registrar/personal']);
 
     }

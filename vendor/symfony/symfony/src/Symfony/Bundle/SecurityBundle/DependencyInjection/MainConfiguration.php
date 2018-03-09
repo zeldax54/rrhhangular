@@ -115,7 +115,7 @@ class MainConfiguration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('acl')
-                    ->setDeprecated('The "security.acl" configuration key is deprecated since version 3.4 and will be removed in 4.0. Install symfony/acl-bundle and use the "acl" key instead.')
+                    ->setDeprecated('The "security.acl" configuration key is deprecated since Symfony 3.4 and will be removed in 4.0. Install symfony/acl-bundle and use the "acl" key instead.')
                     ->children()
                         ->scalarNode('connection')
                             ->defaultNull()
@@ -289,7 +289,7 @@ class MainConfiguration implements ConfigurationInterface
             ->arrayNode('anonymous')
                 ->canBeUnset()
                 ->children()
-                    ->scalarNode('secret')->defaultValue(uniqid('', true))->end()
+                    ->scalarNode('secret')->defaultNull()->end()
                 ->end()
             ->end()
             ->arrayNode('switch_user')
@@ -338,17 +338,6 @@ class MainConfiguration implements ConfigurationInterface
                     }
 
                     return $firewall;
-                })
-            ->end()
-            ->validate()
-                ->ifTrue(function ($v) {
-                    return (isset($v['stateless']) && true === $v['stateless']) || (isset($v['security']) && false === $v['security']);
-                })
-                ->then(function ($v) {
-                    // this option doesn't change behavior when true when stateless, so prevent deprecations
-                    $v['logout_on_user_change'] = true;
-
-                    return $v;
                 })
             ->end()
         ;

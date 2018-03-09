@@ -21,14 +21,11 @@ const appRoutes:Routes=[
     {path:'login',component:LoginComponent,resolve: { envSpecific: EnvironmentSpecificResolver }},
     {path:'aboutme',component:AboutmeComponent,resolve: { envSpecific: EnvironmentSpecificResolver }},
 
-    {path:'registrar',component:RegisterFormHostComponent,resolve: { envSpecific: EnvironmentSpecificResolver },children:[
-
+    {path:'registrar',component:RegisterFormHostComponent,resolve: { envSpecific: EnvironmentSpecificResolver },
+        children:[
         { path: 'personal',  component: PersonalComponent },
-
         { path: 'work',  component: WorkComponent,canActivate: [WorkflowGuard] },
-        // 3rd Route
         { path: 'address',  component: AddressComponent, canActivate: [WorkflowGuard] },
-        // 4th Route
         { path: 'result',  component: ResultComponent, canActivate: [WorkflowGuard] },
         { path: 'aftersend',  component: AfterSendComponent },
     ]},

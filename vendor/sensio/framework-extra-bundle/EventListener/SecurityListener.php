@@ -92,17 +92,19 @@ class SecurityListener implements EventSubscriberInterface
             $roles = $token->getRoles();
         }
 
-        $variables = array(
+        $variables = [
             'token' => $token,
             'user' => $token->getUser(),
             'object' => $request,
             'subject' => $request,
             'request' => $request,
-            'roles' => array_map(function ($role) { return $role->getRole(); }, $roles),
+            'roles' => array_map(function ($role) {
+                return $role->getRole();
+            }, $roles),
             'trust_resolver' => $this->trustResolver,
             // needed for the is_granted expression function
             'auth_checker' => $this->authChecker,
-        );
+        ];
 
         $controllerArguments = $this->argumentNameConverter->getControllerArguments($event);
 
@@ -130,6 +132,6 @@ class SecurityListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(KernelEvents::CONTROLLER_ARGUMENTS => 'onKernelControllerArguments');
+        return [KernelEvents::CONTROLLER_ARGUMENTS => 'onKernelControllerArguments'];
     }
 }

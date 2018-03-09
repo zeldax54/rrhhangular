@@ -173,16 +173,16 @@ class ParameterBag implements ParameterBagInterface
      */
     public function resolveValue($value, array $resolving = array())
     {
-        if (is_array($value)) {
+        if (\is_array($value)) {
             $args = array();
             foreach ($value as $k => $v) {
-                $args[$this->resolveValue($k, $resolving)] = $this->resolveValue($v, $resolving);
+                $args[\is_string($k) ? $this->resolveValue($k, $resolving) : $k] = $this->resolveValue($v, $resolving);
             }
 
             return $args;
         }
 
-        if (!is_string($value)) {
+        if (!\is_string($value) || 2 > \strlen($value)) {
             return $value;
         }
 
@@ -296,7 +296,7 @@ class ParameterBag implements ParameterBagInterface
         if (isset($this->normalizedNames[$normalizedName = strtolower($name)])) {
             $normalizedName = $this->normalizedNames[$normalizedName];
             if ((string) $name !== $normalizedName) {
-                @trigger_error(sprintf('Parameter names will be made case sensitive in Symfony 4.0. Using "%s" instead of "%s" is deprecated since version 3.4.', $name, $normalizedName), E_USER_DEPRECATED);
+                @trigger_error(sprintf('Parameter names will be made case sensitive in Symfony 4.0. Using "%s" instead of "%s" is deprecated since Symfony 3.4.', $name, $normalizedName), E_USER_DEPRECATED);
             }
         } else {
             $normalizedName = $this->normalizedNames[$normalizedName] = (string) $name;

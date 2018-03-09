@@ -32,6 +32,13 @@ export class ValidatorService{
         return this.http.post(url+'/login',params,{headers:headers});
     }
 
+    checktoken(url:string,token:string){
+        let params='token='+token;
+        const headers = new HttpHeaders({'Content-Type':'application/x-www-form-urlencoded'});
+        return this.http.post(url+'/checktoken',params,{headers:headers});
+
+    }
+
 
 
 

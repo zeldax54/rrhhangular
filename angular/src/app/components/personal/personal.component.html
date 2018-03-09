@@ -391,7 +391,7 @@
                 </div>
 
                 <div class="row">
-                    <div class='col-xs-6 col-sm-4'>
+                    <div class='col-md-4'>
                     <mat-form-field class="">
                         <mat-select placeholder="Disponibilidad de traslado"  [(ngModel)]="personal.dispotraslado" name="dispotraslado" id="dispotraslado" >
                             <mat-option *ngFor="let t of dispotrasladolist" value={{t.id}}>
@@ -401,7 +401,7 @@
                     </mat-form-field>
                         </div>
 
-                    <div class='col-xs-6 col-sm-4'>
+                    <div class='col-md-4'>
                         <mat-form-field class="">
                             <mat-select placeholder="Disponibilidad de horas"  [(ngModel)]="personal.dispohoras" name="dispohoras" id="dispohoras" >
                                 <mat-option *ngFor="let t of dispohoraslist" value={{t.id}}>
@@ -412,7 +412,7 @@
                     </div>
 
 
-                    <div class='col-xs-6 col-sm-4'>
+                    <div class='col-md-4'>
                         <mat-form-field class="">
                             <mat-select placeholder="Movilidad Propia" [formControl]="movpropiaFormControl" [errorStateMatcher]="matcher"  [(ngModel)]="personal.movilidadpropia" name="movilidadpropia" id="movilidadpropia" >
                                 <mat-option *ngFor="let t of movilidadpropialist" value={{t.id}}>

@@ -25,6 +25,7 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Adapter\ProxyAdapter;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\DependencyInjection\ChildDefinition;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\ClosureLoader;
@@ -141,6 +142,7 @@ abstract class FrameworkExtensionTest extends TestCase
         $container = $this->createContainerFromFile('esi_disabled');
 
         $this->assertFalse($container->hasDefinition('fragment.renderer.esi'), 'The ESI fragment renderer is not registered');
+        $this->assertFalse($container->hasDefinition('esi'));
     }
 
     public function testSsi()
@@ -156,6 +158,7 @@ abstract class FrameworkExtensionTest extends TestCase
         $container = $this->createContainerFromFile('ssi_disabled');
 
         $this->assertFalse($container->hasDefinition('fragment.renderer.ssi'), 'The SSI fragment renderer is not registered');
+        $this->assertFalse($container->hasDefinition('ssi'));
     }
 
     public function testEsiAndSsiWithoutFragments()
@@ -587,10 +590,12 @@ abstract class FrameworkExtensionTest extends TestCase
 
     public function testAnnotations()
     {
-        $container = $this->createContainerFromFile('full');
+        $container = $this->createContainerFromFile('full', array(), true, false);
+        $container->addCompilerPass(new TestAnnotationsPass());
+        $container->compile();
 
         $this->assertEquals($container->getParameter('kernel.cache_dir').'/annotations', $container->getDefinition('annotations.filesystem_cache')->getArgument(0));
-        $this->assertSame('annotations.filesystem_cache', (string) $container->getDefinition('annotations.cached_reader')->getArgument(1));
+        $this->assertSame('annotations.filesystem_cache', (string) $container->getDefinition('annotation_reader')->getArgument(1));
     }
 
     public function testFileLinkFormat()
@@ -702,6 +707,20 @@ abstract class FrameworkExtensionTest extends TestCase
         // no cache, no annotations, no static methods
     }
 
+    public function testValidationTranslationDomain()
+    {
+        $container = $this->createContainerFromFile('validation_translation_domain');
+
+        $this->assertSame('messages', $container->getParameter('validator.translation_domain'));
+    }
+
+    public function testValidationStrictEmail()
+    {
+        $container = $this->createContainerFromFile('validation_strict_email');
+
+        $this->assertTrue($container->getDefinition('validator.email')->getArgument(0));
+    }
+
     public function testValidationMapping()
     {
         $container = $this->createContainerFromFile('validation_mapping');
@@ -762,6 +781,7 @@ abstract class FrameworkExtensionTest extends TestCase
         $this->assertNull($container->getDefinition('serializer.mapping.class_metadata_factory')->getArgument(1));
         $this->assertEquals(new Reference('serializer.name_converter.camel_case_to_snake_case'), $container->getDefinition('serializer.normalizer.object')->getArgument(1));
         $this->assertEquals(new Reference('property_info', ContainerBuilder::IGNORE_ON_INVALID_REFERENCE), $container->getDefinition('serializer.normalizer.object')->getArgument(3));
+        $this->assertEquals(array('setCircularReferenceHandler', array(new Reference('my.circular.reference.handler'))), $container->getDefinition('serializer.normalizer.object')->getMethodCalls()[0]);
     }
 
     public function testRegisterSerializerExtractor()
@@ -1029,13 +1049,16 @@ abstract class FrameworkExtensionTest extends TestCase
             'kernel.name' => 'kernel',
             'kernel.root_dir' => __DIR__,
             'kernel.container_class' => 'testContainer',
+            'container.build_hash' => 'Abc1234',
+            'container.build_id' => hash('crc32', 'Abc123423456789'),
+            'container.build_time' => 23456789,
         ), $data)));
     }
 
-    protected function createContainerFromFile($file, $data = array(), $resetCompilerPasses = true)
+    protected function createContainerFromFile($file, $data = array(), $resetCompilerPasses = true, $compile = true)
     {
         $cacheKey = md5(get_class($this).$file.serialize($data));
-        if (isset(self::$containerCache[$cacheKey])) {
+        if ($compile && isset(self::$containerCache[$cacheKey])) {
             return self::$containerCache[$cacheKey];
         }
         $container = $this->createContainer($data);
@@ -1046,7 +1069,12 @@ abstract class FrameworkExtensionTest extends TestCase
             $container->getCompilerPassConfig()->setOptimizationPasses(array());
             $container->getCompilerPassConfig()->setRemovingPasses(array());
         }
-        $container->getCompilerPassConfig()->setBeforeRemovingPasses(array(new AddAnnotationsCachedReaderPass(), new AddConstraintValidatorsPass(), new TranslatorPass('translator.default', 'translation.reader')));
+        $container->getCompilerPassConfig()->setBeforeRemovingPasses(array(new AddConstraintValidatorsPass(), new TranslatorPass('translator.default', 'translation.reader')));
+        $container->getCompilerPassConfig()->setAfterRemovingPasses(array(new AddAnnotationsCachedReaderPass()));
+
+        if (!$compile) {
+            return $container;
+        }
         $container->compile();
 
         return self::$containerCache[$cacheKey] = $container;
@@ -1104,7 +1132,7 @@ abstract class FrameworkExtensionTest extends TestCase
         $this->assertFalse($poolDefinition->isAbstract(), sprintf('Service definition "%s" is not abstract.', $id));
 
         $tag = $poolDefinition->getTag('cache.pool');
-        $this->assertTrue(isset($tag[0]['default_lifetime']), 'The default lifetime is stored as an attribute of the "cache.pool" tag.');
+        $this->assertArrayHasKey('default_lifetime', $tag[0], 'The default lifetime is stored as an attribute of the "cache.pool" tag.');
         $this->assertSame($defaultLifetime, $tag[0]['default_lifetime'], 'The default lifetime is stored as an attribute of the "cache.pool" tag.');
 
         $parentDefinition = $poolDefinition;
@@ -1137,5 +1165,17 @@ abstract class FrameworkExtensionTest extends TestCase
             default:
                 $this->fail('Unresolved adapter: '.$adapter);
         }
+    }
+}
+
+/**
+ * Simulates ReplaceAliasByActualDefinitionPass.
+ */
+class TestAnnotationsPass implements CompilerPassInterface
+{
+    public function process(ContainerBuilder $container)
+    {
+        $container->setDefinition('annotation_reader', $container->getDefinition('annotations.cached_reader'));
+        $container->removeDefinition('annotations.cached_reader');
     }
 }

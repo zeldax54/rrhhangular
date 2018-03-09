@@ -1,0 +1,29 @@
+.usercircle {
+    display: inline-block;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: no-repeat center center;
+    background-size: cover;
+
+}
+
+.usercircle:hover{
+    cursor: pointer;
+}
+
+.showlogin{
+    display: block;
+}
+.hidelogin{
+    display: none;
+}
+
+.divclosesesion{
+    z-index: 100;
+    position: absolute;
+    padding-top: 0px;
+    margin-top:5px ;
+    /*width: 162px;*/
+    margin-left: -38px;
+}

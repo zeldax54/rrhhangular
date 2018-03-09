@@ -125,6 +125,10 @@ class CvController extends Controller
                     $eL->setFechainreso(new \DateTime($experiencia->fechaingreso));
                     if($experiencia->fechaegreso!=null)
                     $eL->setFechaegreso(new \DateTime($experiencia->fechaegreso));
+				    if($experiencia->actualmente==true || $experiencia->actualmente=='true')
+						$experiencia->actualmente=1;
+					if($experiencia->actualmente==null || $experiencia->actualmente==false || $experiencia->actualmente=='false')
+						$experiencia->actualmente=0;
                     $eL->setActualmente($experiencia->actualmente);
                     $eL->setModoegreso($experiencia->modoegreso);
                     $eL->setMotivoegreso($experiencia->motivoegreso);
@@ -156,15 +160,30 @@ class CvController extends Controller
             $em->persist($usuario);
             $em->flush();
             //Enviar correo
+            $baseUrl=$helper->getConfigurationValue('baseUrl');
             $message = \Swift_Message::newInstance()
-                ->setSubject('Experiencia y Trabajo');
-            $message->setFrom('contacto@experiencia.com');
+                ->setSubject('Te damos la bienvenida!');
+            $message->setFrom($helper->getConfigurationValue('bienvenidaremitente'));
             $message->setContentType("text/html");
-            $body='Usted se ha dado de alta en el sitio web Experiencia y Trabajo. Estos son sus datos de registro <br>';
-            $body.='Puede loguearse con su email o con el número de documento registrado <br>';
-            $body.='<strong>Email:</strong> '.$usuario->getNombre()."<br>";
-            $body.='<strong>Nro de documento:</strong> '.$usuario->getNrodoc()."<br>";
-            $body.='<strong>Contraseña:</strong> '.$password."<br>";
+            $nombre=$curriculum->getNombre();
+            $apellido=$curriculum->getApellido();
+            $body='<div style="text-align: center"><img src="'.$baseUrl.'/assets/rrhh/imgs/logo_excelencia.png"></div><br>';
+            $body.='<p class="" style="font-family: sans-serif"><span style="font-size:12.0pt">Hola <b>'.$nombre.' '.$apellido.'</b></span></p>';
+
+            $body.='<p class="MsoNormal"><span style="font-size:12.0pt;font-family: sans-serif" lang="es-419">Te damos la bienvenida a Excelencia & Trabajo. Ya te incluimos en nuestra base de datos y podrás acceder para realizar tus postulaciones o modificar datos de tu CV. Estos son tus datos de registro, podes loguearte con tu email o con tu número de documento registrado accediendo a <a href="'.$baseUrl.'/login" style="color:#00b0f0">esta dirección.</a></span></p>';
+            $body.='<div style="font-family: sans-serif"><span><b>Email: </b></span><span>'.$usuario->getCorreo().'</span></div>';
+            $body.='<div style="font-family: sans-serif"><span><b>Nro. de documento: </b></span><span>'.$curriculum->getNrodoc().'</span></div>';
+            $body.='<div style="font-family: sans-serif"><span><b>Contraseña: </b></span><span>'.$password.'</span></div><br>';
+
+            $body.='<div style="font-family: sans-serif"><span>También podes seguirnos en Facebook haciendo </span><span><a href="'.$helper->getConfigurationValue('facebookURL').'" style="color:#00b0f0">click aquí</a> para enterarte todas nuestras novedades.</span></div><br>';
+            $body.='<p style="font-family: sans-serif"><b><span style="font-size:12.0pt;color:#ed7d31" lang="es-419">Contactanos</span></b><b><span style="font-size:14.0pt;color:#ed7d31" lang="es-419">:</span></b></p>';
+
+            $body.='<div style="font-family: sans-serif"><span><b>Dirección: </b></span><span>'.$helper->getConfigurationValue('direccionFisica').'</span></div>';
+            $body.='<div style="font-family: sans-serif"><span><b>Teléfono: </b></span><span>'.$helper->getConfigurationValue('telefono').'</span></div>';
+            $body.='<div style="font-family: sans-serif"><span><b>Email: </b></span><span>'.$helper->getConfigurationValue('emailCorporativo').'</span></div>';
+
+
+
             $to=array(
                 0 =>$usuario->getCorreo(),
             );
@@ -175,8 +194,7 @@ class CvController extends Controller
             $this->get('mailer')->send($message);
             $response=array(
             'code'=>200,
-            'message'=>'Datos registrados exitosamente!!!',
-                'password'=>$password//OJO quitar estoooooooooooooooooooooooooooooooooooooooooooooo
+            'message'=>'Datos registrados exitosamente!!!'
             );
 
             return $helper->JMSSerializar($response,$this->container->get('jms_serializer'));
@@ -186,8 +204,7 @@ class CvController extends Controller
                 $response=array(
                     'code'=>500,
                     'message'=>$e->getMessage().' '.'Datos registrador pero correo no enviado. Contacte a la administracion del sitio para activar su usuario',
-                    'linea'=>$e->getLine(),
-                    'password'=>$password//OJO quitar estoooooooooooooooooooooooooooooooooooooooooooooo
+                    'linea'=>$e->getLine()
 
                 );
             return $helper->JMSSerializar($response,$this->container->get('jms_serializer'));
@@ -204,7 +221,7 @@ class CvController extends Controller
 
     }
 
-    private function findChild($repo,$id){
+       private function findChild($repo,$id){
         if($id==null || $id=="")
             return null;
         return $repo->find($id);

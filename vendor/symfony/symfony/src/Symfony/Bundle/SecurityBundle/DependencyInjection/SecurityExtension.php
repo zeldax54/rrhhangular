@@ -22,6 +22,7 @@ use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Security\Core\Authorization\ExpressionLanguage;
@@ -43,6 +44,7 @@ class SecurityExtension extends Extension
     private $factories = array();
     private $userProviderFactories = array();
     private $expressionLanguage;
+    private $logoutOnUserChangeByContextKey = array();
 
     public function __construct()
     {
@@ -276,12 +278,6 @@ class SecurityExtension extends Extension
                 $customUserChecker = true;
             }
 
-            if (!isset($firewall['logout_on_user_change']) || !$firewall['logout_on_user_change']) {
-                @trigger_error(sprintf('Not setting "logout_on_user_change" to true on firewall "%s" is deprecated as of 3.4, it will always be true in 4.0.', $name), E_USER_DEPRECATED);
-            }
-
-            $contextListenerDefinition->addMethodCall('setLogoutOnUserChange', array($firewall['logout_on_user_change']));
-
             $configId = 'security.firewall.map.config.'.$name;
 
             list($matcher, $listeners, $exceptionListener) = $this->createFirewall($container, $name, $firewall, $authenticationProviders, $providerIds, $configId);
@@ -370,7 +366,16 @@ class SecurityExtension extends Extension
                 $contextKey = $firewall['context'];
             }
 
-            $listeners[] = new Reference($this->createContextListener($container, $contextKey));
+            if (!$logoutOnUserChange = $firewall['logout_on_user_change']) {
+                @trigger_error(sprintf('Not setting "logout_on_user_change" to true on firewall "%s" is deprecated as of 3.4, it will always be true in 4.0.', $id), E_USER_DEPRECATED);
+            }
+
+            if (isset($this->logoutOnUserChangeByContextKey[$contextKey]) && $this->logoutOnUserChangeByContextKey[$contextKey][1] !== $logoutOnUserChange) {
+                throw new InvalidConfigurationException(sprintf('Firewalls "%s" and "%s" need to have the same value for option "logout_on_user_change" as they are sharing the context "%s"', $this->logoutOnUserChangeByContextKey[$contextKey][0], $id, $contextKey));
+            }
+
+            $this->logoutOnUserChangeByContextKey[$contextKey] = array($id, $logoutOnUserChange);
+            $listeners[] = new Reference($this->createContextListener($container, $contextKey, $logoutOnUserChange));
         }
 
         $config->replaceArgument(6, $contextKey);
@@ -481,7 +486,7 @@ class SecurityExtension extends Extension
         return array($matcher, $listeners, $exceptionListener);
     }
 
-    private function createContextListener($container, $contextKey)
+    private function createContextListener($container, $contextKey, $logoutUserOnChange)
     {
         if (isset($this->contextListeners[$contextKey])) {
             return $this->contextListeners[$contextKey];
@@ -490,6 +495,7 @@ class SecurityExtension extends Extension
         $listenerId = 'security.context_listener.'.count($this->contextListeners);
         $listener = $container->setDefinition($listenerId, new ChildDefinition('security.context_listener'));
         $listener->replaceArgument(2, $contextKey);
+        $listener->addMethodCall('setLogoutOnUserChange', array($logoutUserOnChange));
 
         return $this->contextListeners[$contextKey] = $listenerId;
     }
@@ -509,6 +515,9 @@ class SecurityExtension extends Extension
                             throw new InvalidConfigurationException(sprintf('Invalid firewall "%s": user provider "%s" not found.', $id, $firewall[$key]['provider']));
                         }
                         $userProvider = $providerIds[$normalizedName];
+                    } elseif ('remember_me' === $key) {
+                        // RememberMeFactory will use the firewall secret when created
+                        $userProvider = null;
                     } else {
                         $userProvider = $defaultProvider ?: $this->getFirstProvider($id, $key, $providerIds);
                     }
@@ -524,6 +533,10 @@ class SecurityExtension extends Extension
 
         // Anonymous
         if (isset($firewall['anonymous'])) {
+            if (null === $firewall['anonymous']['secret']) {
+                $firewall['anonymous']['secret'] = new Parameter('container.build_hash');
+            }
+
             $listenerId = 'security.authentication.listener.anonymous.'.$id;
             $container
                 ->setDefinition($listenerId, new ChildDefinition('security.authentication.listener.anonymous'))
@@ -803,7 +816,7 @@ class SecurityExtension extends Extension
      */
     private function getFirstProvider($firewallName, $listenerName, array $providerIds)
     {
-        @trigger_error(sprintf('Listener "%s" on firewall "%s" has no "provider" set but multiple providers exist. Using the first configured provider (%s) is deprecated since 3.4 and will throw an exception in 4.0, set the "provider" key on the firewall instead.', $listenerName, $firewallName, $first = array_keys($providerIds)[0]), E_USER_DEPRECATED);
+        @trigger_error(sprintf('Listener "%s" on firewall "%s" has no "provider" set but multiple providers exist. Using the first configured provider (%s) is deprecated since Symfony 3.4 and will throw an exception in 4.0, set the "provider" key on the firewall instead.', $listenerName, $firewallName, $first = array_keys($providerIds)[0]), E_USER_DEPRECATED);
 
         return $providerIds[$first];
     }

@@ -52,13 +52,9 @@ class Helpers{
         $cantidad=count($this->manager->getRepository('AppBundle:Usuario')->findBy(
           array( 'correo'=>$email )
         ));
-        $cantidad2=count($this->manager->getRepository('AppBundle:Usuario')->findBy(
-            array( 'correo2'=>$email )
-        ));
-
         $emailConstraint=new Assert\Email();
         $validate_email=$validator->validate($email,$emailConstraint);
-        if(count($validate_email)>0 || $cantidad>0 || $cantidad2>0 || $email==null || $email=='')
+        if(count($validate_email)>0 || $cantidad>0 || $email==null || $email=='')
             $array= array(
                 'code'=>400
             );
@@ -85,6 +81,10 @@ class Helpers{
         if (function_exists('com_create_guid') === true)
             return trim(com_create_guid(), '{}');
         return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+    }
+
+    public function getConfigurationValue($key){
+        return $this->manager->getRepository('AppBundle:Configuracion')->findOneByclave($key)->getValor();
     }
 
 

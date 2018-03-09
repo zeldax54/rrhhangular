@@ -319,7 +319,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      */
     public function addClassResource(\ReflectionClass $class)
     {
-        @trigger_error('The '.__METHOD__.'() method is deprecated since version 3.3 and will be removed in 4.0. Use the addObjectResource() or the getReflectionClass() method instead.', E_USER_DEPRECATED);
+        @trigger_error('The '.__METHOD__.'() method is deprecated since Symfony 3.3 and will be removed in 4.0. Use the addObjectResource() or the getReflectionClass() method instead.', E_USER_DEPRECATED);
 
         return $this->addObjectResource($class->name);
     }
@@ -346,9 +346,11 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
         try {
             if (isset($this->classReflectors[$class])) {
                 $classReflector = $this->classReflectors[$class];
-            } else {
+            } elseif ($this->trackResources) {
                 $resource = new ClassExistenceResource($class, false);
                 $classReflector = $resource->isFresh(0) ? false : new \ReflectionClass($class);
+            } else {
+                $classReflector = new \ReflectionClass($class);
             }
         } catch (\ReflectionException $e) {
             if ($throw) {
@@ -422,10 +424,14 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      * @throws BadMethodCallException When this ContainerBuilder is compiled
      * @throws \LogicException        if the extension is not registered
      */
-    public function loadFromExtension($extension, array $values = array())
+    public function loadFromExtension($extension, array $values = null)
     {
         if ($this->isCompiled()) {
             throw new BadMethodCallException('Cannot load from an extension on a compiled container.');
+        }
+
+        if (func_num_args() < 2) {
+            $values = array();
         }
 
         $namespace = $this->getExtension($extension)->getAlias();
@@ -452,7 +458,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
             if (__CLASS__ !== get_class($this)) {
                 $r = new \ReflectionMethod($this, __FUNCTION__);
                 if (__CLASS__ !== $r->getDeclaringClass()->getName()) {
-                    @trigger_error(sprintf('Method %s() will have a third `int $priority = 0` argument in version 4.0. Not defining it is deprecated since 3.2.', __METHOD__), E_USER_DEPRECATED);
+                    @trigger_error(sprintf('Method %s() will have a third `int $priority = 0` argument in version 4.0. Not defining it is deprecated since Symfony 3.2.', __METHOD__), E_USER_DEPRECATED);
                 }
             }
 
@@ -556,15 +562,8 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      */
     public function get($id, $invalidBehavior = ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
     {
-        if ($this->isCompiled()) {
-            $id = $this->normalizeId($id);
-
-            if (isset($this->definitions[$id]) && $this->definitions[$id]->isPrivate()) {
-                @trigger_error(sprintf('Fetching the "%s" private service is deprecated and will fail in Symfony 4.0. Make the service public instead.', $id), E_USER_DEPRECATED);
-            }
-            if (isset($this->aliasDefinitions[$id]) && $this->aliasDefinitions[$id]->isPrivate()) {
-                @trigger_error(sprintf('Fetching the "%s" private alias is deprecated and will fail in Symfony 4.0. Make the alias public instead.', $id), E_USER_DEPRECATED);
-            }
+        if ($this->isCompiled() && isset($this->removedIds[$id = $this->normalizeId($id)])) {
+            @trigger_error(sprintf('Fetching the "%s" private service or alias is deprecated since Symfony 3.4 and will fail in 4.0. Make it public instead.', $id), E_USER_DEPRECATED);
         }
 
         return $this->doGet($id, $invalidBehavior);
@@ -630,7 +629,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      *
      * @throws BadMethodCallException When this ContainerBuilder is compiled
      */
-    public function merge(ContainerBuilder $container)
+    public function merge(self $container)
     {
         if ($this->isCompiled()) {
             throw new BadMethodCallException('Cannot merge on a compiled container.');
@@ -739,7 +738,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
             if (__CLASS__ !== static::class) {
                 $r = new \ReflectionMethod($this, __FUNCTION__);
                 if (__CLASS__ !== $r->getDeclaringClass()->getName() && (1 > $r->getNumberOfParameters() || 'resolveEnvPlaceholders' !== $r->getParameters()[0]->name)) {
-                    @trigger_error(sprintf('The %s::compile() method expects a first "$resolveEnvPlaceholders" argument since version 3.3. It will be made mandatory in 4.0.', static::class), E_USER_DEPRECATED);
+                    @trigger_error(sprintf('The %s::compile() method expects a first "$resolveEnvPlaceholders" argument since Symfony 3.3. It will be made mandatory in 4.0.', static::class), E_USER_DEPRECATED);
                 }
             }
             $resolveEnvPlaceholders = false;
@@ -776,6 +775,12 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
         }
 
         parent::compile();
+
+        foreach ($this->definitions + $this->aliasDefinitions as $id => $definition) {
+            if (!$definition->isPublic() || $definition->isPrivate()) {
+                $this->removedIds[$id] = true;
+            }
+        }
     }
 
     /**
@@ -1037,8 +1042,19 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
     {
         $id = $this->normalizeId($id);
 
+        $seen = array();
         while (isset($this->aliasDefinitions[$id])) {
             $id = (string) $this->aliasDefinitions[$id];
+
+            if (isset($seen[$id])) {
+                $seen = array_values($seen);
+                $seen = array_slice($seen, array_search($id, $seen));
+                $seen[] = $id;
+
+                throw new ServiceCircularReferenceException($id, $seen);
+            }
+
+            $seen[$id] = $id;
         }
 
         return $this->getDefinition($id);
@@ -1229,6 +1245,8 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
             $value = $this->doGet((string) $value, $value->getInvalidBehavior(), $inlineServices);
         } elseif ($value instanceof Definition) {
             $value = $this->createService($value, $inlineServices);
+        } elseif ($value instanceof Parameter) {
+            $value = $this->getParameter((string) $value);
         } elseif ($value instanceof Expression) {
             $value = $this->getExpressionLanguage()->evaluate($value, array('container' => $this));
         }
@@ -1352,22 +1370,22 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
             $format = '%%env(%s)%%';
         }
 
-        if (is_array($value)) {
+        $bag = $this->getParameterBag();
+        if (true === $format) {
+            $value = $bag->resolveValue($value);
+        }
+
+        if (\is_array($value)) {
             $result = array();
             foreach ($value as $k => $v) {
-                $result[$this->resolveEnvPlaceholders($k, $format, $usedEnvs)] = $this->resolveEnvPlaceholders($v, $format, $usedEnvs);
+                $result[\is_string($k) ? $this->resolveEnvPlaceholders($k, $format, $usedEnvs) : $k] = $this->resolveEnvPlaceholders($v, $format, $usedEnvs);
             }
 
             return $result;
         }
 
-        if (!is_string($value)) {
+        if (!\is_string($value) || 38 > \strlen($value)) {
             return $value;
-        }
-
-        $bag = $this->getParameterBag();
-        if (true === $format) {
-            $value = $bag->resolveValue($value);
         }
         $envPlaceholders = $bag instanceof EnvPlaceholderParameterBag ? $bag->getEnvPlaceholders() : $this->envPlaceholders;
 
@@ -1437,6 +1455,18 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
     public function log(CompilerPassInterface $pass, $message)
     {
         $this->getCompiler()->log($pass, $message);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function normalizeId($id)
+    {
+        if (!\is_string($id)) {
+            $id = (string) $id;
+        }
+
+        return isset($this->definitions[$id]) || isset($this->aliasDefinitions[$id]) || isset($this->removedIds[$id]) ? $id : parent::normalizeId($id);
     }
 
     /**

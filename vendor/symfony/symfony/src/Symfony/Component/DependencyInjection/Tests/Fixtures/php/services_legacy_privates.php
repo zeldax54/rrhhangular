@@ -23,7 +23,7 @@ class Symfony_DI_PhpDumper_Test_Legacy_Privates extends Container
     {
         $dir = __DIR__;
         for ($i = 1; $i <= 5; ++$i) {
-            $this->targetDirs[$i] = $dir = dirname($dir);
+            $this->targetDirs[$i] = $dir = \dirname($dir);
         }
         $this->services = array();
         $this->methodMap = array(
@@ -60,9 +60,17 @@ class Symfony_DI_PhpDumper_Test_Legacy_Privates extends Container
         return array(
             'Psr\\Container\\ContainerInterface' => true,
             'Symfony\\Component\\DependencyInjection\\ContainerInterface' => true,
+            'decorated_private' => true,
+            'decorated_private_alias' => true,
             'foo' => true,
+            'private' => true,
+            'private_alias' => true,
             'private_alias_decorator.inner' => true,
+            'private_child' => true,
             'private_decorator.inner' => true,
+            'private_not_inlined' => true,
+            'private_not_removed' => true,
+            'private_parent' => true,
         );
     }
 
@@ -78,7 +86,7 @@ class Symfony_DI_PhpDumper_Test_Legacy_Privates extends Container
 
     public function isFrozen()
     {
-        @trigger_error(sprintf('The %s() method is deprecated since version 3.3 and will be removed in 4.0. Use the isCompiled() method instead.', __METHOD__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('The %s() method is deprecated since Symfony 3.3 and will be removed in 4.0. Use the isCompiled() method instead.', __METHOD__), E_USER_DEPRECATED);
 
         return true;
     }

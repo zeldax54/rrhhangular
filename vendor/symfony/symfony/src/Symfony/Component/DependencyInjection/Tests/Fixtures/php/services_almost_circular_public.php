@@ -25,9 +25,11 @@ class Symfony_DI_PhpDumper_Test_Almost_Circular_Public extends Container
         $this->methodMap = array(
             'bar' => 'getBarService',
             'bar3' => 'getBar3Service',
+            'bar5' => 'getBar5Service',
             'foo' => 'getFooService',
             'foo2' => 'getFoo2Service',
             'foo4' => 'getFoo4Service',
+            'foo5' => 'getFoo5Service',
             'foobar' => 'getFoobarService',
             'foobar2' => 'getFoobar2Service',
             'foobar3' => 'getFoobar3Service',
@@ -58,7 +60,7 @@ class Symfony_DI_PhpDumper_Test_Almost_Circular_Public extends Container
 
     public function isFrozen()
     {
-        @trigger_error(sprintf('The %s() method is deprecated since version 3.3 and will be removed in 4.0. Use the isCompiled() method instead.', __METHOD__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('The %s() method is deprecated since Symfony 3.3 and will be removed in 4.0. Use the isCompiled() method instead.', __METHOD__), E_USER_DEPRECATED);
 
         return true;
     }
@@ -89,6 +91,26 @@ class Symfony_DI_PhpDumper_Test_Almost_Circular_Public extends Container
         $a = ${($_ = isset($this->services['foobar3']) ? $this->services['foobar3'] : $this->services['foobar3'] = new \FoobarCircular()) && false ?: '_'};
 
         $instance->addFoobar($a, $a);
+
+        return $instance;
+    }
+
+    /**
+     * Gets the public 'bar5' shared service.
+     *
+     * @return \stdClass
+     */
+    protected function getBar5Service()
+    {
+        $a = ${($_ = isset($this->services['foo5']) ? $this->services['foo5'] : $this->getFoo5Service()) && false ?: '_'};
+
+        if (isset($this->services['bar5'])) {
+            return $this->services['bar5'];
+        }
+
+        $this->services['bar5'] = $instance = new \stdClass($a);
+
+        $instance->foo = $a;
 
         return $instance;
     }
@@ -135,6 +157,20 @@ class Symfony_DI_PhpDumper_Test_Almost_Circular_Public extends Container
         $instance = new \stdClass();
 
         $instance->foobar = ${($_ = isset($this->services['foobar4']) ? $this->services['foobar4'] : $this->getFoobar4Service()) && false ?: '_'};
+
+        return $instance;
+    }
+
+    /**
+     * Gets the public 'foo5' shared service.
+     *
+     * @return \stdClass
+     */
+    protected function getFoo5Service()
+    {
+        $this->services['foo5'] = $instance = new \stdClass();
+
+        $instance->bar = ${($_ = isset($this->services['bar5']) ? $this->services['bar5'] : $this->getBar5Service()) && false ?: '_'};
 
         return $instance;
     }

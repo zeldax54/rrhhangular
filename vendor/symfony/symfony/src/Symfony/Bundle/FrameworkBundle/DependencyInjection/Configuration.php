@@ -143,7 +143,14 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('csrf_protection')
-                    ->{!class_exists(FullStack::class) && class_exists(CsrfTokenManagerInterface::class) ? 'canBeDisabled' : 'canBeEnabled'}()
+                    ->treatFalseLike(array('enabled' => false))
+                    ->treatTrueLike(array('enabled' => true))
+                    ->treatNullLike(array('enabled' => true))
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        // defaults to framework.session.enabled && !class_exists(FullStack::class) && interface_exists(CsrfTokenManagerInterface::class)
+                        ->booleanNode('enabled')->defaultNull()->end()
+                    ->end()
                 ->end()
             ->end()
         ;

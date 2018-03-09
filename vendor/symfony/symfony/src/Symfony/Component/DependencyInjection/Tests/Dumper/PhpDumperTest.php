@@ -23,6 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\EnvVarProcessorInterface;
+use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Tests\Fixtures\StubbedTranslator;
@@ -106,6 +107,46 @@ class PhpDumperTest extends TestCase
         $this->assertStringEqualsFile(self::$fixturesPath.'/php/services12.php', $dumper->dump(array('file' => __FILE__)), '->dump() dumps __DIR__ relative strings');
     }
 
+    public function testDumpCustomContainerClassWithoutConstructor()
+    {
+        $container = new ContainerBuilder();
+        $container->compile();
+
+        $dumper = new PhpDumper($container);
+
+        $this->assertStringEqualsFile(self::$fixturesPath.'/php/custom_container_class_without_constructor.php', $dumper->dump(array('base_class' => 'NoConstructorContainer', 'namespace' => 'Symfony\Component\DependencyInjection\Tests\Fixtures\Container')));
+    }
+
+    public function testDumpCustomContainerClassConstructorWithoutArguments()
+    {
+        $container = new ContainerBuilder();
+        $container->compile();
+
+        $dumper = new PhpDumper($container);
+
+        $this->assertStringEqualsFile(self::$fixturesPath.'/php/custom_container_class_constructor_without_arguments.php', $dumper->dump(array('base_class' => 'ConstructorWithoutArgumentsContainer', 'namespace' => 'Symfony\Component\DependencyInjection\Tests\Fixtures\Container')));
+    }
+
+    public function testDumpCustomContainerClassWithOptionalArgumentLessConstructor()
+    {
+        $container = new ContainerBuilder();
+        $container->compile();
+
+        $dumper = new PhpDumper($container);
+
+        $this->assertStringEqualsFile(self::$fixturesPath.'/php/custom_container_class_with_optional_constructor_arguments.php', $dumper->dump(array('base_class' => 'ConstructorWithOptionalArgumentsContainer', 'namespace' => 'Symfony\Component\DependencyInjection\Tests\Fixtures\Container')));
+    }
+
+    public function testDumpCustomContainerClassWithMandatoryArgumentLessConstructor()
+    {
+        $container = new ContainerBuilder();
+        $container->compile();
+
+        $dumper = new PhpDumper($container);
+
+        $this->assertStringEqualsFile(self::$fixturesPath.'/php/custom_container_class_with_mandatory_constructor_arguments.php', $dumper->dump(array('base_class' => 'ConstructorWithMandatoryArgumentsContainer', 'namespace' => 'Symfony\Component\DependencyInjection\Tests\Fixtures\Container')));
+    }
+
     /**
      * @dataProvider provideInvalidParameters
      * @expectedException \InvalidArgumentException
@@ -138,7 +179,7 @@ class PhpDumperTest extends TestCase
 
     /**
      * @group legacy
-     * @expectedDeprecation Dumping an uncompiled ContainerBuilder is deprecated since version 3.3 and will not be supported anymore in 4.0. Compile the container beforehand.
+     * @expectedDeprecation Dumping an uncompiled ContainerBuilder is deprecated since Symfony 3.3 and will not be supported anymore in 4.0. Compile the container beforehand.
      */
     public function testAddServiceWithoutCompilation()
     {
@@ -782,6 +823,9 @@ class PhpDumperTest extends TestCase
         $this->assertSame($foo2, $foo2->bar->foobar->foo);
 
         $this->assertSame(array(), (array) $container->get('foobar4'));
+
+        $foo5 = $container->get('foo5');
+        $this->assertSame($foo5, $foo5->bar->foo);
     }
 
     public function provideAlmostCircular()
@@ -817,6 +861,31 @@ class PhpDumperTest extends TestCase
         $container = new \Symfony_DI_PhpDumper_Test_Literal_Class_With_Root_Namespace();
 
         $this->assertInstanceOf('stdClass', $container->get('foo'));
+    }
+
+    public function testDumpHandlesObjectClassNames()
+    {
+        $container = new ContainerBuilder(new ParameterBag(array(
+            'class' => 'stdClass',
+        )));
+
+        $container->setDefinition('foo', new Definition(new Parameter('class')));
+        $container->setDefinition('bar', new Definition('stdClass', array(
+            new Reference('foo'),
+        )))->setPublic(true);
+
+        $container->setParameter('inline_requires', true);
+        $container->compile();
+
+        $dumper = new PhpDumper($container);
+        eval('?>'.$dumper->dump(array(
+            'class' => 'Symfony_DI_PhpDumper_Test_Object_Class_Name',
+            'inline_class_loader_parameter' => 'inline_requires',
+        )));
+
+        $container = new \Symfony_DI_PhpDumper_Test_Object_Class_Name();
+
+        $this->assertInstanceOf('stdClass', $container->get('bar'));
     }
 
     /**
@@ -896,9 +965,9 @@ class PhpDumperTest extends TestCase
 
     /**
      * @group legacy
-     * @expectedDeprecation Parameter names will be made case sensitive in Symfony 4.0. Using "foo" instead of "Foo" is deprecated since version 3.4.
-     * @expectedDeprecation Parameter names will be made case sensitive in Symfony 4.0. Using "FOO" instead of "Foo" is deprecated since version 3.4.
-     * @expectedDeprecation Parameter names will be made case sensitive in Symfony 4.0. Using "bar" instead of "BAR" is deprecated since version 3.4.
+     * @expectedDeprecation Parameter names will be made case sensitive in Symfony 4.0. Using "foo" instead of "Foo" is deprecated since Symfony 3.4.
+     * @expectedDeprecation Parameter names will be made case sensitive in Symfony 4.0. Using "FOO" instead of "Foo" is deprecated since Symfony 3.4.
+     * @expectedDeprecation Parameter names will be made case sensitive in Symfony 4.0. Using "bar" instead of "BAR" is deprecated since Symfony 3.4.
      */
     public function testParameterWithMixedCase()
     {
@@ -918,7 +987,7 @@ class PhpDumperTest extends TestCase
 
     /**
      * @group legacy
-     * @expectedDeprecation Parameter names will be made case sensitive in Symfony 4.0. Using "FOO" instead of "foo" is deprecated since version 3.4.
+     * @expectedDeprecation Parameter names will be made case sensitive in Symfony 4.0. Using "FOO" instead of "foo" is deprecated since Symfony 3.4.
      */
     public function testParameterWithLowerCase()
     {
@@ -931,6 +1000,26 @@ class PhpDumperTest extends TestCase
         $container = new \Symfony_DI_PhpDumper_Test_Parameter_With_Lower_Case();
 
         $this->assertSame('bar', $container->getParameter('FOO'));
+    }
+
+    /**
+     * @group legacy
+     * @expectedDeprecation Service identifiers will be made case sensitive in Symfony 4.0. Using "foo" instead of "Foo" is deprecated since Symfony 3.3.
+     * @expectedDeprecation The "Foo" service is deprecated. You should stop using it, as it will soon be removed.
+     */
+    public function testReferenceWithLowerCaseId()
+    {
+        $container = new ContainerBuilder();
+        $container->register('Bar', 'stdClass')->setProperty('foo', new Reference('foo'))->setPublic(true);
+        $container->register('Foo', 'stdClass')->setDeprecated();
+        $container->compile();
+
+        $dumper = new PhpDumper($container);
+        eval('?>'.$dumper->dump(array('class' => 'Symfony_DI_PhpDumper_Test_Reference_With_Lower_Case_Id')));
+
+        $container = new \Symfony_DI_PhpDumper_Test_Reference_With_Lower_Case_Id();
+
+        $this->assertEquals((object) array('foo' => (object) array()), $container->get('Bar'));
     }
 }
 
