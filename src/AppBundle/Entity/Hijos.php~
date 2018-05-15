@@ -36,6 +36,13 @@ class Hijos
      */
     private $fechanacimiento;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sexo", type="string",nullable=false )
+     */
+    private $sexo;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Curriculum",inversedBy="hijos", cascade={"persist"})
@@ -56,29 +63,7 @@ class Hijos
         return $this->id;
     }
 
-    /**
-     * Set tipo
-     *
-     * @param string $tipo
-     *
-     * @return Tipodoc
-     */
-    public function setTipo($tipo)
-    {
-        $this->tipo = $tipo;
 
-        return $this;
-    }
-
-    /**
-     * Get tipo
-     *
-     * @return string
-     */
-    public function getTipo()
-    {
-        return $this->tipo;
-    }
     /**
      * Constructor
      */

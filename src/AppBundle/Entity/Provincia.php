@@ -55,6 +55,12 @@ class Provincia
 
     /**
      * @JMS\Exclude();
+     * @ORM\OneToMany(targetEntity="Curriculum" , mappedBy="provinciaNacimiento", cascade={"persist", "detach"})
+     */
+    private $curriculumnsNacimiento;
+
+    /**
+     * @JMS\Exclude();
      * @ORM\OneToMany(targetEntity="ExperienciaLaboral" , mappedBy="pais", cascade={"persist", "detach"})
      */
     private $experiencias;
@@ -221,5 +227,39 @@ class Provincia
     public function getExperiencias()
     {
         return $this->experiencias;
+    }
+
+    /**
+     * Add curriculumnsNacimiento
+     *
+     * @param \AppBundle\Entity\Curriculum $curriculumnsNacimiento
+     *
+     * @return Provincia
+     */
+    public function addCurriculumnsNacimiento(\AppBundle\Entity\Curriculum $curriculumnsNacimiento)
+    {
+        $this->curriculumnsNacimiento[] = $curriculumnsNacimiento;
+
+        return $this;
+    }
+
+    /**
+     * Remove curriculumnsNacimiento
+     *
+     * @param \AppBundle\Entity\Curriculum $curriculumnsNacimiento
+     */
+    public function removeCurriculumnsNacimiento(\AppBundle\Entity\Curriculum $curriculumnsNacimiento)
+    {
+        $this->curriculumnsNacimiento->removeElement($curriculumnsNacimiento);
+    }
+
+    /**
+     * Get curriculumnsNacimiento
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCurriculumnsNacimiento()
+    {
+        return $this->curriculumnsNacimiento;
     }
 }

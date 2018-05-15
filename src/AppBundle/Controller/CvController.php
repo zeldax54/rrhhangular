@@ -43,6 +43,7 @@ class CvController extends Controller
             foreach($personal->hijos as $hijo){
                 $h=new Hijos();
                 $h->setFechanacimiento(new \DateTime($hijo->fechanacimiento));
+                $h->setSexo($hijo->sexo);
                $curriculum->addHijo($h);
                 $h->setCurriculum($curriculum);
             }
@@ -54,6 +55,12 @@ class CvController extends Controller
             $curriculum->setPais($this->findChild($em->getRepository('AppBundle:Pais'),$personal->pais));
             $curriculum->setProvincia($this->findChild($em->getRepository('AppBundle:Provincia'),$personal->provincia));
             $curriculum->setLocalidad($this->findChild($em->getRepository('AppBundle:Localidad'),$personal->localidad));
+            //Nacimiento
+            $curriculum->setPaisNacimiento($this->findChild($em->getRepository('AppBundle:Pais'),$personal->paisNacimiento));
+            $curriculum->setProvinciaNacimiento($this->findChild($em->getRepository('AppBundle:Provincia'),$personal->provinciaNacimiento));
+            $curriculum->setLocalidadNacimiento($this->findChild($em->getRepository('AppBundle:Localidad'),$personal->localidadNacimiento));
+            //End Nacimiento
+
             foreach($personal->telefonos as $telefono){
                 $t=new Telefono();
                 $t->setNumero($telefono->numero);
@@ -98,6 +105,7 @@ class CvController extends Controller
                 $eC->setAnnosaprobadoscursados($estudiocursado->annosaprobadoscursados);
                 $curriculum->addEstudio($eC);
                 $eC->setCurriculum($curriculum);
+                
             }
               //Estudio Idiomas
             foreach($estudio->estudioIdiomas as $estudioIdioma){

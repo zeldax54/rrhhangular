@@ -1,16 +1,16 @@
-import { Component, OnInit,ViewChild }   from '@angular/core';
+
+import {retry, startWith, map} from 'rxjs/operators';
+import { Component, OnInit,ViewChild,Inject }   from '@angular/core';
 import { Router }              from '@angular/router';
 
 import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {MyErrorStateMatcher} from "../../services/global";
 
-import {Observable} from 'rxjs/Observable';
-import {startWith} from 'rxjs/operators/startWith';
-import {map} from 'rxjs/operators/map';
+import {Observable} from 'rxjs';
 
 import { EnvironmentSpecificService }     from '../../services/enviromentSpecific';
 import { NomencladoresService }     from '../../services/nomencladores.service';
-import {MatDialog, MatPaginator, MatSort,MatTableDataSource} from '@angular/material';
+import {MatDialog, MatPaginator, MatSort,MatTableDataSource,MatDialogRef,MAT_DIALOG_DATA} from '@angular/material';
 import {AddEstudioDialogComponent} from '../../components/dialogos/add_estudio.dialog';
 
 import { FormDataService }     from '../../data/formData.service';
@@ -74,7 +74,8 @@ export class WorkComponent implements OnInit {
     addestudioEnable:boolean=false;
     estudiocursado:EstudioCursado=new EstudioCursado();
     estudiosCursadosArrayList:Array<EstudioCursado>=[];
-
+ //data
+ data:any;
 
 
 
@@ -100,7 +101,7 @@ export class WorkComponent implements OnInit {
 
         }
         else
-        this.nomencladoresservice.getEstudiosTipo(this.url).retry(this.retries).subscribe(
+        this.nomencladoresservice.getEstudiosTipo(this.url).pipe(retry(this.retries)).subscribe(
             result => {
                 this.estudiostipo=result;
 
@@ -117,7 +118,7 @@ export class WorkComponent implements OnInit {
         }
 
         else
-        this.nomencladoresservice.getEstudiosEstado(this.url).retry(this.retries).subscribe(
+        this.nomencladoresservice.getEstudiosEstado(this.url).pipe(retry(this.retries)).subscribe(
             result => {
                 this.estudioestados=result;
 
@@ -136,7 +137,7 @@ export class WorkComponent implements OnInit {
         }
 
         else
-        this.nomencladoresservice.getEstudiosTitulo(this.url).retry(this.retries).subscribe(
+        this.nomencladoresservice.getEstudiosTitulo(this.url).pipe(retry(this.retries)).subscribe(
             result => {
                 this.estudiotitulos=result;
 
@@ -154,7 +155,7 @@ export class WorkComponent implements OnInit {
         }
         else
         if(this.annos.length==0)
-            this.nomencladoresservice.getAnnos(this.url).retry(this.retries).subscribe(
+            this.nomencladoresservice.getAnnos(this.url).pipe(retry(this.retries)).subscribe(
                 result => {
                     this.annos=result;
                     this.annoseg=result;
@@ -170,7 +171,7 @@ export class WorkComponent implements OnInit {
             this.idiomasPlaceHolder='Idioma';
         }
         else
-            this.nomencladoresservice.getIdiomas(this.url).retry(this.retries).subscribe(
+            this.nomencladoresservice.getIdiomas(this.url).pipe(retry(this.retries)).subscribe(
                 result => {
                     this.idiomas=result;
                     this.idiomasPlaceHolder='Idioma';
@@ -189,7 +190,7 @@ export class WorkComponent implements OnInit {
         }
 
         else
-            this.nomencladoresservice.getNiveles(this.url).retry(this.retries).subscribe(
+            this.nomencladoresservice.getNiveles(this.url).pipe(retry(this.retries)).subscribe(
                 result => {
                     this.niveles=result;
                     this.nivelesPlaceHolder='Nivel';
@@ -427,9 +428,58 @@ export class WorkComponent implements OnInit {
 
     }
 
+    addCurso(){
+        let dialogRef = this.dialog.open(DialogCursosSemCongComponent, {
+            width: '250px',
+            data: {tipo:'Curso'}
+          });
+      
+          dialogRef.afterClosed().subscribe(result => {   
+            if(result!=undefined)             
+            this.estudio.cursos+=result+'\n';
+          });
 
+    }
 
+    addSeminario(){
+        let dialogRef = this.dialog.open(DialogCursosSemCongComponent, {
+            width: '250px',
+            data: {tipo:'Seminario'}
+          });
+      
+          dialogRef.afterClosed().subscribe(result => {  
+            if(result!=undefined)              
+            this.estudio.seminarios+=result+'\n';
+          });
+    }
 
+    addCongreso(){
+        let dialogRef = this.dialog.open(DialogCursosSemCongComponent, {
+            width: '250px',
+            data: {tipo:'Congreso'}
+          });
+      
+          dialogRef.afterClosed().subscribe(result => {  
+              if(result!=undefined)          
+            this.estudio.congresos+=result+'\n';
+          }); 
+    }
 
 
 }
+
+@Component({
+    selector: 'dialog-overview-example-dialog',
+    templateUrl: 'cursosemcongdialog.html',
+  })
+  export class DialogCursosSemCongComponent {
+  
+    constructor(
+      public dialogRef: MatDialogRef<DialogCursosSemCongComponent>,
+      @Inject(MAT_DIALOG_DATA) public data: any) { }
+  
+    onNoClick(): void {
+      this.dialogRef.close();
+    }
+  
+  }

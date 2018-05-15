@@ -1,3 +1,5 @@
+
+import {retry} from 'rxjs/operators';
 import { Component, OnInit,ViewChild }   from '@angular/core';
 import { Router }              from '@angular/router';
 
@@ -51,7 +53,7 @@ export class AddressComponent implements OnInit {
         this.perosnal=this.formDataService.getPersonal();
         this.paises=this.perosnal.cachePersonal.paises;
         if(this.paises==undefined){
-            this.paisesservice.getPaises(this.url).retry(3).subscribe(
+            this.paisesservice.getPaises(this.url).pipe(retry(3)).subscribe(
                 result => {
                     this.paises=result;
 
@@ -64,7 +66,7 @@ export class AddressComponent implements OnInit {
         }
         if(this.actividadesempresa.length==0 || this.actividadesempresa==undefined){
 
-            this.nomencladoresService.getActividadEmpresa(this.url).retry(3).subscribe(
+            this.nomencladoresService.getActividadEmpresa(this.url).pipe(retry(3)).subscribe(
                 result => {
                     this.actividadesempresa=result;
                     this.addexperiencieEnable=true;

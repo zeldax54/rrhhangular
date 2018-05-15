@@ -21,9 +21,12 @@ export class FormData {
     pais:string='';
     provincia:string='';
     localidad:string='';
+    paisNacimiento:string='';
+    provinciaNacimiento:string='';
+    localidadNacimiento:string='';
     telefonos:Telefono[]=[];
     dispotraslado:string='';
-    dispohoras:number=2;
+    dispohoras:string='';
     movilidadpropia:string='';
 
     cacheEstudio:CacheEstudio=new CacheEstudio();
@@ -72,9 +75,13 @@ export class FormData {
         this.pais='';
         this.provincia='';
         this.localidad='';
+        this.paisNacimiento='';
+        this.provinciaNacimiento='';
+        this.localidadNacimiento='';
+        
         this.telefonos=[];
         this.dispotraslado='';
-        this.dispohoras=2;
+        this.dispohoras='';
         this.movilidadpropia='';
         //Estudios
         this.cacheEstudio=new CacheEstudio();
@@ -123,9 +130,12 @@ export class Personal {
     pais:string='';
     provincia:string='';
     localidad:string='';
+    paisNacimiento:string='';
+    provinciaNacimiento:string='';
+    localidadNacimiento:string='';
     telefonos:Telefono[];
     dispotraslado:string='';
-    dispohoras:number=2;
+    dispohoras:string='';
     movilidadpropia:string='';
     cachePersonal:CachePersonal=new CachePersonal();
 }
@@ -133,6 +143,7 @@ export class Personal {
 export class Hijo{
 
     id:any=null;
+    sexo:string=null;
     fechanacimiento:Date=null;
 }
 export class Telefono{
@@ -148,6 +159,7 @@ export class CachePersonal{
     td:Array<any>=null;
     ec:Array<any>=null;
     paises:Array<any>=null;
+    paisesNacimiento:Array<any>=null;
     tipostelefono:Array<any>=null;
 }
 

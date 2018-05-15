@@ -3,7 +3,7 @@ import {EnvironmentSpecificService} from "./enviromentSpecific";
 import {EnvSpecific} from "../models/envSpecific";
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import "rxjs/add/operator/map";
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 
 
 

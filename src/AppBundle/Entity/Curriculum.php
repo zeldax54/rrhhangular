@@ -130,8 +130,8 @@ class Curriculum {
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Pais",inversedBy="curriculums", cascade={"persist"})
-     */
+ * @ORM\ManyToOne(targetEntity="Pais",inversedBy="curriculums", cascade={"persist"})
+ */
     private $pais;
 
     /**
@@ -143,6 +143,24 @@ class Curriculum {
      * @ORM\ManyToOne(targetEntity="Localidad",inversedBy="curriculums", cascade={"persist"})
      */
     private $localidad;
+
+
+    //Nacimiento
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Pais",inversedBy="curriculumsNacimiento", cascade={"persist"})
+     */
+    private $paisNacimiento;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Provincia",inversedBy="curriculumsNacimiento", cascade={"persist"})
+     */
+    private $provinciaNacimiento;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Localidad",inversedBy="curriculumsNacimiento", cascade={"persist"})
+     */
+    private $localidadNacimiento;
 
 
 
@@ -1129,5 +1147,77 @@ class Curriculum {
     public function getPostulaciones()
     {
         return $this->postulaciones;
+    }
+
+    /**
+     * Set paisNacimiento
+     *
+     * @param \AppBundle\Entity\Pais $paisNacimiento
+     *
+     * @return Curriculum
+     */
+    public function setPaisNacimiento(\AppBundle\Entity\Pais $paisNacimiento = null)
+    {
+        $this->paisNacimiento = $paisNacimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get paisNacimiento
+     *
+     * @return \AppBundle\Entity\Pais
+     */
+    public function getPaisNacimiento()
+    {
+        return $this->paisNacimiento;
+    }
+
+    /**
+     * Set provinciaNacimiento
+     *
+     * @param \AppBundle\Entity\Provincia $provinciaNacimiento
+     *
+     * @return Curriculum
+     */
+    public function setProvinciaNacimiento(\AppBundle\Entity\Provincia $provinciaNacimiento = null)
+    {
+        $this->provinciaNacimiento = $provinciaNacimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get provinciaNacimiento
+     *
+     * @return \AppBundle\Entity\Provincia
+     */
+    public function getProvinciaNacimiento()
+    {
+        return $this->provinciaNacimiento;
+    }
+
+    /**
+     * Set localidadNacimiento
+     *
+     * @param \AppBundle\Entity\Localidad $localidadNacimiento
+     *
+     * @return Curriculum
+     */
+    public function setLocalidadNacimiento(\AppBundle\Entity\Localidad $localidadNacimiento = null)
+    {
+        $this->localidadNacimiento = $localidadNacimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get localidadNacimiento
+     *
+     * @return \AppBundle\Entity\Localidad
+     */
+    public function getLocalidadNacimiento()
+    {
+        return $this->localidadNacimiento;
     }
 }

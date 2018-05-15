@@ -13,7 +13,8 @@ import {Router,ActivatedRoute,Params} from '@angular/router'
        '../../assets/vendor/rs-plugin/css/settings.css',
         '../../assets/vendor/rs-plugin/css/layers.css',
         '../../assets/vendor/rs-plugin/css/navigation.css',
-        '../../assets/vendor/circle-flip-slideshow/css/component.css'
+        '../../assets/vendor/circle-flip-slideshow/css/component.css',
+        '../../assets/css/mainfix.css',
     ]
 
 })
@@ -62,7 +63,8 @@ public title:string;
                 "./assets/vendor/rs-plugin/js/jquery.themepunch.tools.min.js",
                 "./assets/vendor/rs-plugin/js/jquery.themepunch.revolution.min.js",
                 "./assets/vendor/circle-flip-slideshow/js/jquery.flipshow.min.js",
-                "./assets/js/views/view.home.js",
+                "./assets/js/views/view.home.js"
+            
             ];
             for (var i = 0; i < dynamicScripts .length; i++) {
                 let node = document.createElement('script');

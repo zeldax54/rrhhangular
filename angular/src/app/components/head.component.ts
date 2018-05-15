@@ -1,3 +1,5 @@
+
+import {retry} from 'rxjs/operators';
 import {Component,OnInit} from '@angular/core';
 import {ValidatorService} from "../services/validator.service";
 
@@ -27,7 +29,7 @@ export class HeadComponent  implements OnInit{
     ngOnInit():void {
         if(this.url!=null){
             let token=localStorage.getItem('token');
-            this.validator.checktoken(this.url,token).retry(this.retries).subscribe(result=>{
+            this.validator.checktoken(this.url,token).pipe(retry(this.retries)).subscribe(result=>{
                 let resultcast=result as any;
                 if(resultcast.code==200){
 

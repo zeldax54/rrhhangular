@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import 'rxjs/add/operator/retry';
+
+import {retry} from 'rxjs/operators';
+import { Component, OnInit,Inject } from '@angular/core';
+
 import { Router } from '@angular/router';
 import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {MyErrorStateMatcher} from "../../services/global";
@@ -21,12 +23,14 @@ import {Telefono} from "../../data/formData.model";
 import {EnvironmentSpecificService} from "../../services/enviromentSpecific";
 import {MatTableDataSource} from '@angular/material';
 import {MatSnackBar} from '@angular/material';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 
 //Date provider
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
 import * as _moment from 'moment';
+import { isNullOrUndefined } from 'util';
 const moment = _moment;
 
 export const CUSTOM_DATE_FORMAT = {
@@ -55,7 +59,8 @@ export const CUSTOM_DATE_FORMAT = {
 })
 
 export class PersonalComponent implements OnInit {
-    title = 'Necesitamos estos datos para conocerte y poder contactarte.';
+    title = 'DATOS PERSONALES';
+    subtitle='Necesitamos estos datos para conocerte y poder contactarte.'
     personal: Personal;
     form: any;
     td:any;
@@ -64,9 +69,10 @@ export class PersonalComponent implements OnInit {
     Hijo: Hijo=new Hijo();
     Hijos: Array<Hijo> = [];
     localidades:any;
+    localidadesNacimiento:any;
     Telefono: Telefono=new Telefono();
     Telefonos: Array<Telefono> = [];
-    tipostelefono:any;
+    tipostelefono:any;   
     url:any;
     //Form Control View
     matcher = new MyErrorStateMatcher();
@@ -87,11 +93,20 @@ export class PersonalComponent implements OnInit {
     placeholderestadoCivil='Cargando...';
     calleFormControl=new FormControl('', [Validators.required]);
     nroCalleFormControl=new FormControl('', [Validators.required]);
+    cpFormControl=new FormControl('', [Validators.required]);
+    prefixvalue:string='0000';
+    
 
     paises:Array<any>=[];
     paisFormControl = new FormControl('', [Validators.required,]);
     //filteredpaises: Observable<any[]>;
     placeholderpais:string='Cargando...';
+
+    // Nacimiento
+    paisesNacimiento:Array<any>=[];
+    paisNacimientoFormControl = new FormControl('', [Validators.required,]);
+    //filteredpaises: Observable<any[]>;
+    placeholderpaisNacimiento:string='Cargando...';
 
     dispotrasladolist:Array<any>=[
         {'id':'Si','nombre':'Si'},
@@ -99,21 +114,27 @@ export class PersonalComponent implements OnInit {
     ];
 
     dispohoraslist:Array<any>=[
-        {'id':2,'valor':2},
-        {'id':4,'valor':4},
-        {'id':8,'valor':8},
-
+        {'id':2,'valor':'2'},
+        {'id':4,'valor':'4'},
+        {'id':8,'valor':'8'},
     ];
     movpropiaFormControl= new FormControl('', [Validators.required,]);
     movilidadpropialist:Array<any>=[
         {'id':'Si','nombre':'Si'},
         {'id':'No','nombre':'No'}
     ];
+    sexos:Array<any>=[
+        {'id':'M','sexo':'Masculino'},
+        {'id':'F','sexo':'Femenino'},
+        {'id':'O','sexo':'Otro'}
+    ];
+    disphorasFormControl= new FormControl('', [Validators.required,]);
+    dispotrasladoFormControl= new FormControl('', [Validators.required,]);
 
     classbtnAgregarHijos:string='btn btn-quaternary mr-xs mb-sm';
     classbtnAgregartelefono:string='btn btn-quaternary mr-xs mb-sm';
 
-
+  
 
 
     constructor(
@@ -125,7 +146,8 @@ export class PersonalComponent implements OnInit {
         private estadocivilservice:EstadoCivilService,
         private paisesservice:PaisesService,
         private nomencladoresservice:NomencladoresService,
-        public snackBar: MatSnackBar) {
+        public snackBar: MatSnackBar,
+        public dialog: MatDialog) {
 
         this.url=envspecific.envSpecific.APIURL;
 
@@ -139,8 +161,7 @@ export class PersonalComponent implements OnInit {
 
 
 
-
-
+    
 
 
 
@@ -152,7 +173,7 @@ export class PersonalComponent implements OnInit {
             this.placeholdertipodoc='*Tipo de documento';
             this.td=this.personal.cachePersonal.td;
         }else
-       this.tipodocservice.getTiposDoc(this.url).retry(this.retries).subscribe(
+       this.tipodocservice.getTiposDoc(this.url).pipe(retry(this.retries)).subscribe(
            result => {
                this.td=result;
                this.personal.cachePersonal.td=result;
@@ -167,7 +188,7 @@ export class PersonalComponent implements OnInit {
             this.placeholderestadoCivil='Estado Civil';
             this.ec=this.personal.cachePersonal.ec;
         }else
-        this.estadocivilservice.getEstadoCivil(this.url).retry(this.retries).subscribe(
+        this.estadocivilservice.getEstadoCivil(this.url).pipe(retry(this.retries)).subscribe(
             result => {
                 this.ec=result;
                 this.personal.cachePersonal.ec=result;
@@ -180,13 +201,19 @@ export class PersonalComponent implements OnInit {
         );
         if(this.personal.cachePersonal.paises!=null){
             this.placeholderpais='Pais';
+            this.placeholderpaisNacimiento='Pais de Nacimiento';
             this.paises=this.personal.cachePersonal.paises;
+            this.paisesNacimiento=this.personal.cachePersonal.paisesNacimiento;
         }else
-        this.paisesservice.getPaises(this.url).retry(this.retries).subscribe(
+        this.paisesservice.getPaises(this.url).pipe(retry(this.retries)).subscribe(
             result => {
                 this.paises=result;
                 this.personal.cachePersonal.paises=result;
                 this.placeholderpais='Pais';
+                this.paisesNacimiento=result;
+                this.personal.cachePersonal.paisesNacimiento=result;
+                this.placeholderpaisNacimiento='Pais de Nacimiento';
+
             },
             error => {
                 this.placeholderpais=this.placeholdererror;
@@ -196,7 +223,7 @@ export class PersonalComponent implements OnInit {
         if( this.personal.cachePersonal.tipostelefono!=null){
             this.tipostelefono=this.personal.cachePersonal.tipostelefono;
         }else
-        this.nomencladoresservice.getTiposTelefonos(this.url).retry(this.retries).subscribe(
+        this.nomencladoresservice.getTiposTelefonos(this.url).pipe(retry(this.retries)).subscribe(
             result => {
                 this.personal.cachePersonal.tipostelefono=result;
                 this.tipostelefono=result;
@@ -209,13 +236,14 @@ export class PersonalComponent implements OnInit {
         this.Hijos=this.personal.hijos;
         this.Telefonos=this.personal.telefonos;
         window.scrollTo(0, 0);
+       
     }
 
     validateMail(formulario:any){
         clearTimeout(this.timeout);
         var that=this;
         this.timeout = setTimeout(function (e) {
-            that.validatorservice.validateEmail(that.url,that.personal.email).retry(this.retries).subscribe(
+            that.validatorservice.validateEmail(that.url,that.personal.email).pipe(retry(this.retries)).subscribe(
                 result => {
                     if(result['code']==400)
                     {
@@ -280,7 +308,13 @@ export class PersonalComponent implements OnInit {
     }
 
     addHijo(){
-        if(this.Hijo.fechanacimiento!=null){
+
+        if(this.Hijo.fechanacimiento>=new Date()){
+            this.openSnackBar("La fecha de nacimiento no puede ser mayor que la actual!!");
+            return;
+        }
+
+        if(this.Hijo.fechanacimiento!=null && this.Hijo.sexo!=null){
             this.Hijos.push(this.Hijo);
             this.personal.hijos=this.Hijos;
             this.Hijo=new Hijo();
@@ -302,10 +336,26 @@ export class PersonalComponent implements OnInit {
 
     }
 
+    changeprovinciaNacimiento(provinciaid:any){
+
+        if(provinciaid==-1)
+            return null;
+        this.localidadesNacimiento= this.paisesNacimiento.filter(item => item.id==this.personal.paisNacimiento)[0].provincias.filter(item => item.id==provinciaid)[0].localidades;
+
+    }
+
+
     changepais(){
         this.personal.provincia='-1';
         this.localidades=null;
     }
+
+
+    changepaisNacimiento(){
+        this.personal.provinciaNacimiento='-1';
+        this.localidadesNacimiento=null;
+    }
+
 
 
 
@@ -315,6 +365,7 @@ export class PersonalComponent implements OnInit {
            return;
        }
         if(this.Telefono.numero!=null && this.Telefono.numero!=''){
+            this.Telefono.numero=this.prefixvalue+'-'+this.Telefono.numero;
             this.Telefonos.push(this.Telefono);
             this.personal.telefonos=this.Telefonos;
             this.Telefono=new Telefono();
@@ -341,4 +392,52 @@ export class PersonalComponent implements OnInit {
         else
             this.classbtnAgregartelefono='btn btn-quaternary mr-xs mb-sm';
     }
+
+    changefechanacimiento(event){ //Validar cambio fecha nacimiento no permitir una fecha posterior a la actual
+    
+        if(this.personal.fechanacimiento!=null){
+           var newdate = new Date();                 
+            if(newdate<=this.personal.fechanacimiento){
+                this.openSnackBar("La fecha seleccionada es mayor que la actual!!!");
+                this.personal.fechanacimiento=null;
+                this.fechadenacimientoFormControl.setValue(null);
+            }         
+        
+        }          
+   
+    }
+
+    prefixDialog(){
+        let dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+            width: '250px',
+            data: { prefijo: this.prefixvalue }
+          });
+      
+          dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+            if(result==null || result=='' || result==" " || isNullOrUndefined(result)){
+                result='0000';
+                return;
+            }
+            this.prefixvalue = result;
+          });
+    }
+    
+
 }
+
+@Component({
+    selector: 'dialog-overview-example-dialog',
+    templateUrl: 'prefixdialog.html',
+  })
+  export class DialogOverviewExampleDialog {
+  
+    constructor(
+      public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+      @Inject(MAT_DIALOG_DATA) public data: any) { }
+  
+    onNoClick(): void {
+      this.dialogRef.close();
+    }
+  
+  }

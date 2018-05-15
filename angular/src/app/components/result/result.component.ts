@@ -1,3 +1,5 @@
+
+import {retry} from 'rxjs/operators';
 import { Component, OnInit, Input }   from '@angular/core';
 import { Router } from '@angular/router';
 import { FormData }                   from '../../data/formData.model';
@@ -91,10 +93,10 @@ export class ResultComponent implements OnInit {
         this.result=this.formDataService.getResult();
 
         if( this.formData.postulaciones.length==0){
-            this.nomencladoresservice.getPostulacionesPre(this.url).retry(this.retries).subscribe(
+            this.nomencladoresservice.getPostulacionesPre(this.url).pipe(retry(this.retries)).subscribe(
                 result => {
 
-                    this.postulacionespreplaceholder='Postulaciones';
+                    this.postulacionespreplaceholder=' Quiero postularme para:';
                     this.postulacionespre=result;
                     this.formData.postulaciones=result;
                 },
@@ -105,7 +107,7 @@ export class ResultComponent implements OnInit {
 
 
         }else{
-            this.postulacionespreplaceholder='Postulaciones';
+            this.postulacionespreplaceholder=' Quiero postularme para:';
             console.log(this.formData.postulaciones);
             this.postulacionespre=this.formData.postulaciones;
         }
@@ -133,7 +135,7 @@ export class ResultComponent implements OnInit {
             let experienciaLaboralData=this.experienciaLaboral;
             personalData.cachePersonal=null;
             estudioData.cacheEstudio=null;
-            this.cvService.sendCv(this.url,personalData,estudioData,experienciaLaboralData,this.result).retry(this.retries).subscribe(
+            this.cvService.sendCv(this.url,personalData,estudioData,experienciaLaboralData,this.result).pipe(retry(this.retries)).subscribe(
                 result => {
                  if(result.code==200){
                      this.enviado=true;
@@ -167,7 +169,7 @@ export class ResultComponent implements OnInit {
         clearTimeout(this.timeout);
         var that=this;
         this.timeout = setTimeout(function (e) {
-            that.validatorservice.validateEmail(that.url,that.personal.email).retry(this.retries).subscribe(
+            that.validatorservice.validateEmail(that.url,that.personal.email).pipe(retry(this.retries)).subscribe(
                 result => {
 
                     if(result['code']==400)

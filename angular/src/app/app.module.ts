@@ -21,12 +21,13 @@ import { RegisterFormHostComponent } from './components/registerformhost.compone
 import { AddressComponent } from './components/address/address.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { PersonalComponent } from './components/personal/personal.component';
+import { DialogCursosSemCongComponent } from './components/work/work.component';
 import { WorkComponent } from './components/work/work.component';
 import { ResultComponent } from './components/result/result.component';
 import { AfterSendComponent } from './components/aftersend/aftersend.component';
 import { AddDialogComponent } from './components/dialogos/add_experiencia.dialogg';
 import { AddEstudioDialogComponent } from './components/dialogos/add_estudio.dialog';
-
+import { DialogOverviewExampleDialog } from './components/personal/personal.component';
 import { AboutmeComponent } from './components/aboutme/aboutme.component';
 
 /* Shared Service */
@@ -62,6 +63,7 @@ import {CvService} from "./services/cv.service";
       RegisterFormHostComponent,
       AddressComponent,
       NavbarComponent,
+      DialogOverviewExampleDialog,
       PersonalComponent,
       WorkComponent,
       ResultComponent,
@@ -69,11 +71,15 @@ import {CvService} from "./services/cv.service";
       FilterPipe,
       AddDialogComponent,
       AddEstudioDialogComponent,
+      DialogCursosSemCongComponent,
       AboutmeComponent
+      
   ],
     entryComponents: [
         AddDialogComponent,
-        AddEstudioDialogComponent
+        AddEstudioDialogComponent,
+        DialogOverviewExampleDialog,
+        DialogCursosSemCongComponent
     ],
   imports: [
     BrowserModule,

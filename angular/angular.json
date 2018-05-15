@@ -1,0 +1,198 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "angular": {
+      "root": "",
+      "sourceRoot": "src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "tsConfig": "src/tsconfig.app.json",
+            "polyfills": "src/polyfills.ts",
+            "assets": [
+              "src/assets",
+              "src/favicon.ico"
+            ],
+            "styles": [
+              "src/webfonts.css",
+              "src/assets/vendor/bootstrap/css/bootstrap.min.css",
+              "src/assets/vendor/font-awesome/css/font-awesome.min.css",
+              "src/assets/vendor/animate/animate.min.css",
+              "src/assets/vendor/simple-line-icons/css/simple-line-icons.min.css",
+              "src/assets/vendor/owl.carousel/assets/owl.carousel.min.css",
+              "src/assets/vendor/owl.carousel/assets/owl.theme.default.min.css",
+              "src/assets/vendor/magnific-popup/magnific-popup.min.css",
+              "src/assets/css/theme.css",
+              "src/assets/css/theme-elements.css",
+              "src/assets/css/theme-blog.css",
+              "src/assets/css/theme-shop.css",
+              "src/assets/css/skins/default.css",
+              "src/assets/css/custom.css",
+              "src/styles.css"
+            ],
+            "scripts": [
+              "src/assets/vendor/modernizr/modernizr.min.js",
+              "src/assets/vendor/jquery/jquery.min.js",
+              "src/assets/vendor/jquery.appear/jquery.appear.min.js",
+              "src/assets/vendor/jquery.easing/jquery.easing.min.js",
+              "src/assets/vendor/jquery-cookie/jquery-cookie.min.js",
+              "src/assets/vendor/bootstrap/js/bootstrap.min.js",
+              "src/assets/vendor/common/common.min.js",
+              "src/assets/vendor/jquery.validation/jquery.validation.min.js",
+              "src/assets/vendor/jquery.easy-pie-chart/jquery.easy-pie-chart.min.js",
+              "src/assets/vendor/jquery.gmap/jquery.gmap.min.js",
+              "src/assets/vendor/jquery.lazyload/jquery.lazyload.min.js",
+              "src/assets/vendor/isotope/jquery.isotope.min.js",
+              "src/assets/vendor/owl.carousel/owl.carousel.min.js",
+              "src/assets/vendor/magnific-popup/jquery.magnific-popup.min.js",
+              "src/assets/vendor/vide/vide.min.js",
+              "src/assets/js/custom.js",
+              "src/assets/js/theme.js",
+              "src/assets/js/theme.init.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "angular:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "angular:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "angular:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "karmaConfig": "./karma.conf.js",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.spec.json",
+            "scripts": [
+              "src/assets/vendor/modernizr/modernizr.min.js",
+              "src/assets/vendor/jquery/jquery.min.js",
+              "src/assets/vendor/jquery.appear/jquery.appear.min.js",
+              "src/assets/vendor/jquery.easing/jquery.easing.min.js",
+              "src/assets/vendor/jquery-cookie/jquery-cookie.min.js",
+              "src/assets/vendor/bootstrap/js/bootstrap.min.js",
+              "src/assets/vendor/common/common.min.js",
+              "src/assets/vendor/jquery.validation/jquery.validation.min.js",
+              "src/assets/vendor/jquery.easy-pie-chart/jquery.easy-pie-chart.min.js",
+              "src/assets/vendor/jquery.gmap/jquery.gmap.min.js",
+              "src/assets/vendor/jquery.lazyload/jquery.lazyload.min.js",
+              "src/assets/vendor/isotope/jquery.isotope.min.js",
+              "src/assets/vendor/owl.carousel/owl.carousel.min.js",
+              "src/assets/vendor/magnific-popup/jquery.magnific-popup.min.js",
+              "src/assets/vendor/vide/vide.min.js",
+              "src/assets/js/custom.js",
+              "src/assets/js/theme.js",
+              "src/assets/js/theme.init.js"
+            ],
+            "styles": [
+              "src/webfonts.css",
+              "src/assets/vendor/bootstrap/css/bootstrap.min.css",
+              "src/assets/vendor/font-awesome/css/font-awesome.min.css",
+              "src/assets/vendor/animate/animate.min.css",
+              "src/assets/vendor/simple-line-icons/css/simple-line-icons.min.css",
+              "src/assets/vendor/owl.carousel/assets/owl.carousel.min.css",
+              "src/assets/vendor/owl.carousel/assets/owl.theme.default.min.css",
+              "src/assets/vendor/magnific-popup/magnific-popup.min.css",
+              "src/assets/css/theme.css",
+              "src/assets/css/theme-elements.css",
+              "src/assets/css/theme-blog.css",
+              "src/assets/css/theme-shop.css",
+              "src/assets/css/skins/default.css",
+              "src/assets/css/custom.css",
+              "src/styles.css"
+            ],
+            "assets": [
+              "src/assets",
+              "src/favicon.ico"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "src/tsconfig.app.json",
+              "src/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "angular-e2e": {
+      "root": "",
+      "sourceRoot": "",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "./protractor.conf.js",
+            "devServerTarget": "angular:serve"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "angular",
+  "schematics": {
+    "@schematics/angular:component": {
+      "prefix": "app",
+      "styleext": "css"
+    },
+    "@schematics/angular:directive": {
+      "prefix": "app"
+    }
+  }
+}

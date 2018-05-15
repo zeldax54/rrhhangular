@@ -130,8 +130,8 @@ class Curriculum {
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Pais",inversedBy="curriculums", cascade={"persist"})
-     */
+ * @ORM\ManyToOne(targetEntity="Pais",inversedBy="curriculums", cascade={"persist"})
+ */
     private $pais;
 
     /**
@@ -143,6 +143,24 @@ class Curriculum {
      * @ORM\ManyToOne(targetEntity="Localidad",inversedBy="curriculums", cascade={"persist"})
      */
     private $localidad;
+
+
+    //Nacimiento
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Pais",inversedBy="curriculumsNacimiento", cascade={"persist"})
+     */
+    private $paisNacimiento;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Provincia",inversedBy="curriculumsNacimiento", cascade={"persist"})
+     */
+    private $provinciaNacimiento;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Localidad",inversedBy="curriculumsNacimiento", cascade={"persist"})
+     */
+    private $localidadNacimiento;
 
 
 

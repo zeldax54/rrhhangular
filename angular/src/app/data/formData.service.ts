@@ -43,6 +43,9 @@ export class FormDataService {
             pais:this.formData.pais,
             provincia:this.formData.provincia,
             localidad:this.formData.localidad,
+            paisNacimiento:this.formData.paisNacimiento,
+            provinciaNacimiento:this.formData.provinciaNacimiento,
+            localidadNacimiento:this.formData.localidadNacimiento,
             telefonos:this.formData.telefonos,
             dispotraslado:this.formData.dispotraslado,
             dispohoras:this.formData.dispohoras,
@@ -75,6 +78,9 @@ export class FormDataService {
         this.formData.pais=data.pais;
         this.formData.provincia=data.provincia;
         this.formData.localidad=data.localidad;
+        this.formData.paisNacimiento=data.paisNacimiento;
+        this.formData.provinciaNacimiento=data.provinciaNacimiento;
+        this.formData.localidadNacimiento=data.localidadNacimiento;
         this.formData.telefonos=data.telefonos;
         this.formData.dispotraslado=data.dispotraslado;
         this.formData.dispohoras=data.dispohoras;

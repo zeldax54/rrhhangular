@@ -56,6 +56,12 @@ class Pais
      */
     private $curriculumns;
 
+    /**
+     * @JMS\Exclude();
+     * @ORM\OneToMany(targetEntity="Curriculum" , mappedBy="paisNacimiento", cascade={"persist", "detach"})
+     */
+    private $curriculumnsNacimiento;
+
 
     /**
      * @JMS\Exclude();
@@ -233,5 +239,39 @@ class Pais
     public function getExperiencias()
     {
         return $this->experiencias;
+    }
+
+    /**
+     * Add curriculumnsNacimiento
+     *
+     * @param \AppBundle\Entity\Curriculum $curriculumnsNacimiento
+     *
+     * @return Pais
+     */
+    public function addCurriculumnsNacimiento(\AppBundle\Entity\Curriculum $curriculumnsNacimiento)
+    {
+        $this->curriculumnsNacimiento[] = $curriculumnsNacimiento;
+
+        return $this;
+    }
+
+    /**
+     * Remove curriculumnsNacimiento
+     *
+     * @param \AppBundle\Entity\Curriculum $curriculumnsNacimiento
+     */
+    public function removeCurriculumnsNacimiento(\AppBundle\Entity\Curriculum $curriculumnsNacimiento)
+    {
+        $this->curriculumnsNacimiento->removeElement($curriculumnsNacimiento);
+    }
+
+    /**
+     * Get curriculumnsNacimiento
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCurriculumnsNacimiento()
+    {
+        return $this->curriculumnsNacimiento;
     }
 }

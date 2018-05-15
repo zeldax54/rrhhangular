@@ -36,6 +36,13 @@ class Hijos
      */
     private $fechanacimiento;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sexo", type="string",nullable=false )
+     */
+    private $sexo;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Curriculum",inversedBy="hijos", cascade={"persist"})
@@ -145,5 +152,29 @@ class Hijos
     public function getCurriculum()
     {
         return $this->curriculum;
+    }
+
+    /**
+     * Set sexo
+     *
+     * @param string $sexo
+     *
+     * @return Hijos
+     */
+    public function setSexo($sexo)
+    {
+        $this->sexo = $sexo;
+
+        return $this;
+    }
+
+    /**
+     * Get sexo
+     *
+     * @return string
+     */
+    public function getSexo()
+    {
+        return $this->sexo;
     }
 }
