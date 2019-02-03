@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use JMS\Serializer\Annotation as JMS;
 
 
 
@@ -36,12 +37,17 @@ class Idioma
     private $idioma;
 
     /**
+     * @JMS\Exclude();
      * @ORM\OneToMany(targetEntity="EstudioIdioma" , mappedBy="idioma", cascade={"persist", "detach"})
      */
     private $estudiosidioma;
 
 
-
+    /**
+     * @JMS\Exclude();
+     * @ORM\OneToMany(targetEntity="OfertaLaboral" , mappedBy="idioma", cascade={"persist", "detach"})
+     */
+    private $ofertaslaborales;
 
 
     /**
@@ -106,7 +112,7 @@ class Idioma
      */
     public function removeEstudiodioma(\AppBundle\Entity\EstudioIdioma $estudiodioma)
     {
-        $this->estudiodioma->removeElement($estudiodioma);
+        $this->estudiosidioma->removeElement($estudiodioma);
     }
 
     /**
@@ -116,6 +122,40 @@ class Idioma
      */
     public function getEstudiodioma()
     {
-        return $this->estudiodioma;
+        return $this->estudiosidioma;
+    }
+
+    /**
+     * Add estudiosidioma
+     *
+     * @param \AppBundle\Entity\EstudioIdioma $estudiosidioma
+     *
+     * @return Idioma
+     */
+    public function addEstudiosidioma(\AppBundle\Entity\EstudioIdioma $estudiosidioma)
+    {
+        $this->estudiosidioma[] = $estudiosidioma;
+
+        return $this;
+    }
+
+    /**
+     * Remove estudiosidioma
+     *
+     * @param \AppBundle\Entity\EstudioIdioma $estudiosidioma
+     */
+    public function removeEstudiosidioma(\AppBundle\Entity\EstudioIdioma $estudiosidioma)
+    {
+        $this->estudiosidioma->removeElement($estudiosidioma);
+    }
+
+    /**
+     * Get estudiosidioma
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEstudiosidioma()
+    {
+        return $this->estudiosidioma;
     }
 }

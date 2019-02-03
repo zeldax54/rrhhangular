@@ -1,1 +1,67 @@
 /* Add here all your CSS customizations */
+
+.verticaltdcontent{
+  vertical-align: middle !important;
+}
+
+#myTab a{
+
+  background: none !important;
+
+border-bottom: none !important;
+
+border-left: none !important;
+
+border-right: none !important;
+
+border-top: none !important;
+
+color: transparent !important;
+}
+
+#myTab a:hover{
+
+  background: none !important;
+
+border-bottom: none !important;
+
+border-left: none !important;
+
+border-right: none !important;
+
+border-top: none !important;
+
+color: transparent !important;
+}
+
+.nav-tabs li a, .nav-tabs li a:hover{
+  background: none !important;
+
+border-bottom: none !important;
+
+border-left: none !important;
+
+border-right: none !important;
+
+border-top: none !important;
+
+color: transparent !important;
+}
+
+
+.mat-checkbox-background {
+  background-color: rgb(240, 107, 33) !important;
+}
+
+.mat-slide-toggle-bar{
+  background-color: rgb(240, 107, 33) !important;}
+
+  .mat-slide-toggle-thumb{
+    background-color: rgb(240, 107, 33) !important;
+  }
+
+  .my-full-screen-dialog{
+   max-width: none;
+   width: 100vw;
+   height: 100vh;
+  }

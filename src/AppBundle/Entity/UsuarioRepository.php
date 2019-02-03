@@ -1,7 +1,11 @@
 <?php
 
 namespace AppBundle\Entity;
-
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
+use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\HttpFoundation\Request;
 /**
  * UsuarioRepository
  *
@@ -10,4 +14,6 @@ namespace AppBundle\Entity;
  */
 class UsuarioRepository extends \Doctrine\ORM\EntityRepository
 {
+
+
 }

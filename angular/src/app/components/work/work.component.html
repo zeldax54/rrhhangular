@@ -197,49 +197,68 @@
 
 
                 <br>
+
+                <!--Eventos-->
                 <div class="row">
-
-                    <h4 class="head text-left text-uppercase font-weight-bold">
-                        Cursos/Seminarios/Congresos
-                    </h4>
-                    <div class="row">
-                    <div class='col-xs-12 col-sm-12'>
-
-                        <mat-form-field class="example-full-width">
-                        <textarea  matInput  matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="5"  name="cursos" type="text" placeholder="Cursos" [(ngModel)]="estudio.cursos">
-                        </textarea>
-                        <button matSuffix (click)="addCurso();">+</button>
-                        <mat-hint>Cursos recibidos</mat-hint>
-                        </mat-form-field>
-
-                    </div></div>
-                    <div class="row"><br>
-                    <div class='col-xs-12 col-sm-12'>
-
-                        <mat-form-field class="example-full-width">
-                        <textarea  matInput  matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="5"  name="seminarios" type="text" placeholder="Seminarios" [(ngModel)]="estudio.seminarios">
-                        </textarea>
-                        <button matSuffix (click)="addSeminario();">+</button>
-                            <mat-hint>Seminarios recibidos</mat-hint>
-                        </mat-form-field>
-
-                    </div></div><br>
-
-                    <div class="row">
-                    <div class='col-xs-12 col-sm-12'>
-
-                        <mat-form-field class="example-full-width">
-                        <textarea  matInput  matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="5"  name="congresos" type="text" placeholder="Congresos" [(ngModel)]="estudio.congresos">
-                        </textarea>
-                        <button matSuffix (click)="addCongreso();">+</button>
-                            <mat-hint>Congresos a los que has asistido</mat-hint>
-                        </mat-form-field>
+                    <div class='col-xs-4 col-sm-4' style="text-align: right">
+                        <button class="btn btn-borders btn-quaternary mr-xs mb-sm agregaridioma" (click)="agregarEvento()">
+                            <span class="glyphicon glyphicon-plus"></span>
+                           Agregar Curso/Seminario/Congreso
+                        </button>
 
                     </div>
-</div>
+                  <div class=''>
+
+                   <div class="row tablaestudios">
+
+                       <div class='tablecontainer'>
+                           <mat-table #table [dataSource]="dataSourceEventos" matSort class="mat-cell">
+
+                               <ng-container matColumnDef="nombre">
+                                   <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
+                                   <mat-cell *matCellDef="let row" >
+
+                                       {{row.nombre}}
 
 
-                </div>
+                                   </mat-cell>
+                               </ng-container>
+
+                               <ng-container matColumnDef="fechaevento">
+                                   <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
+                                   <mat-cell *matCellDef="let row" >
+                                       {{row.fechaevento | date: 'dd/MM/yyyy'}}
+                                   </mat-cell>
+                               </ng-container>
+
+
+
+                               <mat-header-row *matHeaderRowDef="displayedEventosColumns"></mat-header-row>
+                               <mat-row *matRowDef="let row; columns: displayedEventosColumns;"></mat-row>
+
+                               <ng-container matColumnDef="actions">
+                                   <mat-header-cell *matHeaderCellDef>
+                                       Acciones
+                                   </mat-header-cell>
+
+                                   <mat-cell *matCellDef="let row; let i=index;">
+
+                                       <button class="tabledeletebtn" mat-icon-button color="accent" (click)="deleteEvento(row)">
+                                             <i class="material-icons">
+                                                     delete
+                                             </i>
+                                       </button>
+                                       <button style="margin-left: 20px !important;" class="tabledeletebtn" mat-icon-button color="accent" (click)="editEvento(row)">
+                                         <mat-icon matSuffix >mode_edit</mat-icon>
+                                       </button>
+                                   </mat-cell>
+                               </ng-container>
+
+                           </mat-table>
+
+                       </div>
+
+                   </div></div></div>
 
                 <br><br>
 

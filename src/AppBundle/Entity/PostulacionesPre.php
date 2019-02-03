@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping\ManyToMany;
-
+use JMS\Serializer\Annotation as JMS;
 
 
 
@@ -47,6 +47,7 @@ class PostulacionesPre
     private $nombre;
 
     /**
+     * @JMS\Exclude();
      * @ORM\ManyToMany(targetEntity="Curriculum", mappedBy="postulaciones")
      */
     private $curriculums;

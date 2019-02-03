@@ -18,7 +18,7 @@ export class FormDataService {
     private isWorkFormValid: boolean = false;
     private isAddressFormValid: boolean = false;
 
-    constructor(private workflowService: WorkflowService) { 
+    constructor(private workflowService: WorkflowService) {
     }
 
     getPersonal(): Personal {
@@ -97,26 +97,19 @@ export class FormDataService {
              estudioscursados:this.formData.estudioscursados,
             estudioIdiomas:this.formData.estudioIdiomas,
             cacheEstudio:this.formData.cacheEstudio,
-            cursos:this.formData.cursos,
-            seminarios:this.formData.seminarios,
-            congresos:this.formData.congresos,
-
-
-
+            eventos:this.formData.eventos
 
         };
         return estudio;
     }
-    
+
     setEstudio(data: Estudio) {
 
         this.isWorkFormValid = true;
         this.formData.estudioscursados=data.estudioscursados;
         this.formData.estudioIdiomas = data.estudioIdiomas;
         this.formData.cacheEstudio = data.cacheEstudio;
-        this.formData.cursos = data.cursos;
-        this.formData.seminarios = data.seminarios;
-        this.formData.congresos = data.congresos;
+        this.formData.eventos=data.eventos;
 
 
 
@@ -146,6 +139,7 @@ export class FormDataService {
     setResult(data: Result){
 
         this.formData.postulaciones = data.postulaciones;
+        this.formData.postulacionesNomenclador=data.postulacionesNomenclador;
         this.formData.otraspostulaciones = data.otraspostulaciones;
         this.formData.comentarios = data.comentarios;
         this.formData.subscribir = data.subscribir;
@@ -156,6 +150,7 @@ export class FormDataService {
 
         var result: Result= {
             postulaciones:this.formData.postulaciones,
+            postulacionesNomenclador:this.formData.postulacionesNomenclador,
             otraspostulaciones:this.formData.otraspostulaciones,
             comentarios:this.formData.comentarios,
             subscribir:this.formData.subscribir
@@ -180,7 +175,7 @@ export class FormDataService {
     isFormValid() {
         // Return true if all forms had been validated successfully; otherwise, return false
         return this.isPersonalFormValid &&
-                this.isWorkFormValid && 
+                this.isWorkFormValid &&
                 this.isAddressFormValid;
     }
 }

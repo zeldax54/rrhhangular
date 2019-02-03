@@ -87,6 +87,3 @@ assetic:
             jar: '%kernel.project_dir%/app/Resources/java/yuicompressor.jar'
         yui_js:
             jar: '%kernel.project_dir%/app/Resources/java/yuicompressor.jar'
-
-
-

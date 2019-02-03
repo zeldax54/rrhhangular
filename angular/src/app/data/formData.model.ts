@@ -1,6 +1,6 @@
 export class FormData {
 
-
+    loadedCV:any;
     cachePersonal:CachePersonal=new CachePersonal();
     nombre: string = null;
     apellidos : string ='';
@@ -28,23 +28,23 @@ export class FormData {
     dispotraslado:string='';
     dispohoras:string='';
     movilidadpropia:string='';
-
+    //Estudio
     cacheEstudio:CacheEstudio=new CacheEstudio();
     estudioIdiomas:EstudioIdioma[]=[];
     estudioscursados:Array<EstudioCursado>=[];
+    eventos:Array<Evento>=[];
 
-    cursos:string='';
-    seminarios:string='';
-    congresos:string='';
+
     //Experiencia
     hasexperiencia:boolean=false;
     experiencias:Array<Experiencia>=[];
    //Final
     postulaciones:Array<any>=[];
+    postulacionesNomenclador:Array<any>=[];
     otraspostulaciones:string='';
     comentarios:string='';
     subscribir:boolean=true;
-
+    datadownload:number=0;
 
 
 
@@ -55,6 +55,7 @@ export class FormData {
 
     clear() {
 
+        this.loadedCV=null;
         this.cachePersonal=new CachePersonal();
         this.nombre = null;
         this.apellidos = '';
@@ -78,7 +79,7 @@ export class FormData {
         this.paisNacimiento='';
         this.provinciaNacimiento='';
         this.localidadNacimiento='';
-        
+
         this.telefonos=[];
         this.dispotraslado='';
         this.dispohoras='';
@@ -87,17 +88,18 @@ export class FormData {
         this.cacheEstudio=new CacheEstudio();
         this.estudioscursados=[];
         this.estudioIdiomas=[];
-        this.cursos='';
-        this.seminarios='';
-        this.congresos='';
+        this.eventos=[];
         //Experiencia
         this.hasexperiencia=false;
         this.experiencias=[];
         //final
         this.postulaciones=[];
+        this.postulacionesNomenclador=[];
         this.otraspostulaciones='';
         this.comentarios='';
         this.subscribir=true;
+
+        this.datadownload=0;
 
 
 
@@ -168,10 +170,8 @@ export class Estudio{
 
     estudioscursados:Array<EstudioCursado>=[];
     estudioIdiomas:EstudioIdioma[];
-    cursos:string='';
-    seminarios:string='';
-    congresos:string='';
     cacheEstudio:CacheEstudio=new CacheEstudio();
+    eventos:Evento[];
 
 }
 
@@ -194,6 +194,7 @@ export class EstudioIdioma{
     idioma:number=0;
     habilidad:number=0;
     nivel:number=0;
+    idiomaSet:string=null;
 }
 
 export class CacheEstudio{
@@ -212,6 +213,7 @@ export class EstuduiIdiomaVisual{
     nivellectura:number=1;
     nivelescritura:number=1;
     nivelconversacion:number=1;
+
 
 }
 
@@ -232,7 +234,7 @@ export  class Experiencia{
     actualmente:boolean=true;
     modoegreso:string='acuerdo';
     motivoegreso:string='';
-    puestodesempenado:string='';
+    puestodesempenado:number=0;
     principalesresponsabilidades:string='';
     principalestareas:string='';
     actividadempresa:number=0;
@@ -245,9 +247,22 @@ export  class Experiencia{
 }
 
 export class Result{
-    postulaciones:Array<any>=[];
+    postulacionesNomenclador:Array<Postulacion>=[];
+    postulaciones:Array<Postulacion>=[];
     otraspostulaciones:string='';
     comentarios:string='';
     subscribir:boolean=true;
 }
 
+export class Postulacion{
+  id:number;
+  nombre:string;
+  codigo:string;
+}
+
+
+export class Evento{
+  id:number;
+  nombre:string;
+  fechaevento:Date;
+}

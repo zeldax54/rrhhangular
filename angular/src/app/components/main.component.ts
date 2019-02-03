@@ -60,11 +60,15 @@ public title:string;
 
         if (!isFound) {
             var dynamicScripts = [
+              "./assets/js/theme.js",
                 "./assets/vendor/rs-plugin/js/jquery.themepunch.tools.min.js",
                 "./assets/vendor/rs-plugin/js/jquery.themepunch.revolution.min.js",
                 "./assets/vendor/circle-flip-slideshow/js/jquery.flipshow.min.js",
-                "./assets/js/views/view.home.js"
-            
+                "./assets/js/views/view.home.js",
+                "./assets/js/theme.init.js"
+
+
+
             ];
             for (var i = 0; i < dynamicScripts .length; i++) {
                 let node = document.createElement('script');

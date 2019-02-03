@@ -33,3 +33,7 @@ postulacionespre:
 actividadempresa:
     path:     /actividadempresa/getall
     defaults: { _controller: AppBundle:Nomencladores:actividadempresaget }
+
+puestos:
+    path:     /puestos/getall
+    defaults: { _controller: AppBundle:Nomencladores:puestosget }

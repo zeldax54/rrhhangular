@@ -1,4 +1,4 @@
-
+import { Evento } from './../../data/formData.model';
 import {retry, startWith, map} from 'rxjs/operators';
 import { Component, OnInit,ViewChild,Inject }   from '@angular/core';
 import { Router }              from '@angular/router';
@@ -14,6 +14,7 @@ import {MatDialog, MatPaginator, MatSort,MatTableDataSource,MatDialogRef,MAT_DIA
 import {AddEstudioDialogComponent} from '../../components/dialogos/add_estudio.dialog';
 
 import { FormDataService }     from '../../data/formData.service';
+import { ValidatorService }    from '../../services/validator.service';
 import {Estudio} from "../../data/formData.model";
 import {EstudioCursado} from "../../data/formData.model";
 import { EnvSpecific} from "../../models/envSpecific";
@@ -22,6 +23,7 @@ import {EstudioIdioma} from "../../data/formData.model";
 
 import {EstuduiIdiomaVisual} from "../../data/formData.model";
 import {MatSnackBar} from '@angular/material';
+import { EstadoCivilService } from '../../services/estadocivil';
 
 
 //@import '../node_modules/@swimlane/ngx-datatable/release/index.css';
@@ -44,7 +46,7 @@ export class WorkComponent implements OnInit {
     estudiostipo:Array<any>=[];
     estudioestados:Array<any>=[];
     estudiotitulos:Array<any>=[];
-
+    evento:Evento;
 
     annos:Array<any>=[];
     annoseg:Array<any>=[];
@@ -65,8 +67,10 @@ export class WorkComponent implements OnInit {
     //Table test
     displayedColumns = ['idioma','nivellectura','nivelescritura','nivelconversacion','actions'];
     displayedEstudiosColumns = ['estudiotipo','estudioestado','estudiotitulo','actions'];
+    displayedEventosColumns = ['nombre','fechaevento','actions'];
     dataSource: MatTableDataSource<any>;
     dataSourceEstudios: MatTableDataSource<any>;
+    dataSourceEventos: MatTableDataSource<any>;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -74,6 +78,7 @@ export class WorkComponent implements OnInit {
     addestudioEnable:boolean=false;
     estudiocursado:EstudioCursado=new EstudioCursado();
     estudiosCursadosArrayList:Array<EstudioCursado>=[];
+    eventosArrayList:Array<Evento>=[];
  //data
  data:any;
 
@@ -83,11 +88,14 @@ export class WorkComponent implements OnInit {
 
     constructor(private router: Router,private envspecific:EnvironmentSpecificService,
                 private nomencladoresservice:NomencladoresService,
-                private formDataService: FormDataService,public snackBar: MatSnackBar,public dialog: MatDialog) {
+                private formDataService: FormDataService,
+                public snackBar: MatSnackBar,public dialog: MatDialog,private validatorservice:ValidatorService) {
         this.url=envspecific.envSpecific.APIURL;
 
         this.dataSource=  new MatTableDataSource(this.estudioIdiomasList);
         this.dataSourceEstudios=new MatTableDataSource(this.estudiosCursadosArrayList);
+        this.dataSourceEventos=new MatTableDataSource(this.eventosArrayList);
+        this.form = this.formDataService.getFormData();
     }
 
 
@@ -95,17 +103,71 @@ export class WorkComponent implements OnInit {
     ngOnInit() {
         this.estudio = this.formDataService.getEstudio();
 
+        if(this.form.datadownload==1){
+          let dataStudioForm= this.form.loadedCV;
+          let estudiosCV=dataStudioForm.estudios;
+          for (var _i = 0; _i < estudiosCV.length; _i++) {
+
+           let ec=new EstudioCursado();
+           ec.annoegreso=estudiosCV[_i].annoegreso;
+           ec.annoingreso=estudiosCV[_i].annoingreso;
+           if(estudiosCV[_i].annosaprobadoscursados!=undefined)
+           ec.annosaprobadoscursados=estudiosCV[_i].annosaprobadoscursados;
+           if( ec.cantidadmaterias!=undefined)
+           ec.cantidadmaterias=estudiosCV[_i].cantidadmaterias;
+
+           ec.estudiotipo=estudiosCV[_i].tipo.id;
+           ec.estudioestado=estudiosCV[_i].estado.id;
+           ec.estudiotitulo=estudiosCV[_i].titulo;
+           ec.institucion=estudiosCV[_i].institucion;
+
+           if( ec.materiasaprobadas!=undefined)
+           ec.materiasaprobadas=estudiosCV[_i].materiasaprobadas;
+           this.estudiosCursadosArrayList.push(ec);
+          }
+           //Idiomas
+           if(dataStudioForm.estudioidiomas!=undefined && dataStudioForm.estudioidiomas!=null){
+             let idiomasData=dataStudioForm.estudioidiomas;
+            for (var _i = 0; _i < idiomasData.length; _i++) {
+              let eI=new EstudioIdioma();
+              eI.habilidad=idiomasData[_i].habilidad.id;
+              eI.idioma=idiomasData[_i].idioma.id;
+              eI.nivel=idiomasData[_i].nivel.id;
+              eI.idiomaSet=idiomasData[_i].idioma.idioma;
+              this.estudio.estudioIdiomas.push(eI);
+             }
+           }
+
+
+           //eventos
+           if(dataStudioForm.eventos!=undefined && dataStudioForm.eventos!=null){
+            let estEventos=dataStudioForm.eventos;
+            for (var _i = 0; _i < estEventos.length; _i++) {
+              let newE=new Evento();
+              newE.id=estEventos[_i].id;
+              newE.nombre=estEventos[_i].nombre;
+              newE.fechaevento=this.convertUTCDateToLocalDate(estEventos[_i].fechaevento);
+              this.eventosArrayList.push(newE);
+              this.estudio.eventos= this.eventosArrayList;
+              this.dataSourceEventos=new MatTableDataSource(this.eventosArrayList);
+            }
+          }
+        }
+
+
         if(this.estudio.cacheEstudio.estudiostipo!=null)
         {
             this.estudiostipo=this.estudio.cacheEstudio.estudiostipo;
+            this.UpdateaEstidios();
 
         }
         else
         this.nomencladoresservice.getEstudiosTipo(this.url).pipe(retry(this.retries)).subscribe(
             result => {
                 this.estudiostipo=result;
-
                 this.estudio.cacheEstudio.estudiostipo=result;
+                this.UpdateaEstidios();
+
             },
             error => {
                 console.log(<any>error);
@@ -114,6 +176,7 @@ export class WorkComponent implements OnInit {
         );
         if(this.estudio.cacheEstudio.estudioestados!=null){
             this.estudioestados=this.estudio.cacheEstudio.estudioestados;
+            this.UpdateaEstidios();
 
         }
 
@@ -121,8 +184,9 @@ export class WorkComponent implements OnInit {
         this.nomencladoresservice.getEstudiosEstado(this.url).pipe(retry(this.retries)).subscribe(
             result => {
                 this.estudioestados=result;
-
                 this.estudio.cacheEstudio.estudioestados=result;
+                this.UpdateaEstidios();
+
             },
             error => {
                 console.log(<any>error);
@@ -132,16 +196,16 @@ export class WorkComponent implements OnInit {
         if(this.estudio.cacheEstudio.estudiotitulos!=null)
         {
             this.estudiotitulos=this.estudio.cacheEstudio.estudiotitulos;
-
             this.addestudioEnable=true;
+            this.UpdateaEstidios();
         }
 
         else
         this.nomencladoresservice.getEstudiosTitulo(this.url).pipe(retry(this.retries)).subscribe(
             result => {
                 this.estudiotitulos=result;
-
                 this.estudio.cacheEstudio.estudiotitulos=result;
+                this.UpdateaEstidios();
             },
             error => {
                 console.log(<any>error);
@@ -169,6 +233,8 @@ export class WorkComponent implements OnInit {
         if(this.estudio.cacheEstudio.idiomas!=null){
             this.idiomas=this.estudio.cacheEstudio.idiomas;
             this.idiomasPlaceHolder='Idioma';
+            this.updateVisualfromEstudioIdiomas();
+
         }
         else
             this.nomencladoresservice.getIdiomas(this.url).pipe(retry(this.retries)).subscribe(
@@ -176,7 +242,7 @@ export class WorkComponent implements OnInit {
                     this.idiomas=result;
                     this.idiomasPlaceHolder='Idioma';
                     this.estudio.cacheEstudio.idiomas=result;
-
+                    this.updateVisualfromEstudioIdiomas();
                 },
                 error => {
                     console.log(<any>error);
@@ -187,6 +253,7 @@ export class WorkComponent implements OnInit {
         if(this.estudio.cacheEstudio.niveles!=null){
             this.niveles=this.estudio.cacheEstudio.niveles;
             this.nivelesPlaceHolder='Nivel';
+          //  this.updateVisualfromEstudioIdiomas();
         }
 
         else
@@ -196,19 +263,18 @@ export class WorkComponent implements OnInit {
                     this.nivelesPlaceHolder='Nivel';
                     this.estudio.cacheEstudio.niveles=result;
                     this.addestudioEnable=true;
+                   // this.updateVisualfromEstudioIdiomas();
                 },
                 error => {
                     this.nivelesPlaceHolder='Error de red';
                     console.log(<any>error);
                 }
             );
-        if( this.estudio.estudioscursados.length>0)
-        {
-            this.dataSourceEstudios=  new MatTableDataSource(this.estudio.estudioscursados);
-            this.estudiosCursadosArrayList=this.estudio.estudioscursados;
-        }
+
 
         this.updateVisualfromEstudioIdiomas();
+        this.eventosArrayList=this.estudio.eventos;
+        this.dataSourceEventos=new MatTableDataSource(this.eventosArrayList);
         //this.handleState(this.estudio.estudioestado);
         window.scrollTo(0, 0);
     }
@@ -230,6 +296,7 @@ export class WorkComponent implements OnInit {
 
     goToNext(form: any) {
         if (this.save(form)) {
+          console.log(this.estudio);
             // Navigate to the address page
             this.router.navigate(['registrar/address']);
         }
@@ -259,6 +326,9 @@ export class WorkComponent implements OnInit {
     }
 
     getIdioNameFromId(id:any){
+      console.log(id);
+      console.log(this.idiomas);
+      if(this.idiomas!=undefined && this.idiomas.length>0)
         return this.idiomas.filter(idioma=>idioma.id==id)[0].idioma;
     }
     isIdiomaSet(id:any){
@@ -315,12 +385,16 @@ export class WorkComponent implements OnInit {
                 var eI = this.estudio.estudioIdiomas[_i];
                 var veI=new EstuduiIdiomaVisual();
                 veI.idioma=eI.idioma;
+                if(eI.idiomaSet!=null)
+                veI.idiomaname=eI.idiomaSet;
+                else
                 veI.idiomaname=this.getIdioNameFromId(eI.idioma);
 
                 veI.nivelconversacion=this.getNivelHabilidadFromEi(eiarray,3);
                 veI.nivelescritura=this.getNivelHabilidadFromEi(eiarray,2);
                 veI.nivellectura=this.getNivelHabilidadFromEi(eiarray,1);
 
+                if(this.estudioIdiomasList.filter(a=>a.idiomaname==veI.idiomaname).length==0)
                 this.estudioIdiomasList.push(veI);
 
             }
@@ -381,17 +455,27 @@ export class WorkComponent implements OnInit {
     }
 
     FromTipo(id:any){
+
+      if(id!=undefined && this.estudiostipo!=undefined && this.estudiostipo.length>0)
       return  this.estudiostipo.filter(x =>
        x.id== id)[0].nombre;
     }
 
     FromEstado(id:any){
+      if(id!=undefined && this.estudioestados!=undefined && this.estudioestados.length>0)
         return  this.estudioestados.filter(x =>
         x.id== id)[0].nombre;
     }
 
     FromNombre(estudio:any){
         return estudio ? estudio.nombre : estudio;
+    }
+
+    UpdateaEstidios(){
+        this.dataSourceEstudios=  new MatTableDataSource(this.estudiosCursadosArrayList);
+        this.estudio.estudioscursados=this.estudiosCursadosArrayList;
+
+
     }
 
 
@@ -428,44 +512,71 @@ export class WorkComponent implements OnInit {
 
     }
 
-    addCurso(){
-        let dialogRef = this.dialog.open(DialogCursosSemCongComponent, {
-            width: '250px',
-            data: {tipo:'Curso'}
-          });
-      
-          dialogRef.afterClosed().subscribe(result => {   
-            if(result!=undefined)             
-            this.estudio.cursos+=result+'\n';
-          });
 
-    }
-
-    addSeminario(){
-        let dialogRef = this.dialog.open(DialogCursosSemCongComponent, {
-            width: '250px',
-            data: {tipo:'Seminario'}
-          });
-      
-          dialogRef.afterClosed().subscribe(result => {  
-            if(result!=undefined)              
-            this.estudio.seminarios+=result+'\n';
-          });
-    }
-
-    addCongreso(){
-        let dialogRef = this.dialog.open(DialogCursosSemCongComponent, {
-            width: '250px',
-            data: {tipo:'Congreso'}
-          });
-      
-          dialogRef.afterClosed().subscribe(result => {  
-              if(result!=undefined)          
-            this.estudio.congresos+=result+'\n';
-          }); 
+    findEvento(evento:Evento){
+      var index = this.eventosArrayList.findIndex(x => x==evento );
+      if(index>-1)
+      return true;
+      return false;
     }
 
 
+    agregarEvento(){
+
+        this.evento=new Evento();
+      let dialogRef = this.dialog.open(DialogCursosSemCongComponent, {
+        width: '250px',
+        data: {evento:this.evento},
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if(result!=undefined){
+
+          if(this.findEvento(this.evento))
+          this.openSnackBar('Ya ha agregado este evento !!!');
+          else{
+            this.eventosArrayList.push(this.evento);
+            this.dataSourceEventos=  new MatTableDataSource(this.eventosArrayList);
+              this.estudio.eventos=this.eventosArrayList;
+              this.evento=new Evento();
+          }
+
+        }
+
+      });
+    }
+
+    deleteEvento(evento:Evento){
+
+      var index = this.eventosArrayList.findIndex(x => x==evento );
+       if(index>-1) {
+          this.eventosArrayList.splice(index, 1);
+          this.dataSourceEventos=  new MatTableDataSource(this.eventosArrayList);
+          this.estudio.eventos=this.eventosArrayList;
+          }
+
+    }
+
+    editEvento(evento:Evento){
+
+      let eventoEdit=this.eventosArrayList.filter(x=>x==evento)[0];
+      console.log(this.eventosArrayList);
+      console.log(eventoEdit);
+
+      let dialogRef = this.dialog.open(DialogCursosSemCongComponent, {
+        width: '250px',
+        data: {evento:eventoEdit},
+
+      });
+        dialogRef.afterClosed().subscribe(result => {
+
+        });
+    }
+
+    convertUTCDateToLocalDate(date:Date) {
+      var finalDate=new Date(date);
+      return new Date(finalDate.setDate(finalDate.getDate()+1));
+    }
 }
 
 @Component({
@@ -473,13 +584,19 @@ export class WorkComponent implements OnInit {
     templateUrl: 'cursosemcongdialog.html',
   })
   export class DialogCursosSemCongComponent {
-  
+
+    evento:Evento;
+
+    fechaeventoFormControl = new FormControl('', [Validators.required]);
     constructor(
       public dialogRef: MatDialogRef<DialogCursosSemCongComponent>,
-      @Inject(MAT_DIALOG_DATA) public data: any) { }
-  
+      @Inject(MAT_DIALOG_DATA) public data: any) {
+
+        this.evento=data.evento;
+      }
+
     onNoClick(): void {
       this.dialogRef.close();
     }
-  
+
   }

@@ -26,14 +26,22 @@ class JwtAuth{
          return JWT::encode($userData,$this->key,'HS256');
      }
 
-     public function CheckToken($token){
+     public function CheckToken($token,$isforadmin=false){
          try {
 
              $data = JWT::decode($token, $this->key, array('HS256'));
              if (isset($data) && is_object($data) && isset($data->email)) {
+                 $role='';
+                 if($isforadmin===true)
+                     $role=$data->rol;
                  return array(
                      'code' => 200,
-                     'message' => 'Login success'
+                     'message' => 'Login success',
+                     'email'=>$data->email,
+                     'nrodoc'=>$data->nrodoc,
+                     'referencia'=>$data->idcv,
+                     'rol'=>$role
+
                  );
              }
              return array(
@@ -65,26 +73,6 @@ class JwtAuth{
 
 
 
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

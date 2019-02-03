@@ -42,9 +42,21 @@
 											<i class="fa fa-bars"></i>
 										</button>
 										<ul class="header-social-icons social-icons hidden-xs">
+                        <li *ngIf="showcircleuser==true" class="social-icons"><a href="#" title="Usuario" (click)="ShowHiddenDiv()">  <i class="fa fa-user"></i></a>
+                          <div class="divclosesesion" *ngIf="showclosesesion==true">
+                              <div class="testimonial-author">
+                                  <div class="testimonial-author-thumbnail img-thumbnail">
+                                      <img src="../../assets/img/clients/client-1.jpg" alt="">
+                                  </div>
+                                  <p><strong>{{nombre}}</strong><span> Apellidos</span></p>
+                              </div>
+                              <button class="btn btn-quaternary mr-xs mb-sm"  (click)="logoff();">Cerrar sesion</button>
+                          </div>
+                        </li>
 											<li class="social-icons-facebook"><a href="http://www.facebook.com/" target="_blank" title="Facebook"><i class="fa fa-facebook"></i></a></li>
 											<li class="social-icons-twitter"><a href="http://www.twitter.com/" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></li>
-											<li class="social-icons-linkedin"><a href="http://www.linkedin.com/" target="_blank" title="Linkedin"><i class="fa fa-linkedin"></i></a></li>
+                    	<li class="social-icons-linkedin"><a href="http://www.linkedin.com/" target="_blank" title="Linkedin"><i class="fa fa-linkedin"></i></a></li>
+
 										</ul>
 										<div class="header-nav-main header-nav-main-effect-1 header-nav-main-sub-effect-1 collapse">
 											<nav>
@@ -103,19 +115,21 @@
 
 													</li>
 
-													<li *ngIf="showcircleuser==true">
-                                                            <a  [title]="title" style="background: none !important;" role="button" (click)="ShowHiddenDiv()"><div class="usercircle" style="background-image: url('../../assets/img/clients/client-1.jpg')">
-                                                            </div></a>
-                                                        <div class="divclosesesion" *ngIf="showclosesesion==true">
-                                                            <div class="testimonial-author">
-                                                                <div class="testimonial-author-thumbnail img-thumbnail">
-                                                                    <img src="../../assets/img/clients/client-1.jpg" alt="">
-                                                                </div>
-                                                                <p><strong>{{nombre}}</strong><span> Apellidos</span></p>
-                                                            </div>
-                                                            <button class="btn btn-quaternary mr-xs mb-sm"  (click)="logoff();">Cerrar sesion</button>
-                                                        </div>
-                                                    </li>
+
+
+                                                    <li class="dropdown" *ngIf="showadminMenu==true">
+                                                        <a class="dropdown-toggle" href="#">Administrar</a>
+                                                        <ul class="dropdown-menu">
+                                                            <li class="dropdown-submenu">
+                                                              <a href="#">Oferta Laboral</a>
+                                                              <ul class="dropdown-menu">
+                                                                <li><a class="" href="#" (click)="CrearOferta($event)">Crear Oferta</a></li>
+                                                              </ul>
+                                                            </li>
+
+
+                                                        </ul>
+                                                      </li>
 												</ul>
 											</nav>
 										</div>

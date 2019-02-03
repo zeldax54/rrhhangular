@@ -1,3 +1,5 @@
+import { FormData } from './../../data/formData.model';
+import { ValidatorService } from './../../services/validator.service';
 
 import {retry} from 'rxjs/operators';
 import { Component, OnInit,Inject } from '@angular/core';
@@ -13,11 +15,11 @@ import {MyErrorStateMatcher} from "../../services/global";
 import { Personal } from '../../data/formData.model';
 import { FormDataService } from '../../data/formData.service';
 
-import { TiposDocService} from '../../services/tiposdoc.service'
-import { ValidatorService} from '../../services/validator.service'
-import { EstadoCivilService} from '../../services/estadocivil'
-import { PaisesService} from '../../services/paises.services'
-import { NomencladoresService} from '../../services/nomencladores.service'
+import { TiposDocService} from '../../services/tiposdoc.service';
+import { EstadoCivilService} from '../../services/estadocivil';
+import { PaisesService} from '../../services/paises.services';
+import { NomencladoresService} from '../../services/nomencladores.service';
+import { CvService} from '../../services/cv.service';
 import {Hijo} from "../../data/formData.model";
 import {Telefono} from "../../data/formData.model";
 import {EnvironmentSpecificService} from "../../services/enviromentSpecific";
@@ -31,6 +33,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 
 import * as _moment from 'moment';
 import { isNullOrUndefined } from 'util';
+import { forEach } from '@angular/router/src/utils/collection';
 const moment = _moment;
 
 export const CUSTOM_DATE_FORMAT = {
@@ -72,7 +75,7 @@ export class PersonalComponent implements OnInit {
     localidadesNacimiento:any;
     Telefono: Telefono=new Telefono();
     Telefonos: Array<Telefono> = [];
-    tipostelefono:any;   
+    tipostelefono:any;
     url:any;
     //Form Control View
     matcher = new MyErrorStateMatcher();
@@ -95,7 +98,8 @@ export class PersonalComponent implements OnInit {
     nroCalleFormControl=new FormControl('', [Validators.required]);
     cpFormControl=new FormControl('', [Validators.required]);
     prefixvalue:string='0000';
-    
+
+
 
     paises:Array<any>=[];
     paisFormControl = new FormControl('', [Validators.required,]);
@@ -134,7 +138,7 @@ export class PersonalComponent implements OnInit {
     classbtnAgregarHijos:string='btn btn-quaternary mr-xs mb-sm';
     classbtnAgregartelefono:string='btn btn-quaternary mr-xs mb-sm';
 
-  
+
 
 
     constructor(
@@ -146,6 +150,7 @@ export class PersonalComponent implements OnInit {
         private estadocivilservice:EstadoCivilService,
         private paisesservice:PaisesService,
         private nomencladoresservice:NomencladoresService,
+        private cvservice:CvService,
         public snackBar: MatSnackBar,
         public dialog: MatDialog) {
 
@@ -154,24 +159,18 @@ export class PersonalComponent implements OnInit {
         this.nombreFormControl.setErrors({
             "required": false
         });
-
-
-
     }
 
 
 
-    
-
-
-
-
-
     ngOnInit() {
+
        this.personal = this.formDataService.getPersonal();
+       this.form = this.formDataService.getFormData();
         if(this.personal.cachePersonal.td!=null){
             this.placeholdertipodoc='*Tipo de documento';
             this.td=this.personal.cachePersonal.td;
+        // tslint:disable-next-line:curly
         }else
        this.tipodocservice.getTiposDoc(this.url).pipe(retry(this.retries)).subscribe(
            result => {
@@ -204,7 +203,8 @@ export class PersonalComponent implements OnInit {
             this.placeholderpaisNacimiento='Pais de Nacimiento';
             this.paises=this.personal.cachePersonal.paises;
             this.paisesNacimiento=this.personal.cachePersonal.paisesNacimiento;
-        }else
+        }
+        else
         this.paisesservice.getPaises(this.url).pipe(retry(this.retries)).subscribe(
             result => {
                 this.paises=result;
@@ -235,9 +235,121 @@ export class PersonalComponent implements OnInit {
 
         this.Hijos=this.personal.hijos;
         this.Telefonos=this.personal.telefonos;
+        //this.openSnackBar("Comprobando información de usuario...");
+
+       // console.log(this.form);
+        if(this.form.datadownload==0){
+
+          this.validatorservice.checktoken(this.url,localStorage.getItem('token')).pipe(retry(this.retries)).subscribe(
+            result => {
+                  let resultcast=result as any;
+               if (resultcast.code === 200){
+                 // start load cv
+                   this.openSnackBar('Cargando datos de usuario...');
+                   this.cvservice.getCv(this.url,resultcast.referencia).pipe(retry(this.retries)).subscribe(
+                     resultcv => {
+                        console.log(resultcv);
+                        const cvData = resultcv as any;
+                        this.form.loadedCV = cvData;
+                        // Nombre y apellidos
+                        this.personal.nombre = cvData.nombre;
+                        this.personal.apellidos = cvData.apellido;
+                        this.personal.tipodoc = cvData.tipodoc.id;
+                        this.personal.nrodoc = cvData.nrodoc;
+                        this.personal.email = cvData.usuario.correo;
+                        this.personal.email2 = cvData.usuario.correo;
+                        this.personal.paisNacimiento = cvData.pais.id;
+                         //Nacimiento
+                        if(cvData.pais_nacimiento!=undefined && cvData.pais_nacimiento!='null')
+                        this.personal.paisNacimiento=cvData.pais_nacimiento.id;
+                        if (cvData.provincia_nacimiento != undefined && cvData.provincia_nacimiento != 'null')
+                         this.personal.provinciaNacimiento = cvData.provincia_nacimiento.id;
+                          if (cvData.localidad_nacimiento != undefined && cvData.localidad_nacimiento.id != undefined)
+                          {
+                            this.changeprovinciaNacimiento(cvData.provincia_nacimiento.id);
+                            this.personal.localidadNacimiento = cvData.localidad_nacimiento.id;
+                          }
+
+                        this.personal.fechanacimiento = this.convertUTCDateToLocalDate( cvData.fechanacimiento);
+                        if(cvData.lugarnacimiento!=undefined && cvData.lugarnacimiento!=null)
+                         this.personal.lugarnacimiento=cvData.lugarnacimiento;
+                         this.personal.sexo=cvData.sexo;
+                         this.personal.estadocivil = cvData.estadocivil.id;
+                          //Nacimiento end
+                         //Hijos
+                         if(cvData.hijos.length>0){
+                          for (var _i = 0; _i < cvData.hijos.length; _i++) {
+                            cvData.hijos[_i].fechanacimiento=this.convertUTCDateToLocalDate(cvData.hijos[_i].fechanacimiento);
+                          }
+                           this.personal.hijos=cvData.hijos as Hijo[];
+                           this.Hijos=cvData.hijos as Hijo[];
+                         }
+                         //
+                         this.personal.calle=cvData.calle;
+                         this.personal.nrocalle=cvData.nrocalle;
+                         this.personal.piso=cvData.piso;
+                         this.personal.depto=cvData.depto;
+                         this.personal.codigopostal=cvData.codigopostal;
+                         //Pais actual
+                         if(cvData.pais!=undefined && cvData.pais!='null')
+                         this.personal.pais=cvData.pais.id;
+                         if (cvData.provincia != undefined && cvData.provincia != 'null')
+                          this.personal.provincia = cvData.provincia.id;
+                           if (cvData.localidad != undefined && cvData.localidad.id != undefined)
+                           {
+                             this.changeprovincia(cvData.provincia.id);
+                             this.personal.localidad = cvData.localidad.id;
+                           }
+                           //pais actual end
+
+                           //Telefonos
+                           if(cvData.telefonos!=undefined && cvData.telefonos.length>0){
+                            for (var _i = 0; _i < cvData.telefonos.length; _i++) {
+                              cvData.telefonos[_i].tipo=cvData.telefonos[_i].tipo.id.toString();
+                            }
+                            this.personal.telefonos=cvData.telefonos as Telefono[];
+                            this.Telefonos=cvData.telefonos as Telefono[];
+                           }
+
+                           this.personal.dispotraslado=cvData.dispotraslado;
+                           this.personal.dispohoras=cvData.dispohoras.toString();
+                           this.personal.movilidadpropia=cvData.movilidadpropia;
+
+                           this.form.datadownload=1;
+
+                     },
+                     error => {
+                         this.openSnackBar('Error obteniendo datos del cv ingresado...')
+                         console.log(<any>error);
+                     }
+                 );
+                  // End load CV
+
+               }
+               else{
+
+               }
+            },
+            error => {
+                this.openSnackBar("Error de logueo")
+                console.log(<any>error);
+            }
+        );
+
+        }
+
+
+
+
         window.scrollTo(0, 0);
-       
+
     }
+
+     convertUTCDateToLocalDate(date:Date) {
+      var finalDate=new Date(date);
+      return new Date(finalDate.setDate(finalDate.getDate()+1));
+    }
+
 
     validateMail(formulario:any){
         clearTimeout(this.timeout);
@@ -273,7 +385,7 @@ export class PersonalComponent implements OnInit {
             if(that.personal.email!=that.personal.email2){
 
                 that.emailFormControl2.setErrors({
-                    "repetido": true
+                    'repetido': true
                 });
                 that.openSnackBar('Los emails no coinciden.')
 
@@ -286,18 +398,49 @@ export class PersonalComponent implements OnInit {
 
     }
 
-    openSnackBar(message: string, action: string='') {
+    openSnackBar(message: string, action: string='',durationparam=2000) {
         this.snackBar.open(message, action, {
-            duration: 2000,
+            duration: durationparam,
         });
     }
 
     save(form: any): boolean {
-        if (!form.valid) {
+      if(this.personal.telefonos.length==0){
+
+        let snackBarRef =  this.snackBar.open("Por favor ingrese un número telefónico.","Completar", { duration: 4000 }); snackBarRef.onAction().subscribe(()=> this.focus());
+        return false;
+      }
+
+      let errorExist=false;
+           if(
+            this.nombreFormControl.hasError('required') ||
+            this.apellidosFormControl.hasError('required') ||
+            this.tipodedocumentoFormControl.hasError('required') ||
+            this.nrodocumentoFormControl.hasError('required') ||
+            this.emailFormControl.hasError('required') ||
+            this.emailFormControl2.hasError('required') ||
+            this.fechadenacimientoFormControl.hasError('required') ||
+            this.lucagarNacimientoFormControl.hasError('required') ||
+            this.sexoFormControl.hasError('required') ||
+            this.estadoCivilFormControl.hasError('required') ||
+            this.calleFormControl.hasError('required') ||
+            this.nroCalleFormControl.hasError('required') ||
+            this.cpFormControl.hasError('required')
+
+           ){
+            errorExist=true;
+           }
+
+        if (!form.valid || errorExist==true) {
+          let snackBarRef = this.snackBar.open("Por favor complete todos los campos obligatorios.","Completar", { duration: 4000 }); snackBarRef.onAction().subscribe(()=> this.focus());
             return false;
         }
         this.formDataService.setPersonal(this.personal);
         return true;
+    }
+
+    focus(){
+      window.scrollTo(0, 0);
     }
 
     goToNext(form: any) {
@@ -310,7 +453,7 @@ export class PersonalComponent implements OnInit {
     addHijo(){
 
         if(this.Hijo.fechanacimiento>=new Date()){
-            this.openSnackBar("La fecha de nacimiento no puede ser mayor que la actual!!");
+            this.openSnackBar('La fecha de nacimiento no puede ser mayor que la actual!!');
             return;
         }
 
@@ -340,8 +483,8 @@ export class PersonalComponent implements OnInit {
 
         if(provinciaid==-1)
             return null;
-        this.localidadesNacimiento= this.paisesNacimiento.filter(item => item.id==this.personal.paisNacimiento)[0].provincias.filter(item => item.id==provinciaid)[0].localidades;
-
+        this.localidadesNacimiento= this.paisesNacimiento.
+        filter(item => item.id == this.personal.paisNacimiento)[0].provincias.filter(item => item.id==provinciaid)[0].localidades;
     }
 
 
@@ -359,12 +502,16 @@ export class PersonalComponent implements OnInit {
 
 
 
-    addTelefono(){
-       if(this.Telefono.tipo===null || this.Telefono.tipo===""){
-           this.openSnackBar("Especifique el tipo de teléfono!!!")
+    addTelefono() {
+       if(this.Telefono.tipo === null || this.Telefono.tipo===""){
+           this.openSnackBar('Especifique el tipo de teléfono!!!')
            return;
        }
         if(this.Telefono.numero!=null && this.Telefono.numero!=''){
+
+          if(this.prefixvalue=="0000")
+          this.Telefono.numero=this.Telefono.numero;
+          else
             this.Telefono.numero=this.prefixvalue+'-'+this.Telefono.numero;
             this.Telefonos.push(this.Telefono);
             this.personal.telefonos=this.Telefonos;
@@ -393,18 +540,18 @@ export class PersonalComponent implements OnInit {
             this.classbtnAgregartelefono='btn btn-quaternary mr-xs mb-sm';
     }
 
-    changefechanacimiento(event){ //Validar cambio fecha nacimiento no permitir una fecha posterior a la actual
-    
+    changefechanacimiento(event){ // Validar cambio fecha nacimiento no permitir una fecha posterior a la actual
+
         if(this.personal.fechanacimiento!=null){
-           var newdate = new Date();                 
+           var newdate = new Date();
             if(newdate<=this.personal.fechanacimiento){
-                this.openSnackBar("La fecha seleccionada es mayor que la actual!!!");
+                this.openSnackBar('La fecha seleccionada es mayor que la actual!!!');
                 this.personal.fechanacimiento=null;
                 this.fechadenacimientoFormControl.setValue(null);
-            }         
-        
-        }          
-   
+            }
+
+        }
+
     }
 
     prefixDialog(){
@@ -412,7 +559,7 @@ export class PersonalComponent implements OnInit {
             width: '250px',
             data: { prefijo: this.prefixvalue }
           });
-      
+
           dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
             if(result==null || result=='' || result==" " || isNullOrUndefined(result)){
@@ -422,7 +569,7 @@ export class PersonalComponent implements OnInit {
             this.prefixvalue = result;
           });
     }
-    
+
 
 }
 
@@ -431,13 +578,13 @@ export class PersonalComponent implements OnInit {
     templateUrl: 'prefixdialog.html',
   })
   export class DialogOverviewExampleDialog {
-  
+
     constructor(
       public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
       @Inject(MAT_DIALOG_DATA) public data: any) { }
-  
+
     onNoClick(): void {
       this.dialogRef.close();
     }
-  
+
   }

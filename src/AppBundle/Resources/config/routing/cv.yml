@@ -3,3 +3,7 @@ registrarcv:
     defaults: { _controller: AppBundle:Cv:create }
     methods: POST
 
+getcv:
+    path:     /cv/getCv
+    defaults: { _controller: AppBundle:Cv:getCv }
+    methods: POST

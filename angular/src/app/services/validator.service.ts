@@ -36,8 +36,14 @@ export class ValidatorService{
         let params='token='+token;
         const headers = new HttpHeaders({'Content-Type':'application/x-www-form-urlencoded'});
         return this.http.post(url+'/checktoken',params,{headers:headers});
-
     }
+
+    tokenAdmin(url:string,token:string){
+      let params='token='+token;
+      const headers = new HttpHeaders({'Content-Type':'application/x-www-form-urlencoded'});
+      return this.http.post(url+'/checktokenAdmin',params,{headers:headers});
+    }
+
 
 
 

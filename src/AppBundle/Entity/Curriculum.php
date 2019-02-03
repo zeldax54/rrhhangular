@@ -204,32 +204,7 @@ class Curriculum {
     private $estudioidiomas;
 
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="cursos",type="text",nullable=true )
-     */
-    private $cursos;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="seminarios",type="text",nullable=true )
-     */
-    private $seminarios;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="congresos",type="text",nullable=true )
-     */
-    private $congresos;
-
-
-
-
-    /**
+      /**
      * @ORM\Column(name="hasexp", type="boolean", nullable=true)
      */
     private $hasexp;
@@ -273,7 +248,10 @@ class Curriculum {
     private $comentarios;
 
 
-
+    /**
+     * @ORM\OneToMany(targetEntity="Evento" , mappedBy="curriculum", cascade={"persist", "detach"})
+     */
+    private $eventos;
 
 
 
@@ -961,6 +939,8 @@ class Curriculum {
         $this->estudioidiomas->removeElement($estudioidioma);
     }
 
+
+
     /**
      * Get estudioidiomas
      *
@@ -971,77 +951,6 @@ class Curriculum {
         return $this->estudioidiomas;
     }
 
-    /**
-     * Set cursos
-     *
-     * @param string $cursos
-     *
-     * @return Curriculum
-     */
-    public function setCursos($cursos)
-    {
-        $this->cursos = $cursos;
-
-        return $this;
-    }
-
-    /**
-     * Get cursos
-     *
-     * @return string
-     */
-    public function getCursos()
-    {
-        return $this->cursos;
-    }
-
-    /**
-     * Set seminarios
-     *
-     * @param string $seminarios
-     *
-     * @return Curriculum
-     */
-    public function setSeminarios($seminarios)
-    {
-        $this->seminarios = $seminarios;
-
-        return $this;
-    }
-
-    /**
-     * Get seminarios
-     *
-     * @return string
-     */
-    public function getSeminarios()
-    {
-        return $this->seminarios;
-    }
-
-    /**
-     * Set congresos
-     *
-     * @param string $congresos
-     *
-     * @return Curriculum
-     */
-    public function setCongresos($congresos)
-    {
-        $this->congresos = $congresos;
-
-        return $this;
-    }
-
-    /**
-     * Get congresos
-     *
-     * @return string
-     */
-    public function getCongresos()
-    {
-        return $this->congresos;
-    }
 
     /**
      * Set subscribir
@@ -1219,5 +1128,39 @@ class Curriculum {
     public function getLocalidadNacimiento()
     {
         return $this->localidadNacimiento;
+    }
+
+    /**
+     * Add evento
+     *
+     * @param \AppBundle\Entity\Evento $evento
+     *
+     * @return Curriculum
+     */
+    public function addEvento(\AppBundle\Entity\Evento $evento)
+    {
+        $this->eventos[] = $evento;
+
+        return $this;
+    }
+
+    /**
+     * Remove evento
+     *
+     * @param \AppBundle\Entity\Evento $evento
+     */
+    public function removeEvento(\AppBundle\Entity\Evento $evento)
+    {
+        $this->eventos->removeElement($evento);
+    }
+
+    /**
+     * Get eventos
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEventos()
+    {
+        return $this->eventos;
     }
 }

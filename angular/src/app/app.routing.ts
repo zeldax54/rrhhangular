@@ -1,3 +1,5 @@
+import { AdminComponent } from './components/admin/admin.component';
+import { AdminGuard } from './guard/admin.guard';
 import { NgModule }             from '@angular/core';
 
 import {ModuleWithProviders} from '@angular/core'
@@ -13,6 +15,9 @@ import {AfterSendComponent} from "./components/aftersend/aftersend.component";
 import {WorkflowGuard} from "./workflow/workflow-guard.service";
 import {EnvironmentSpecificResolver} from "./services/configuration.service";
 import {AboutmeComponent} from "./components/aboutme/aboutme.component";
+import { OfertalaboralComponent } from './components/ofertalaboral/ofertalaboral.component';
+
+
 
 
 const appRoutes:Routes=[
@@ -29,9 +34,9 @@ const appRoutes:Routes=[
         { path: 'result',  component: ResultComponent, canActivate: [WorkflowGuard] },
         { path: 'aftersend',  component: AfterSendComponent },
     ]},
-
-
-    {path:'**',component:MainComponent},
+    {path:'admin',component:AdminComponent,resolve: { envSpecific: EnvironmentSpecificResolver },},
+    { path: 'ofertas',  component: OfertalaboralComponent,canActivate: [AdminGuard],data :{data :'Test Data'} },
+  //  {path:'**',component:MainComponent},
 
     ];
 

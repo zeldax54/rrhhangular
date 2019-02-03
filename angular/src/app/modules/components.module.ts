@@ -20,6 +20,7 @@ import {
     MatPaginatorModule,
     MatSnackBarModule,
     MatDialogModule,
+    MatProgressSpinnerModule
 
 
 
@@ -51,7 +52,8 @@ import {
         MatTableModule,
         MatPaginatorModule,
         MatSnackBarModule,
-        MatDialogModule
+        MatDialogModule,
+        MatProgressSpinnerModule
 
         ],
     exports: [
@@ -74,9 +76,11 @@ import {
         MatTableModule,
         MatPaginatorModule,
         MatSnackBarModule,
-        MatDialogModule
+        MatDialogModule,
+        MatProgressSpinnerModule
 
         ],
 
 })
 export class MyOwnCustomMaterialModule { }
+

@@ -62,6 +62,10 @@ export class NomencladoresService{
         return this.http.get(url+'/actividadempresa/getall');
     }
 
+    getPuestos(url:any){
+      return this.http.get(url+'/puestos/getall');
+    }
+
 
 
 

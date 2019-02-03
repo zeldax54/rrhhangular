@@ -43,7 +43,11 @@ class Idioma
     private $estudiosidioma;
 
 
-
+    /**
+     * @JMS\Exclude();
+     * @ORM\OneToMany(targetEntity="OfertaLaboral" , mappedBy="idioma", cascade={"persist", "detach"})
+     */
+    private $ofertaslaborales;
 
 
     /**
@@ -153,5 +157,39 @@ class Idioma
     public function getEstudiosidioma()
     {
         return $this->estudiosidioma;
+    }
+
+    /**
+     * Add ofertaslaborale
+     *
+     * @param \AppBundle\Entity\OfertaLaboral $ofertaslaborale
+     *
+     * @return Idioma
+     */
+    public function addOfertaslaborale(\AppBundle\Entity\OfertaLaboral $ofertaslaborale)
+    {
+        $this->ofertaslaborales[] = $ofertaslaborale;
+
+        return $this;
+    }
+
+    /**
+     * Remove ofertaslaborale
+     *
+     * @param \AppBundle\Entity\OfertaLaboral $ofertaslaborale
+     */
+    public function removeOfertaslaborale(\AppBundle\Entity\OfertaLaboral $ofertaslaborale)
+    {
+        $this->ofertaslaborales->removeElement($ofertaslaborale);
+    }
+
+    /**
+     * Get ofertaslaborales
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOfertaslaborales()
+    {
+        return $this->ofertaslaborales;
     }
 }

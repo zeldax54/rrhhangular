@@ -108,6 +108,14 @@ class NomencladoresController extends Controller
     }
 
 
+    public function puestosgetAction(){
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('AppBundle:Puesto')->findAll();
+        $helper=$this->get(Helpers::class);
+        return $helper->JMSSerializar($entities,$this->container->get('jms_serializer'));
+    }
+
+
 
 
 

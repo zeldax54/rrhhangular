@@ -74,11 +74,10 @@ class ExperienciaLaboral
 
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="puestodesempenado",type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="Puesto",inversedBy="experiencias", cascade={"persist"})
      */
-    private $puestodesempenado;
+
+    private $puesto;
 
     /**
      * @var string
@@ -248,29 +247,6 @@ class ExperienciaLaboral
         return $this->motivoegreso;
     }
 
-    /**
-     * Set puestodesempenado
-     *
-     * @param string $puestodesempenado
-     *
-     * @return ExperienciaLaboral
-     */
-    public function setPuestodesempenado($puestodesempenado)
-    {
-        $this->puestodesempenado = $puestodesempenado;
-
-        return $this;
-    }
-
-    /**
-     * Get puestodesempenado
-     *
-     * @return string
-     */
-    public function getPuestodesempenado()
-    {
-        return $this->puestodesempenado;
-    }
 
     /**
      * Set principalesresponsabilidades
@@ -512,5 +488,29 @@ class ExperienciaLaboral
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set puesto
+     *
+     * @param \AppBundle\Entity\Puesto $puesto
+     *
+     * @return ExperienciaLaboral
+     */
+    public function setPuesto(\AppBundle\Entity\Puesto $puesto = null)
+    {
+        $this->puesto = $puesto;
+
+        return $this;
+    }
+
+    /**
+     * Get puesto
+     *
+     * @return \AppBundle\Entity\Puesto
+     */
+    public function getPuesto()
+    {
+        return $this->puesto;
     }
 }

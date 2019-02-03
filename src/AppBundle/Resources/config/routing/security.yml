@@ -7,3 +7,8 @@ checktoken:
     path:     /checktoken
     defaults: { _controller: AppBundle:Security:checkToken }
     methods: POST
+
+checktokenAdmin:
+    path:     /checktokenAdmin
+    defaults: { _controller: AppBundle:Security:checktokenAdmin }
+    methods: POST

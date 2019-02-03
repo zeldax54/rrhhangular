@@ -34,6 +34,10 @@ export class AddressComponent implements OnInit {
     displayedColumns = ['empresa','fechaingreso','fechaegreso','actions'];
     dataSource: MatTableDataSource<any>;
     addexperiencieEnable:boolean=false;
+    actividadcargada:boolean=false;
+    puestos:Array<any>=[];
+    puestoscargado:boolean=false;
+
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -42,20 +46,27 @@ export class AddressComponent implements OnInit {
                 public dialog: MatDialog,private envspecific:EnvironmentSpecificService, private paisesservice:PaisesService,public snackBar: MatSnackBar,
      private nomencladoresService:NomencladoresService) {
         this.url=envspecific.envSpecific.APIURL;
-        this.dataSource=  new MatTableDataSource(this.experienciaLaboral.experiencias);
+       // this.dataSource=  new MatTableDataSource(this.experienciaLaboral.experiencias);
     }
 
     ngOnInit() {
-          this.experienciaLaboral = this.formDataService.getExperienciaLaboral();
-             if(this.experienciaLaboral.hasexperiencia==true)
-                 this.hasexperienciabool=true;
 
-        this.perosnal=this.formDataService.getPersonal();
+      //Update
+      this.form = this.formDataService.getFormData();
+
+        this.experienciaLaboral = this.formDataService.getExperienciaLaboral();
+        if(this.experienciaLaboral.hasexperiencia==true)
+            this.hasexperienciabool=true;
+                    this.perosnal=this.formDataService.getPersonal();
+
+
+
         this.paises=this.perosnal.cachePersonal.paises;
         if(this.paises==undefined){
             this.paisesservice.getPaises(this.url).pipe(retry(3)).subscribe(
                 result => {
                     this.paises=result;
+                    this.updateExps();
 
                 },
                 error => {
@@ -70,7 +81,8 @@ export class AddressComponent implements OnInit {
                 result => {
                     this.actividadesempresa=result;
                     this.addexperiencieEnable=true;
-
+                    this.actividadcargada=true;
+                    this.updateExps();
                 },
                 error => {
 
@@ -79,18 +91,73 @@ export class AddressComponent implements OnInit {
             );
 
         }
-        if(this.experienciaLaboral.experiencias!=[] && this.experienciaLaboral.experiencias.length>0){
+        if(this.puestos.length==0 || this.puestos==undefined){
 
-            this.dataSource=  new MatTableDataSource(this.experienciaLaboral.experiencias);
+          this.nomencladoresService.getPuestos(this.url).pipe(retry(3)).subscribe(
+              result => {
+                  let casttResult=result as any;
+                  this.puestos=casttResult;
+                  this.addexperiencieEnable=true;
+                  this.updateExps();
+              },
+              error => {
+
+                  console.log(<any>error);
+              }
+          );
+
+      }
+        if(this.experienciaLaboral.experiencias!=[] && this.experienciaLaboral.experiencias.length>0)
+        {
+          this.hasexperienciabool=true;
+          this.dataSource=  new MatTableDataSource(this.experienciaLaboral.experiencias);
+          this.form.loadedCV=false;
         }
         window.scrollTo(0, 0);
+    }
+
+    updateExps(){
+      if(this.form.datadownload==1){
+        let dataExp= this.form.loadedCV;
+        if(dataExp.hasexp==true ||dataExp.hasexp=='true'){
+          this.experienciaLaboral.hasexperiencia=true;
+          let expLaborales=dataExp.experienciaslaborales;
+          let ExperienciaArray=new Array<Experiencia>();
+          for (var _i = 0; _i < expLaborales.length; _i++) {
+            let tE=new Experiencia();
+            console.log(expLaborales[_i].actividadempresa.id);
+            tE.actividadempresa=expLaborales[_i].actividadempresa.id;
+
+            tE.actualmente=expLaborales[_i].actualmente;
+            tE.email=expLaborales[_i].email;
+            tE.empresa=expLaborales[_i].empresa;
+            tE.fechaingreso=this.convertUTCDateToLocalDate(expLaborales[_i].fechainreso);
+            if(expLaborales[_i].fechaegreso!=undefined)
+            tE.fechaegreso=this.convertUTCDateToLocalDate(expLaborales[_i].fechaegreso);
+            tE.modoegreso=expLaborales[_i].modoegreso;
+            tE.motivoegreso=expLaborales[_i].motivoegreso;
+            tE.pais=expLaborales[_i].pais.id;
+            tE.principalesresponsabilidades=expLaborales[_i].principalesresponsabilidades;
+            tE.principalestareas=expLaborales[_i].principalestareas;
+            tE.puestodesempenado=expLaborales[_i].puesto.id;
+            tE.referencias=expLaborales[_i].referencias;
+            tE.telefono=expLaborales[_i].telefono;
+            ExperienciaArray.push(tE);
+
+          }
+
+          this.experienciaLaboral.experiencias=ExperienciaArray;
+          this.hasexperienciabool=true;
+          this.dataSource=  new MatTableDataSource(this.experienciaLaboral.experiencias);
+        }
+      }
     }
 
     save(form: any): boolean {
         if (!form.valid) {
             return false;
         }
-            
+
         this.formDataService.setExperienciaLaboral(this.experienciaLaboral);
         return true;
     }
@@ -117,9 +184,12 @@ export class AddressComponent implements OnInit {
     }
 
     addNew() {
+
         if(this.addexperiencieEnable){
+          this.experiencia.actualmente=false;
             const dialogRef = this.dialog.open(AddDialogComponent, {
-                data: {experiencia: this.experiencia,paises:this.paises,actividadesempresa:this.actividadesempresa}
+                panelClass: 'my-full-screen-dialog',
+                data: {experiencia: this.experiencia,paises:this.paises,actividadesempresa:this.actividadesempresa,puestos:this.puestos}
             });
 
             dialogRef.afterClosed().subscribe(result => {
@@ -131,6 +201,7 @@ export class AddressComponent implements OnInit {
                         this.experienciaLaboral.experiencias.push(this.experiencia);
                         this.dataSource=  new MatTableDataSource(this.experienciaLaboral.experiencias);
                         this.experiencia=new Experiencia();
+                        this.experiencia.actualmente=false;
                     }
 
                 }
@@ -155,10 +226,10 @@ export class AddressComponent implements OnInit {
 
     editItem(empresa){
 
-
+      if(this.addexperiencieEnable){
         let experiencia=this.getExperienciaFromList(empresa);
         const dialogRef = this.dialog.open(AddDialogComponent, {
-            data: {experiencia:experiencia ,paises:this.paises}
+            data: {experiencia:experiencia ,paises:this.paises,actividadesempresa:this.actividadesempresa,puestos:this.puestos}
         });
         dialogRef.afterClosed().subscribe(result => {
             if (result === 1) {
@@ -171,6 +242,10 @@ export class AddressComponent implements OnInit {
 
             }
         });
+      }   else{
+        this.openSnackBar('Cargando nomencladores. Espere por favor');
+    }
+
 
 
     }
@@ -184,6 +259,11 @@ export class AddressComponent implements OnInit {
 
       return  this.experienciaLaboral.experiencias.filter(x => x.empresa==empresa)[0]
     }
+
+    convertUTCDateToLocalDate(date:Date) {
+      var finalDate=new Date(date);
+      return new Date(finalDate.setDate(finalDate.getDate()+1));
+  }
 
     openSnackBar(message: string, action: string='') {
         this.snackBar.open(message, action, {

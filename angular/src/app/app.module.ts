@@ -45,7 +45,9 @@ import {NomencladoresService} from "./services/nomencladores.service";
 import {EnvironmentSpecificResolver} from "./services/configuration.service";
 import {CvService} from "./services/cv.service";
 //import	{	NgxDatatableModule	}	from	'@swimlane/ngx-datatable';
-
+import {OfertalaboralComponent} from './components/ofertalaboral/ofertalaboral.component';
+import { AdminGuard } from './guard/admin.guard';
+import {AdminComponent} from './components/admin/admin.component';
 
 
 
@@ -72,8 +74,10 @@ import {CvService} from "./services/cv.service";
       AddDialogComponent,
       AddEstudioDialogComponent,
       DialogCursosSemCongComponent,
-      AboutmeComponent
-      
+      AboutmeComponent,
+      OfertalaboralComponent,
+      AdminComponent
+
   ],
     entryComponents: [
         AddDialogComponent,
@@ -109,7 +113,8 @@ import {CvService} from "./services/cv.service";
       WorkflowGuard,
       appRoutingProviders,
       { provide: FormDataService, useClass: FormDataService },
-      { provide: WorkflowService, useClass: WorkflowService }
+      { provide: WorkflowService, useClass: WorkflowService },
+      AdminGuard
 
 
 

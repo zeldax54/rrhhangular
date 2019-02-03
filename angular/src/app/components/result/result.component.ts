@@ -6,6 +6,7 @@ import { FormData }                   from '../../data/formData.model';
 import { FormDataService }            from '../../data/formData.service';
 import {Personal} from "../../data/formData.model";
 import {Estudio} from "../../data/formData.model";
+import {Postulacion} from "../../data/formData.model";
 import {EstudioCursado} from "../../data/formData.model";
 import {EstudioIdioma} from "../../data/formData.model";
 import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
@@ -64,12 +65,21 @@ export class ResultComponent implements OnInit {
     apellidosFormControl = new FormControl('', [Validators.required,]);
     emailFormControl = new FormControl('', [Validators.required,Validators.email]);
     fechadenacimientoFormControl = new FormControl('', [Validators.required]);
-    postulacionespre:Array<any>=[];
+    postulacionespre:Array<Postulacion>=[];
     result:Result;
     retries:number=3;
     postulacionespreplaceholder:string='Cargando...';
     matcher = new MyErrorStateMatcher();
     enviado:boolean=false;
+    compareByValue:boolean = true;
+    seleccionados:any;
+    //spiner
+    color = 'warn';
+    mode = 'indeterminate';
+    value = 100;
+    diameter = 40;
+    sipinear = false;
+
 
     constructor(
         private formDataService: FormDataService,
@@ -91,14 +101,17 @@ export class ResultComponent implements OnInit {
         this.estudio=this.formDataService.getEstudio();
         this.experienciaLaboral=this.formDataService.getExperienciaLaboral();
         this.result=this.formDataService.getResult();
+        console.log(this.formData);
 
-        if( this.formData.postulaciones.length==0){
+        if( this.formData.postulacionesNomenclador.length==0){
             this.nomencladoresservice.getPostulacionesPre(this.url).pipe(retry(this.retries)).subscribe(
-                result => {
+                resultpost => {
 
                     this.postulacionespreplaceholder=' Quiero postularme para:';
-                    this.postulacionespre=result;
-                    this.formData.postulaciones=result;
+                    this.postulacionespre=resultpost;
+                    //this.formData.postulaciones=resultpost;
+                    this.formData.postulacionesNomenclador=resultpost;
+                    this.updateFields();
                 },
                 error => {
                     console.log(<any>error);
@@ -108,8 +121,8 @@ export class ResultComponent implements OnInit {
 
         }else{
             this.postulacionespreplaceholder=' Quiero postularme para:';
-            console.log(this.formData.postulaciones);
-            this.postulacionespre=this.formData.postulaciones;
+            this.postulacionespre=this.formData.postulacionesNomenclador;
+            this.updateFields();
         }
         window.scrollTo(0, 0);
     }
@@ -120,13 +133,37 @@ export class ResultComponent implements OnInit {
         });
     }
 
+    updateFields(){
+   if(this.formData.datadownload==1){
+    let loadedData=this.formData.loadedCV;
+    let myArray=Array<Postulacion>();
+    let postulacionesid=Array<number>();
+    for (var _i = 0; _i < loadedData.postulaciones.length; _i++) {
+      let mypost=new Postulacion();
+      mypost.id= loadedData.postulaciones[_i].id;
+      mypost.nombre= loadedData.postulaciones[_i].nombre;
+      mypost.codigo= loadedData.postulaciones[_i].codigo;
+      myArray.push(mypost);
+      postulacionesid.push(mypost.id);
+    }
+    this.result.postulaciones=myArray;
+    this.seleccionados=myArray;
+    this.pstulacionesFormControl.setValue(postulacionesid);
+    this.result.otraspostulaciones=loadedData.otraspostulaciones;
+    this.result.comentarios=loadedData.comentarios;
+   }
+
+    }
+
 
     submit() {
+
         let nombre=this.personal.nombre;
         let emmail=this.personal.email;
 
         //Enviar CV here
-        if(1==1){ // IF formlario es valido
+        if(this.Validar()){ // IF formlario es valido en produccion
+          this.sipinear=true;
             this.personal.nombre=nombre;
             this.personal.email=emmail;
 
@@ -135,9 +172,9 @@ export class ResultComponent implements OnInit {
             let experienciaLaboralData=this.experienciaLaboral;
             personalData.cachePersonal=null;
             estudioData.cacheEstudio=null;
-            this.cvService.sendCv(this.url,personalData,estudioData,experienciaLaboralData,this.result).pipe(retry(this.retries)).subscribe(
-                result => {
-                 if(result.code==200){
+            this.cvService.sendCv(this.url,personalData,estudioData,experienciaLaboralData,this.result,this.formData.datadownload).pipe(retry(this.retries)).subscribe(
+                resultcv => {
+                 if(resultcv.code==200){
                      this.enviado=true;
                      this.formData = this.formDataService.resetFormData();
                      this.isFormValid = false;
@@ -147,11 +184,13 @@ export class ResultComponent implements OnInit {
                     else{
                      this.enviado=false;
                      this.openSnackBar("Ha ocurrido un error mientras se enviaban los datos. Si el error persiste envie este mensaje a los " +
-                         "administradores."+result.message);
+                         "administradores."+resultcv.message);
+                         this.sipinear=false;
                  }
 
                 },
                 error => {
+                  this.sipinear=false;
                     console.log(<any>error);
                 }
             );
@@ -161,8 +200,45 @@ export class ResultComponent implements OnInit {
 
     }
 
+    changepost(){
+
+      this.FormSave();
+
+    }
     FormSave(){
         this.formDataService.setResult(this.result);
+    }
+
+    Validar(){
+
+
+if(this.result.postulaciones.length==0){
+  let snackBarRef = this.snackBar.open("Debes postularte en alguna actividad.","Completar", { duration: 4000 }); snackBarRef.onAction().subscribe(()=> this.focus());
+  return false;
+}
+if(
+
+  this.nombreFormControl.hasError('required') ||
+  this.pstulacionesFormControl.hasError('required')||
+  this.apellidosFormControl.hasError('required')||
+  this.emailFormControl.hasError('required')||
+  this.fechadenacimientoFormControl.hasError('required')
+ ){
+  let snackBarRef = this.snackBar.open("Por favor completá todos los campos obligatorios.","Completar", { duration: 4000 }); snackBarRef.onAction().subscribe(()=> this.focus());
+  return false;
+ }
+ return true;
+    }
+
+    focus(){
+      window.scrollTo(0, 0);
+    }
+
+    compareDrinkObjectsByValue(d1: {value: string}, d2: {value: string}) {
+      return d1 && d2 && d1.value === d2.value;
+    }
+    compareByReference(o1: any, o2: any) {
+      return o1 === o2;
     }
 
     validateMail(){
@@ -189,5 +265,21 @@ export class ResultComponent implements OnInit {
             );
 
         }, 2500);
+
+
+
     }
+
+    save(): boolean {
+
+      this.formDataService.setResult(this.result);
+      return true;
+  }
+
+    goToPrevious() {
+      if (this.save()) {
+          // Navigate to the work page
+          this.router.navigate(['registrar/address']);
+      }
+  }
 }

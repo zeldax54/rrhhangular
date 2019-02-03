@@ -2,6 +2,7 @@
 import {retry} from 'rxjs/operators';
 import {Component,OnInit} from '@angular/core';
 import {ValidatorService} from "../services/validator.service";
+import {Router,ActivatedRoute,Params, NavigationExtras} from '@angular/router'
 
 @Component({
     selector:'layouthead',
@@ -18,9 +19,11 @@ export class HeadComponent  implements OnInit{
     title:string='';
     nombre:string='';
     showclosesesion=false;
+    showadminMenu=false;
 
     constructor(
-        private validator:ValidatorService
+        private validator:ValidatorService,
+        private router: Router
         ){
         this.url=localStorage.getItem('apiUrl');
        }
@@ -45,16 +48,35 @@ export class HeadComponent  implements OnInit{
                     this.showcircleuser=false;
                 }
             });
+
+            this.validator.tokenAdmin(this.url,token).pipe(retry(this.retries)).subscribe(result=>{
+              let resultcast=result as any;
+              if(resultcast.code==200 ){
+                 this.showadminMenu=true;
+              }
+          });
         }
 
 
     }
 
-
+    logoff(){
+      alert('no implementado');
+    }
 
     ShowHiddenDiv(){
         this.showclosesesion=!this.showclosesesion;
 
     }
+
+   CrearOferta(event){
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          id: 'nueva'
+       }
+     };
+       this.router.navigate(['ofertas'],navigationExtras);
+        event.preventDefault();
+      }
 
 }

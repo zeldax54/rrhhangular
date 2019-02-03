@@ -143,39 +143,7 @@ class EstudioIdioma
         return $this->nivel;
     }
 
-    /**
-     * Add estudio
-     *
-     * @param \AppBundle\Entity\Estudio $estudio
-     *
-     * @return EstudioIdioma
-     */
-    public function addEstudio(\AppBundle\Entity\Estudio $estudio)
-    {
-        $this->estudios[] = $estudio;
 
-        return $this;
-    }
-
-    /**
-     * Remove estudio
-     *
-     * @param \AppBundle\Entity\Estudio $estudio
-     */
-    public function removeEstudio(\AppBundle\Entity\Estudio $estudio)
-    {
-        $this->estudios->removeElement($estudio);
-    }
-
-    /**
-     * Get estudios
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEstudios()
-    {
-        return $this->estudios;
-    }
 
     /**
      * Add habilidad
@@ -253,29 +221,7 @@ class EstudioIdioma
         return $this;
     }
 
-    /**
-     * Set estudio
-     *
-     * @param \AppBundle\Entity\Estudio $estudio
-     *
-     * @return EstudioIdioma
-     */
-    public function setEstudio(\AppBundle\Entity\Estudio $estudio = null)
-    {
-        $this->estudio = $estudio;
 
-        return $this;
-    }
-
-    /**
-     * Get estudio
-     *
-     * @return \AppBundle\Entity\Estudio
-     */
-    public function getEstudio()
-    {
-        return $this->estudio;
-    }
 
     /**
      * Set curriculum

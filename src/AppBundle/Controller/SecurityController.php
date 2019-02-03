@@ -41,9 +41,12 @@ class SecurityController extends Controller
                     $response['error']=0;
                     $response['nombre']=$usuariobd->getNombre();
                     $response['email']=$usuariobd->getCorreo();
+                    $response['nrodoc']=$usuario->getNrodoc();
+                    $response['idcv']=$usuario->getId();
+                    $response['rol']=$usuario->getRoles();
                     $response['iat']=time();
-                //    $response['exp']=time()+(5*24*60*60);
-                    $response['exp']=time()+(120);
+                    $response['exp']=time()+(5*24*60*60);
+                   // $response['exp']=time()+(240);
                     $response['token']=$jwt->GenerateToken($response);
 
 
@@ -62,9 +65,12 @@ class SecurityController extends Controller
                         $response['error']=0;
                         $response['nombre']=$n->getNombre();
                         $response['email']=$n->getCorreo();
+                        $response['nrodoc']=$n->getNrodoc();
+                        $response['idcv']=$n->getId();
+                        $response['rol']=$n->getRoles();
                         $response['iat']=time();
-                       // $response['exp']=time()+(5*24*60*60);
-                        $response['exp']=time()+(120);
+                        $response['exp']=time()+(5*24*60*60);
+                        //$response['exp']=time()+(240);
                         $response['token']=$jwt->GenerateToken($response);
                         $find=true;
                     }
@@ -97,6 +103,42 @@ class SecurityController extends Controller
         $token=$request->get('token',null);
         return $helper->JMSSerializar($jwt->CheckToken($token),$this->container->get('jms_serializer'));
 
+
+    }
+
+    public function checktokenAdminAction(Request $request){
+        $jwt=$this->get(JwtAuth::class);
+        $helper=$this->get(Helpers::class);
+        $token=$request->get('token',null);
+        $check=$jwt->CheckToken($token,true);
+        if($check['code']==200){
+            if($this->checkAdminInarrayRoles($check['rol'])==true)
+            {
+              return   $helper->JMSSerializar(array(
+                    'code'=>200,
+                ),$this->container->get('jms_serializer'));
+            }
+            else{
+               return $helper->JMSSerializar(array(
+                    'code'=>400
+                ),$this->container->get('jms_serializer'));
+            }
+
+        }
+        else
+            return $helper->JMSSerializar($check,$this->container->get('jms_serializer'));
+
+    }
+
+
+    private function checkAdminInarrayRoles($roles){
+
+        foreach ($roles as $r)
+        {
+            if($r=='ROLE_ADMINISTRADOR')
+                return true;
+        }
+            return false;
 
     }
 }

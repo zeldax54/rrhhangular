@@ -8,8 +8,9 @@
 
               <div class="row">
                 <div class='col-xs-6 col-sm-4'>
+                    <span> Experiencia Laboral</span>
                     <section class="example-section">
-
+                        <span style="margin-right: 10px"> No </span>
                     <mat-slide-toggle
                             class="example-margin"
                             color="warn"
@@ -17,8 +18,9 @@
                             name="hasexperiencia"
                             id="hasexperiencia"
                             (change)="changeExp();" >
-                        Experiencia Laboral
+                            <span>Si</span>
                     </mat-slide-toggle>
+
                         </section>
 
                 </div>
@@ -85,20 +87,22 @@
 
                                     <ng-container matColumnDef="actions">
                                         <mat-header-cell *matHeaderCellDef>
-                                            <button mat-icon-button color="primary">
+                                            <!-- <button mat-icon-button color="primary">
                                                 <mat-icon aria-label="Example icon-button with a heart icon">Acciones</mat-icon>
-                                            </button>
+                                            </button> -->
                                         </mat-header-cell>
 
                                         <mat-cell *matCellDef="let row; let i=index;">
 
                                             <button class="tabledeletebtn" mat-icon-button color="accent" (click)="deleteItem(row.empresa)">
-                                                <mat-icon aria-label="Delete">Eliminar</mat-icon>
+                                              <i class="material-icons">
+                                                delete
+                                               </i>
                                             </button>
 
 
                                             <button style="margin-left: 20px !important;" class="tabledeletebtn" mat-icon-button color="accent" (click)="editItem(row.empresa)">
-                                                <mat-icon aria-label="Edit">Editar</mat-icon>
+                                              <mat-icon matSuffix >mode_edit</mat-icon>
                                             </button>
                                         </mat-cell>
                                     </ng-container>
@@ -131,6 +135,6 @@
 
 
         </div>
-    
+
     </div>
 </form>

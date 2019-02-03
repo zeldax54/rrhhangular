@@ -9,11 +9,11 @@
                 <div class="row">
                     <div class='col-xs-12 col-sm-6'>
                           <mat-form-field class="example-full-width">
-                        <input matInput placeholder="Nombre(s)"  [formControl]="nombreFormControl" [errorStateMatcher]="matcher" id="nombre" name="nombre" type="text" placeholder="*Nombre" [(ngModel)]="personal.nombre">
+                        <input matInput placeholder="Nombre(s)" [formControl]="nombreFormControl" [errorStateMatcher]="matcher" id="nombre" name="nombre" type="text" placeholder="*Nombre" [(ngModel)]="personal.nombre">
                         <mat-hint><span class="requerido" *ngIf="nombreFormControl.value==null">campo obligatorio</span></mat-hint>
 
                         <mat-error *ngIf="nombreFormControl.hasError('required')">
-                            Campo <strong>requerido</strong>
+                            Campo <strong>obligatorio</strong>
                         </mat-error>
 
                     </mat-form-field>
@@ -25,7 +25,7 @@
                         <input matInput placeholder="*Apellidos" [formControl]="apellidosFormControl" [errorStateMatcher]="matcher" id="apellidos" name="apellidos" type="text" placeholder="*Apellidos" [(ngModel)]="personal.apellidos">
                         <mat-hint class="requerido"><span class="requerido" *ngIf="apellidosFormControl.value==''">campo obligatorio</span></mat-hint>
                         <mat-error *ngIf="apellidosFormControl.hasError('required')">
-                            Campo <strong>requerido</strong>
+                            Campo <strong>obligatorio</strong>
                         </mat-error>
                     </mat-form-field>
                         </div>
@@ -43,7 +43,7 @@
                             </mat-select>
                             <mat-hint><span class="requerido" *ngIf="tipodedocumentoFormControl.value==''">campo obligatorio</span></mat-hint>
                             <mat-error *ngIf="tipodedocumentoFormControl.hasError('required')">
-                                Campo <strong>requerido</strong>
+                                Campo <strong>obligatorio</strong>
                             </mat-error>
                         </mat-form-field>
 
@@ -55,7 +55,7 @@
                             <input matInput placeholder="Nro de Documento" [formControl]="nrodocumentoFormControl" [errorStateMatcher]="matcher" id="nrodocumento" name="nrodocumento" type="text" placeholder="*Nro de Documento" [(ngModel)]="personal.nrodoc">
                             <mat-hint>Nro de Documento <span class="requerido" *ngIf="nrodocumentoFormControl.value==''">campo obligatorio</span></mat-hint>
                             <mat-error *ngIf="nrodocumentoFormControl.hasError('required')">
-                                Campo <strong>requerido</strong>
+                                Campo <strong>obligatorio</strong>
                             </mat-error>
                         </mat-form-field>
                     </div>
@@ -70,7 +70,7 @@
                         <input matInput placeholder="Email@email.com" [formControl]="emailFormControl" [errorStateMatcher]="matcher" id="email" name="email" type="email"  [(ngModel)]="personal.email" (keyup)="validateMail(personalForm);">
                         <mat-hint><span class="requerido" *ngIf="emailFormControl.value==''">campo obligatorio</span></mat-hint>
                         <mat-error *ngIf="emailFormControl.hasError('required')">
-                            Campo <strong>requerido</strong> y <strong>válido</strong>
+                            Campo <strong>obligatorio</strong> y <strong>válido</strong>
                         </mat-error>
                         <mat-error *ngIf="emailFormControl.hasError('notUnique')">
                             Email <strong>en uso</strong>
@@ -83,10 +83,10 @@
 
 
                         <mat-form-field class="example-full-width">
-                            <input matInput placeholder="Repita su email" [formControl]="emailFormControl2" [errorStateMatcher]="matcher2" id="email2" name="email2" type="email"  [(ngModel)]="personal.email2" (keyup)="validateMail2(personalForm);" (cut)="$event.preventDefault()" (copy)="$event.preventDefault()" (paste)="$event.preventDefault()">
+                            <input matInput placeholder="Reptie tu email" [formControl]="emailFormControl2" [errorStateMatcher]="matcher2" id="email2" name="email2" type="email"  [(ngModel)]="personal.email2" (keyup)="validateMail2(personalForm);" (cut)="$event.preventDefault()" (copy)="$event.preventDefault()" (paste)="$event.preventDefault()">
                             <mat-hint><span class="requerido" *ngIf="emailFormControl2.value==''">campo obligatorio</span></mat-hint>
                             <mat-error *ngIf="emailFormControl2.hasError('required')">
-                                Campo <strong>requerido</strong> y <strong>válido</strong>
+                                Campo <strong>obligatorio</strong> y <strong>válido</strong>
                             </mat-error>
                             <mat-error *ngIf="emailFormControl2.hasError('notUnique')">
                                 Email <strong>en uso</strong>
@@ -102,7 +102,7 @@
 
                     <br>
 
-             
+
 
                    <!-- Nacimiento -->
 
@@ -118,7 +118,7 @@
                         </mat-select>
                         <mat-hint><span class="requerido" *ngIf="paisNacimientoFormControl.value==''">campo obligatorio</span></mat-hint>
                         <mat-error *ngIf="paisNacimientoFormControl.hasError('required')">
-                            Campo <strong>requerido</strong>
+                            Campo <strong>obligatorio</strong>
                         </mat-error>
                     </mat-form-field>
                 </div>
@@ -126,20 +126,20 @@
                 <div class='col-xs-6 col-sm-4'>
 
                 <mat-form-field class="example-full-width">
-                    <mat-select placeholder="Provincia"   [(ngModel)]="personal.provinciaNacimiento" name="provinciaNacimiento" id="provinciaNacimiento" (selectionChange)="changeprovinciaNacimiento(personal.provinciaNacimiento);">
+                    <mat-select placeholder="Provincia de Nacimiento"   [(ngModel)]="personal.provinciaNacimiento" name="provinciaNacimiento" id="provinciaNacimiento" (selectionChange)="changeprovinciaNacimiento(personal.provinciaNacimiento);">
                         <mat-option *ngFor="let p of (paisesNacimiento | filter:{'id':personal.paisNacimiento})[0].provincias" [value]="p.id">
                             {{ p.nombre }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
 
-              
+
                 </div>
 
                 <div class='col-xs-6 col-sm-4'>
 
                     <mat-form-field class="example-full-width">
-                        <mat-select placeholder="Localidad"   [(ngModel)]="personal.localidadNacimiento" name="localidadNacimiento" id="localidadNacimiento">
+                        <mat-select placeholder="Localidad de Nacimiento"   [(ngModel)]="personal.localidadNacimiento" name="localidadNacimiento" id="localidadNacimiento">
                             <mat-option *ngFor="let l of localidadesNacimiento" [value]="l.id">
                                 {{ l.nombre }}
                             </mat-option>
@@ -161,18 +161,18 @@
                         <mat-datepicker touchUi="true" #picker ></mat-datepicker>
                         <mat-hint><span class="requerido" *ngIf="fechadenacimientoFormControl.value==null">campo obligatorio</span></mat-hint>
                     </mat-form-field>
-                </div>          
+                </div>
 
-              
-                  
+
+
 
                 <div class='col-xs-12 col-sm-6'>
                     <mat-form-field class="example-full-width">
                         <input matInput placeholder="Lugar de nacimiento" [formControl]="lucagarNacimientoFormControl" [errorStateMatcher]="matcher" id="lugarnacimiento" name="lugarnacimiento" type="text" placeholder="Lugar de nacimiento" [(ngModel)]="personal.lugarnacimiento">
                         <mat-hint><span>Complete si es necesario</span></mat-hint>
-                        <!-- <mat-error *ngIf="nrodocumentoFormControl.hasError('required')">
-                            Campo <strong>requerido</strong>
-                        </mat-error> -->
+                        <mat-error *ngIf="lucagarNacimientoFormControl.hasError('required')">
+                            Campo <strong>obligatorio</strong>
+                        </mat-error>
                     </mat-form-field>
 
                 </div>
@@ -197,7 +197,7 @@
                             </mat-select>
                             <mat-hint><span class="requerido" *ngIf="sexoFormControl.value==''">campo obligatorio</span></mat-hint>
                             <mat-error *ngIf="sexoFormControl.hasError('required')">
-                                Campo <strong>requerido</strong>
+                                Campo <strong>obligatorio</strong>
                             </mat-error>
                         </mat-form-field>
 
@@ -212,7 +212,7 @@
                             </mat-select>
                             <mat-hint><span class="requerido" *ngIf="estadoCivilFormControl.value==''">campo obligatorio</span></mat-hint>
                             <mat-error *ngIf="estadoCivilFormControl.hasError('required')">
-                                Campo <strong>requerido</strong>
+                                Campo <strong>obligatorio</strong>
                             </mat-error>
                         </mat-form-field>
                     </div>
@@ -221,7 +221,7 @@
 
                 <div class="row">
                     <div class="form-group">
-                        <label class="control-label">Si tiene hijo(s) complete los datos siguientes:</label>
+                        <label class="control-label">Si tenés hijo(s) completá los datos siguientes:</label>
                         <table class="table table-striped table-bordered">
                             <thead>
                             <tr>
@@ -231,23 +231,22 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr *ngFor="let h of Hijos; let i = index">
-
+                            <tr *ngFor="let hij of Hijos; let i = index">
                               <td>
                                 <mat-form-field class="">
-                                    <mat-select placeholder="Sexo"  [(ngModel)]="h.sexo" name="{{h.sexo}}" >
-                                        <mat-option *ngFor="let s of sexos" value={{s.sexo}}>
+                                    <mat-select placeholder="Sexo"  [(ngModel)]="hij.sexo" name="{{hij.sexo}}" >
+                                        <mat-option *ngFor="let s of sexos" value={{s.id}}>
                                             {{ s.sexo }}
-                                        </mat-option>                                      
-                                    </mat-select>                                    
-                                </mat-form-field>                               
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
 
                               </td>
 
                                 <td>
                                     <!--<input [(ngModel)]="h.fechanacimiento"  class="form-control" type="date" name="{{h.fechanacimiento}}"/>-->
                                     <mat-form-field class="">
-                                        <input matInput [matDatepicker]="picker2"   name="{{h.fechanacimiento}}" [(ngModel)] ="h.fechanacimiento">
+                                        <input matInput [matDatepicker]="picker2"   name="{{hij.fechanacimiento}}" [(ngModel)] ="hij.fechanacimiento">
                                         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                                         <mat-datepicker touchUi="true" #picker2></mat-datepicker>
                                     </mat-form-field>
@@ -261,13 +260,13 @@
                                 </td>
                             </tr>
                             <tr>
-                              <td>                                
+                              <td>
                                     <mat-form-field class="example-full-width">
                                         <mat-select  placeholder="Sexo"  name="newAttributeSexo" [(ngModel)] ="Hijo.sexo">
                                             <mat-option *ngFor="let s of sexos" value={{s.sexo}}>
                                                 {{ s.sexo }}
                                             </mat-option>
-                                        </mat-select>                                        
+                                        </mat-select>
                                     </mat-form-field>
 
                                     <!-- <mat-form-field class="">
@@ -277,7 +276,7 @@
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field> -->
-                               
+
                               </td>
                                 <td>
                                     <!--<input class="form-control" type="date" id="newAttributeCode" [(ngModel)]="Hijo.fechanacimiento" name="newAttributeCode" />-->
@@ -302,22 +301,21 @@
                 </div>
 
 
-                <div class="row">
-                    <div class="col-md-8">
+               <div style="border:1px solid #f0e6e1;padding: 17px !important;">
+                <div class="row" >
+                   <div class="col-md-12">
                         <p>
-                        <strong>  <em class="headerinform">Datos de Acceso y Contacto</em></strong>
+                        <strong>  <em class="headerinform">Datos de residencia y contacto</em></strong>
 
                         </p>
                     </div>
-                </div>
-                <div class="row">
                 <div class='col-xs-6 col-sm-4'>
                     <mat-form-field class="example-full-width">
                         <input matInput placeholder="Calle" [formControl]="calleFormControl" [errorStateMatcher]="matcher" id="calle" name="calle" type="text" placeholder="Calle" [(ngModel)]="personal.calle">
                         <mat-hint><span class="requerido" *ngIf="calleFormControl.value==''">campo obligatorio</span></mat-hint>
 
                         <mat-error *ngIf="calleFormControl.hasError('required')">
-                            Campo <strong>requerido</strong>
+                            Campo <strong>obligatorio</strong>
                         </mat-error>
 
                     </mat-form-field>
@@ -329,7 +327,7 @@
                             <mat-hint><span class="requerido" *ngIf="nroCalleFormControl.value==''">campo obligatorio</span></mat-hint>
 
                             <mat-error *ngIf="nroCalleFormControl.hasError('required')">
-                                Campo <strong>requerido</strong>
+                                Campo <strong>obligatorio</strong>
                             </mat-error>
 
                         </mat-form-field>
@@ -353,14 +351,14 @@
                     <div class='col-xs-6 col-sm-4'>
 
                         <mat-form-field class="example-full-width">
-                            <input matInput placeholder="Código Postal" maxlength="5" minlength="5" [formControl]="cpFormControl" [errorStateMatcher]="matcher" #codigopostal  id="codigopostal" name="codigopostal" type="text"  [(ngModel)]="personal.codigopostal">
+                            <input matInput placeholder="Código Postal"  [formControl]="cpFormControl" [errorStateMatcher]="matcher" #codigopostal  id="codigopostal" name="codigopostal" type="text"  [(ngModel)]="personal.codigopostal">
                             <mat-hint align="start"><span class="requerido" *ngIf="cpFormControl.value==''">campo obligatorio</span></mat-hint>
-                            <mat-hint align="end">{{codigopostal.value.length}} / 5</mat-hint>
+                            <!-- <mat-hint align="end">{{codigopostal.value.length}} / 5</mat-hint> -->
                             <mat-error *ngIf="cpFormControl.hasError('required')">
-                                Campo <strong>requerido</strong>
-                            </mat-error>    
+                                Campo <strong>obligatorio</strong>
+                            </mat-error>
                         </mat-form-field>
-                        
+
                     </div>
 
                 </div>
@@ -376,7 +374,7 @@
                             </mat-select>
                             <mat-hint><span class="requerido" *ngIf="paisFormControl.value==''">campo obligatorio</span></mat-hint>
                             <mat-error *ngIf="paisFormControl.hasError('required')">
-                                Campo <strong>requerido</strong>
+                                Campo <strong>obligatorio</strong>
                             </mat-error>
                         </mat-form-field>
                     </div>
@@ -404,9 +402,11 @@
                     </div>
 
 
-                </div><br>
+                </div>
+                </div>
+                <br>
 
-           
+
 
                 <div class="row">
                     <div class="form-group">
@@ -423,11 +423,11 @@
                             <tbody>
                             <tr *ngFor="let n of Telefonos; let i = index">
 
-                                <td>
+                                <td style="width: 100%">
 
                                     <mat-form-field class="">
                                         <input matInput   name="{{n.numero}}" [(ngModel)] ="n.numero">
-                                    </mat-form-field> 
+                                    </mat-form-field>
                                 </td>
 
                                 <td>
@@ -440,29 +440,25 @@
                                     </mat-form-field>
                                 </td>
 
-                                <td class="verticaltdcontent">                                       
+                                <td class="verticaltdcontent">
                                     <button class="tabledeletebtn" mat-icon-button color="accent" (click)="deleteTelefono(i)">
                                             <i class="material-icons">
                                                     delete
                                             </i>
-                                    </button>                                  
+                                    </button>
                                 </td>
                             </tr>
                             <tr>
-                                <td>                        
-                                        <mat-form-field class="example-full-width">                                          
-                                        <!-- <span style="border: 1px solid;" matPrefix (click)="prefixDialog()">{{prefixvalue}}-</span>          
-                                        <input matInput type="tel" id="newNumero" [(ngModel)]="Telefono.numero" name="newNumero" (keyup)="ColorearAddTelefono()" (change)="ColorearAddTelefono()">    
-                                     </mat-form-field>
-                                    -->
-                                       
+                                <td>
+                                        <mat-form-field class="example-full-width">
+
                                             <span matPrefix class="forcedit" (click)="prefixDialog()"  matTooltip="Click para editar el prefijo"> {{prefixvalue}} &nbsp;</span>
                                             <input type="tel" matInput  id="newNumero" [(ngModel)]="Telefono.numero" name="newNumero" (keyup)="ColorearAddTelefono()" (change)="ColorearAddTelefono()">
                                             <mat-icon matSuffix >mode_edit</mat-icon>
-                                        
-                                    </mat-form-field>                                  
-                                   
-                                  
+
+                                    </mat-form-field>
+
+
                                 </td>
 
                                 <td>
@@ -499,7 +495,7 @@
                         </mat-select>
                         <mat-hint><span class="requerido" *ngIf="dispotrasladoFormControl.value==''">campo obligatorio</span></mat-hint>
                         <mat-error *ngIf="dispotrasladoFormControl.hasError('required')">
-                            Campo <strong>requerido</strong>
+                            Campo <strong>obligatorio</strong>
                         </mat-error>
                     </mat-form-field>
                         </div>
@@ -513,11 +509,11 @@
                             </mat-select>
                             <mat-hint><span class="requerido" *ngIf="disphorasFormControl.value==''">campo obligatorio</span></mat-hint>
                             <mat-error *ngIf="disphorasFormControl.hasError('required')">
-                                Campo <strong>requerido</strong>
+                                Campo <strong>obligatorio</strong>
                             </mat-error>
                         </mat-form-field>
                     </div>
-                
+
                 </div><br>
                 <div class="row">
                 <div class='col-md-6'>
@@ -529,7 +525,7 @@
                             </mat-select>
                             <mat-hint><span class="requerido" *ngIf="movpropiaFormControl.value==''">campo obligatorio</span></mat-hint>
                             <mat-error *ngIf="movpropiaFormControl.hasError('required')">
-                                Campo <strong>requerido</strong>
+                                Campo <strong>obligatorio</strong>
                             </mat-error>
                         </mat-form-field>
 
